@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "titanite"
+version = "0.1.0"
+description = ""
+authors = ["Shota Takahashi <shotakaha@kmi.nagoya-u.ac.jp>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
