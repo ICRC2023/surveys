@@ -1,5 +1,9 @@
 # Titanite
 
-スフェーン : https://karatz.jp/sphene-iro/
+Diversityセッションの事前アンケートを集計するためのスクリプト群です。
+PythonとJupyterノートブックを使って集計＆プロット作成します。
 
-Analysis tools for pre-surveys of ICRC2023 diversity session
+## リポジトリ名について
+
+リポジトリ名の``Titanite``は[チタン石](https://ja.wikipedia.org/wiki/%E3%83%81%E3%82%BF%E3%83%B3%E7%9F%B3)という鉱物の名までです。「スフェーン」という宝石としても知られているそうです。
+光の当たり具合によってさまざまな色に見えるそうで「多様性」っぽいかなと思って採用しました。
