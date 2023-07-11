@@ -18,8 +18,8 @@ loguru = "^0.7.0"
 
 [tool.poetry.group.dev.dependencies]
 commitizen = "^3.5.2"
-pysen-ls = "^0.1.2"
 jupyterlab = "^4.0.2"
+pysen-ls = "^0.1.2"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
