@@ -2,6 +2,10 @@ import typer
 
 app = typer.Typer()
 
+@app.command()
+def config(item: str):
+    """Show configuration"""
+    print(f"Config item: {item}")
 
 @app.command()
 def create(item: str):
