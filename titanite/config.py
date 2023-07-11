@@ -1,23 +1,21 @@
 
+from pathlib import Path
+
 from loguru import logger
 from pydantic import BaseModel
 
 
 class Config(BaseModel):
-    id: int
-    name: str
-    email: str
-
+    confd: str = "."
+    fname: str = "config.toml"
 
 if __name__ == "__main__":
 
     config_data = {
-        "id": 1,
-        "name": "John Doe",
-        "email": "johndoe@example.com"
+        "confd": "John Doe",
+        "fname": "johndoe@example.com"
     }
 
     config = Config(**config_data)
-    logger.debug(config.id)
-    logger.debug(config.name)
-    logger.debug(config.email)
+    logger.debug(config.confd)
+    logger.debug(config.fname)
