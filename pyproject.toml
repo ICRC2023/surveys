@@ -15,11 +15,18 @@ altair = "^5.0.1"
 vl-convert-python = "^0.11.2"
 typer = {version = "^0.9.0", extras = ["all"]}
 
-
 [tool.poetry.group.dev.dependencies]
 commitizen = "^3.5.2"
 pysen-ls = "^0.1.2"
 jupyterlab = "^4.0.2"
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+tag_format = "$version"
+version_scheme = "semver"
+version_provider = "poetry"
+update_changelog_on_bump = true
+major_version_zero = true
 
 [build-system]
 requires = ["poetry-core"]
