@@ -5,6 +5,9 @@ description = ""
 authors = ["Shota Takahashi <shotakaha@kmi.nagoya-u.ac.jp>"]
 readme = "README.md"
 
+[tool.poetry.scripts]
+ti = "titanite.cli:app"
+
 [tool.poetry.dependencies]
 python = "^3.11"
 pandas = "^2.0.3"
