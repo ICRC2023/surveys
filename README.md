@@ -3,25 +3,30 @@
 Diversityセッションの事前アンケートを集計するためのスクリプト群です。
 PythonとJupyterノートブックを使って集計＆プロット作成します。
 
-# TODO
+## TODO
 
 1. GoogleスプレッドシートをCSV形式でダウンロードする（手動）
 2. すべてのアンケート項目のヒストグラムを確認する
 3. アンケート項目2つをクロス集計する
 
-# 事前準備
+## 事前準備
 
 ```console
-$ ghq git@github.com:ICRC2023/diversity.git
-$ cd $ghqのルート/ICRC2023/diversity
+$ git clone git@github.com:ICRC2023/diversity.git
+$ cd diversity
 $ poetry shell
-$ poetry install
+(venv) $ poetry install
+...（省略）...
+Installing the current project: titanite (0.1.0)
+$ ti --help
 ```
 
-- ``ghq``を使ってリポジトリをクローンする（普通に``git clone``でもOK）
-- ``poetry``を使ってPythonの仮想環境を構築する
+- 任意の作用用ディレクトリに移動して、リポジトリをクローンする（``git clone``）
+- Pythonの仮想環境をローカルに構築する（``poetry shell``）
+- 必要なパッケージをローカルな仮想環境（``.venv``）インストールする（``poetry install``）
   - メインは``pandas``と``altair``、 開発用に``jupyterlab``
   - 補助ツールに``commitizen``と``pysen``
+- ``ti``（``titanite``）コマンドが使えることを確認する（``ti --help``）
 
 ## リポジトリ名について
 
