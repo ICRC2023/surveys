@@ -29,6 +29,9 @@ version_scheme = "semver"
 version_provider = "poetry"
 update_changelog_on_bump = true
 major_version_zero = true
+version_files = [
+    "titanite/__init__.py:__version__"
+]
 
 [build-system]
 requires = ["poetry-core"]
