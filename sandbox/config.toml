@@ -1,4 +1,137 @@
-[question]
-q1 = "q1 description"
-q2 = "q2 description"
-q3 = "q3 description"
+[questions]
+q1 = "【Q1】What is your age ?"
+q2 = "【Q2】What gender do you identify as ?"
+q3 = "【Q3】Which geographical region are you currently working or attending school/university in ?"
+q4 = "【Q4】Which geographical region do you most strongly associate with ?"
+q5 = "【Q5】What is your job title ?"
+q6 = "【Q6】Which group do you belong to ? "
+q7 = "【Q7】What is your research type ?"
+q8 = "【Q8】How long have you been in this field ?"
+q9 = "【Q9】Are you satisfied with your career to date ?"
+q10 = "【Q10】How many hours, on average, do you spend on housework, childcare, and caregiving per day ?"
+q11 = "【Q11】Did you already sign up for the diversity session in ICRC2023?"
+q12 = "【Q12】What do you think about the initiatives on DE&I of your group?"
+q13 = "【Q13】What is the percentage of female researcher in your group?"
+q14 = "【Q14】What do you think about the percentage above ?"
+q15 = "【Q15】Please let us know If your group has any good practice examples related to DE&I ?"
+q16 = "【Q16】Please let us know if there is anything your group needs to work on or if your group has any problems related to DE&I."
+q17 = "【Q17】What are your thoughts on diversity, equity & inclusion initiatives ?"
+q18 = "【Q18】Could you tell us more about your thoughts (agree / disagree) ?"
+q19 = "【Q19】When did you first become interested in science ?"
+q20 = "【Q20】Do you have any concerns / problems related to DE&I initiatives in science ?"
+q21 = "【Q21】What reasons do you think are hindering DE&I initiatives in science ?"
+q22 = "【Q22】Comments"
+
+
+[choices]
+age = [
+    "10s",
+    "20s",
+    "30s",
+    "40s",
+    "50s",
+    "60s",
+    "70s",
+    "80s",
+    "90s+",
+    "Prefer not to answer",
+    ]
+gender = [
+    "Female",
+    "Male",
+    "Non-binary",
+    "Prefer to self-identify",
+    "Prefer not to answer",
+    ]
+regional = [
+    "Asia",
+    "Africa",
+    "Europe",
+    "America",
+    "Oceania",
+    "Prefer not to answer",
+]
+subregional = [
+    "Japan",
+    "Eastern Asia",
+    "South-Eastern Asia",
+    "Southern Asia",
+    "Central Asia",
+    "Western Asia",
+    "Northern Africa",
+    "Western Africa",
+    "Middle Africa",
+    "Eastern Africa",
+    "Southern Africa",
+    "North Europe",
+    "West Europe",
+    "Central Europe",
+    "East Europe",
+    "South Europe",
+    "North America",
+    "Central America",
+    "South America",
+    "Oceania",
+    "Prefer not to answer",
+]
+job_title = [
+    "Undergraduate",
+    "Master",
+    "Doctrate",
+    "Postdoc",
+    "Fixed-term staff",
+    "Permanent staff",
+    "Prefer not to answer",
+]
+research_group = [
+    "Labels are chosen from ICRC2023 session name",
+    "CRD: Cosmic-ray physics (Direct)",
+    "CRI: Cosmic-ray physics (Indirect)",
+    "GA: Gamma-ray astronomy",
+    "NU: Neutrino astronomy & physics",
+    "SH: Solar & heliospheric physics",
+    "DM: Dark-matter physics",
+    "MM&GW: Multimessenger & gravitational wave",
+    "O&E: Outreach & education",
+    "Prefer not to answer",
+]
+research_field = [
+    "Theorist",
+    "Experimentalist",
+    "Prefer not to answer",
+]
+research_years = [
+    "< 1 year",
+    "1 - 3 years",
+    "3 - 5 years",
+    "5 - 10 yeas",
+    "> 10 years",
+    "Prefer not to answer",
+]
+yes_no = [
+    "Yes",
+    "No",
+    "Prefer not to answer",
+]
+good_poor = [
+    "Very Good",
+    "Good",
+    "Poor",
+    "Very Poor",
+    "No interest",
+    "Prefer not to answer",
+]
+agree_disagree = [
+    "Agree",
+    "Disagree",
+    "No interest",
+    "Prefer not to answer",
+]
+school = [
+    "Pre school",
+    "Elementary school",
+    "Junior High school",
+    "High school",
+    "University",
+    "Prefer not to answer",
+]
