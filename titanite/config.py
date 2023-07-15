@@ -6,7 +6,6 @@ from pydantic import BaseModel
 
 
 class Config(BaseModel):
-    confd: str = "."
     fname: str = "config.toml"
     questions: dict | None = {}
     choices: dict | None = {}
@@ -17,7 +16,7 @@ class Config(BaseModel):
         self.choices = config.get("choices")
 
     def load_toml(self):
-        fname = Path(self.confd) / self.fname
+        fname = Path(self.fname)
         with fname.open("rb") as f:
             config = tomllib.load(f)
         return config
@@ -26,7 +25,7 @@ class Config(BaseModel):
         """
         Print configuration
         """
-        f = Path(self.confd) / self.fname
+        f = Path(self.fname)
         q = self.questions
         c = self.choices
 
@@ -53,9 +52,7 @@ class Config(BaseModel):
             print(f"{k}= {v}")
         print("\n")
 
-
         return
-
 
 
 if __name__ == "__main__":
@@ -63,7 +60,6 @@ if __name__ == "__main__":
 
     c = Config(**settings)
     c.load()
-    logger.debug(c.confd)
     logger.debug(c.fname)
     logger.debug(c.get("questions").keys())
     logger.debug(c.get("choices").keys())
