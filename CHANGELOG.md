@@ -2,50 +2,46 @@
 
 ### Fix
 
-- **notebooks/others.ipynb**: プロットを好きに作ってみるノートブックを追加した
-- **titanite/cli.py**: 引数の名前を工夫した
-- **titanite/__init__.py**: coreから外に出す関数を限定した
-- **titanite/cli.py**: 前処理したデータをCLIで生成できるようにした
-- **titanite/core.py**: データを前処理する関数を追加した
-- **notebooks/preprocess.ipynb**: 前処理を追記した
-- **notebooks/preprocess.ipynb**: データの前処理を整理した
-- **titanite/config.py**: 設定ファイルからカテゴリ型を作った
-- **titanite/__init__.py**: Configクラスを呼び出せるようにした
-- **sandbox/config.toml**: カテゴリーを追加した
-- **titanite/__init__.py**: __version__を追加した
-- **sandbox/config.toml**: データ置き場を追加した
-- **titanite/cli.py**: 設定ファイルがない場合は終了するようにした
-- **titanite/config.py**: removed confd from Config class
-- **titanite/cli.py**: CLIで設定ファイルの内容を確認できるようにした
-- **titanite/config.py**: showを追加した
-- **titanite/config.py**: Configクラスを作成した
-- **pyproject.toml**: add pytest
-- **notebooks/config.ipynb**: config.tomlが読み込めることを確認した
-- **sandbox/config.toml**: updated configurations
-- **notebooks/quick_summary.ipynb**: 順番付きカテゴリカルデータを試してみた
-- **titanite/core.py**: コア機能のテンプレートを追加した
-- **notebooks/quick_summary.ipynb**: 回答時刻の図を修正した
+- **.gitignore**:
+  - ignore macOS, Python related files
+  - ignore files with "tmp_" prefix
+- **notebooks/config.ipynb**:
+  - 設定ファイル（config.toml）を読み込むときの手順を整理した
+- **notebooks/others.ipynb**:
+  - それぞれの回答の相関を確かめている
+- **notebooks/preprocess.ipynb**:
+  - データを前処理するときの手順を整理した
+- **notebooks/quick_summary.ipynb**:
+  - とりあえず集計できるか確かめた
+- **sandbox/config.toml**:
+  - 設定ファイルを用意した
+  - カテゴリーを追加した
+  - データ置き場を追加した
+- **titanite/__init__.py**:
+  - __version__を追加した
+  - config.Configを追加した
+  - core.preprocess_dataを追加した
+  - core.categorical_dataを追加した
+- **titanite/cli.py**:
+  - cli.configを追加した
+  - cli.createを追加した
+- **titanite/config.py**:
+  - config.Configクラスを作成した
+  - 引数を修正した（confdを削除した）
+  - 設定ファイルを確認できるようにした（show）
+  - 設定ファイルからカテゴリー型を作成できるようにした（categories）
+- **titanite/core.py**:
+  - データを前処理できるようにした（preprocess_data）
+  - データをカテゴリー型に変換できるようにした（categorical_data）
+
+### Build
+
+- **pyproject.toml**: added altair
+- **pyproject.toml**: added commitizen
+- **pyproject.toml**: added jupyterlab
+- **pyproject.toml**: added loguru
+- **pyproject.toml**: added pandas
+- **pyproject.toml**: added pytest
+- **pyproject.toml**: added typer
+- **pyproject.toml**: added vl-convert-python
 - **pyproject.toml**: added pydantic
-- **pyproject.toml**: removed pysen-ls
-- **notebooks/quick_summary.ipynb**: ヒートマップを修正した
-- **sandbox/config.toml**: configもどきを追加した
-- **titanite/config.py**: add template for Config class
-- **pyproject.toml**: re-add pysen-ls
-- **pyproject.toml**: add loguru
-- **titanite/cli.py**: add config
-- **titanite/cli.py**: add CLI template
-- **pyproject.toml**: add typer
-- **.gitignore**: tmp_からはじまるファイルはGit管理から除外する
-- **notebooks/quick_summary.ipynb**: ノーボブックを整理した
-- **notebooks/quick_summary.ipynb**: ヒストグラムを保存した
-- **pyproject.toml**: add vl-convert-python
-- **notebooks/quick_summary.ipynb**: add quick_summary
-- **pyproject.toml**: add jupyterlab
-- **pyproject.toml**: add pysen-ls
-- **data/**: add placeholders for main_data, test_data
-- **pyproject.toml**: add altair
-- **pyproject.toml**: add pandas
-- **pyproject.toml**: add commitizen
-- **.gitignore**: ignore Python related files
-- **.gitignore**: ignore macOS related files
-- **pyproject.toml**: Init package
