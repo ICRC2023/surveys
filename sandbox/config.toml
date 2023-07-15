@@ -47,6 +47,30 @@ gender = [
     "Prefer to self-identify",
     "Prefer not to answer",
     ]
+
+geoscheme = [
+"Asia / Japan",
+"Asia / Eastern Asia",
+"Asia / South-Eastern Asia",
+"Asia / Southern Asia",
+"Asia / Central Asia",
+"Asia / Western Asia",
+"Africa / Northern Africa",
+"Africa / Western Africa",
+"Africa / Middle Africa",
+"Africa / Eastern Africa",
+"Africa / Southern Africa",
+"Europe / North Europe",
+"Europe / West Europe",
+"Europe / Central Europe",
+"Europe / East Europe",
+"Europe / South Europe",
+"America / North America",
+"America / Central America",
+"America / South America",
+"Oceania / Oceania",
+"Prefer not to answer / Prefer not to answer",
+]
 regional = [
     "Asia",
     "Africa",
@@ -88,7 +112,6 @@ job_title = [
     "Prefer not to answer",
 ]
 research_group = [
-    "Labels are chosen from ICRC2023 session name",
     "CRD: Cosmic-ray physics (Direct)",
     "CRI: Cosmic-ray physics (Indirect)",
     "GA: Gamma-ray astronomy",
