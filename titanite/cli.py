@@ -11,34 +11,38 @@ app = typer.Typer()
 
 
 @app.command()
-def config(fname: str = "config.toml", show: bool = True):
+def config(load_from: str = "config.toml", show: bool = True):
     """Show configuration"""
-    _fname = Path(fname)
+    _fname = Path(load_from)
     if not _fname.exists():
         msg = f"File Not Found: {_fname} ({_fname.resolve()})"
         logger.error(msg)
         raise typer.Exit(code=1)
 
-    c = Config(fname=_fname)
-    c.load()
+    cfg = Config(fname=_fname)
+    cfg.load()
     if show:
-        c.show()
+        cfg.show()
         return
-    return c
+    return cfg
 
 
 @app.command()
-def create(i: str, o: str = "tmp_preprocessed.csv", c: str = "config.toml"):
+def create(
+    read_from: str,
+    write_to: str = "tmp_preprocessed.csv",
+    load_from: str = "config.toml",
+):
     """
     Create preprocessed data
     """
-    _config = config(c, show=False)
-    category = _config.categories()
+    cfg = config(load_from, show=False)
+    category = cfg.categories()
 
-    data = pd.read_csv(i, skiprows=1)
+    data = pd.read_csv(read_from, skiprows=1)
     data = preprocess_data(data, category)
-    data.to_csv(o, index=False)
-    msg = f"Saved as {o}"
+    data.to_csv(write_to, index=False)
+    msg = f"Saved as {write_to}"
     logger.info(msg)
 
 
