@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 
 class Config(BaseModel):
-    fname: str|Path = "config.toml"
+    fname: str | Path = "config.toml"
     questions: dict | None = {}
     choices: dict | None = {}
 
@@ -23,6 +23,7 @@ class Config(BaseModel):
 
     def categories(self):
         from pandas.api.types import CategoricalDtype
+
         _categories = {}
 
         for k, v in self.choices.items():
