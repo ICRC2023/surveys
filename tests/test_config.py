@@ -5,7 +5,7 @@ def init_config():
     settings = {"confd": "../sandbox/", "fname": "config.toml"}
 
     c = config.Config(**settings)
-    c.init()
+    c.load()
 
     q = c.get("questions").keys()
     x = c.get("choices").keys()
