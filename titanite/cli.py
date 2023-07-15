@@ -1,17 +1,19 @@
 from pathlib import Path
 
+import pandas as pd
 import typer
 from loguru import logger
 
 from .config import Config
+from .core import preprocess_data
 
 app = typer.Typer()
 
 
 @app.command()
-def config(fname: str = "config.toml", confd: str = ".", show: bool = False):
+def config(fname: str = "config.toml", show: bool = True):
     """Show configuration"""
-    _fname = Path(confd) / fname
+    _fname = Path(fname)
     if not _fname.exists():
         msg = f"File Not Found: {_fname} ({_fname.resolve()})"
         logger.error(msg)
@@ -26,8 +28,18 @@ def config(fname: str = "config.toml", confd: str = ".", show: bool = False):
 
 
 @app.command()
-def create(item: str):
-    print(f"Creating item: {item}")
+def create(i: str, o: str = "tmp_preprocessed.csv", c: str = "config.toml"):
+    """
+    Create preprocessed data
+    """
+    _config = config(c, show=False)
+    category = _config.categories()
+
+    data = pd.read_csv(i, skiprows=1)
+    data = preprocess_data(data, category)
+    data.to_csv(o, index=False)
+    msg = f"Saved as {o}"
+    logger.info(msg)
 
 
 @app.command()
