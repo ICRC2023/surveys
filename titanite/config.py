@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 
 class Config(BaseModel):
-    fname: str = "config.toml"
+    fname: str|Path = "config.toml"
     questions: dict | None = {}
     choices: dict | None = {}
 

@@ -1,4 +1,7 @@
+from pathlib import Path
+
 import typer
+from loguru import logger
 
 from .config import Config
 
@@ -8,11 +11,13 @@ app = typer.Typer()
 @app.command()
 def config(fname: str = "config.toml", confd: str = ".", show: bool = False):
     """Show configuration"""
-    settings = {
-        "confd": confd,
-        "fname": fname,
-    }
-    c = Config(**settings)
+    _fname = Path(confd) / fname
+    if not _fname.exists():
+        msg = f"File Not Found: {_fname} ({_fname.resolve()})"
+        logger.error(msg)
+        raise typer.Exit(code=1)
+
+    c = Config(fname=_fname)
     c.load()
     if show:
         c.show()
