@@ -20,6 +20,7 @@ pydantic = "^2.0.2"
 [tool.poetry.group.dev.dependencies]
 commitizen = "^3.5.2"
 jupyterlab = "^4.0.2"
+pytest = "^7.4.0"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
