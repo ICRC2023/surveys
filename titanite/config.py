@@ -21,6 +21,15 @@ class Config(BaseModel):
             config = tomllib.load(f)
         return config
 
+    def categories(self):
+        from pandas.api.types import CategoricalDtype
+        _categories = {}
+
+        for k, v in self.choices.items():
+            _categories[k] = CategoricalDtype(categories=v, ordered=True)
+
+        return _categories
+
     def show(self):
         """
         Print configuration
