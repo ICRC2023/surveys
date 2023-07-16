@@ -1,0 +1,47 @@
+## 0.1.1 (2023-07-16)
+
+### Fix
+
+- **.gitignore**:
+  - ignore macOS, Python related files
+  - ignore files with "tmp_" prefix
+- **notebooks/config.ipynb**:
+  - 設定ファイル（config.toml）を読み込むときの手順を整理した
+- **notebooks/others.ipynb**:
+  - それぞれの回答の相関を確かめている
+- **notebooks/preprocess.ipynb**:
+  - データを前処理するときの手順を整理した
+- **notebooks/quick_summary.ipynb**:
+  - とりあえず集計できるか確かめた
+- **sandbox/config.toml**:
+  - 設定ファイルを用意した
+  - カテゴリーを追加した
+  - データ置き場を追加した
+- **titanite/__init__.py**:
+  - __version__を追加した
+  - config.Configを追加した
+  - core.preprocess_dataを追加した
+  - core.categorical_dataを追加した
+- **titanite/cli.py**:
+  - cli.configを追加した
+  - cli.createを追加した
+- **titanite/config.py**:
+  - config.Configクラスを作成した
+  - 引数を修正した（confdを削除した）
+  - 設定ファイルを確認できるようにした（show）
+  - 設定ファイルからカテゴリー型を作成できるようにした（categories）
+- **titanite/core.py**:
+  - データを前処理できるようにした（preprocess_data）
+  - データをカテゴリー型に変換できるようにした（categorical_data）
+
+### Build
+
+- **pyproject.toml**: added altair
+- **pyproject.toml**: added commitizen
+- **pyproject.toml**: added jupyterlab
+- **pyproject.toml**: added loguru
+- **pyproject.toml**: added pandas
+- **pyproject.toml**: added pytest
+- **pyproject.toml**: added typer
+- **pyproject.toml**: added vl-convert-python
+- **pyproject.toml**: added pydantic

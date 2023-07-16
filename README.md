@@ -28,6 +28,14 @@ $ ti --help
   - 補助ツールに``commitizen``と``pysen``
 - ``ti``（``titanite``）コマンドが使えることを確認する（``ti --help``）
 
+## データの前処理
+
+CSV形式でダウンロードしたGoogleスプレッドシートを前処理して、CSVファイルに変換する
+
+```console
+$ cd sandbox
+$ ti create ../data/test_data/回答のスプレッドシート名.csv --write-to=tmp_preprocessed.csv --load-from=config.toml
+```
 
 # プロットの作成
 
