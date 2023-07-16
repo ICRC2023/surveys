@@ -1,8 +1,10 @@
 import altair as alt
 import pandas as pd
 
+from .config import Config
 
-def group(data: pd.DataFrame, x: str, y: str, z: str = "response") -> pd.DataFrame:
+
+def group_data(data: pd.DataFrame, x: str, y: str) -> pd.DataFrame:
     """
     データフレームをグループ化
 
@@ -14,8 +16,6 @@ def group(data: pd.DataFrame, x: str, y: str, z: str = "response") -> pd.DataFra
         X軸に設定する質問の番号
     y : str
         Y軸に設定する質問の番号
-    z : str, optional
-        Z軸に設定する質問の番号, by default "response"
 
     Returns
     -------
@@ -24,8 +24,33 @@ def group(data: pd.DataFrame, x: str, y: str, z: str = "response") -> pd.DataFra
     """
 
     names = [x, y]
+    z = "response"
     grouped = data.groupby(names)[z].sum().reset_index()
     return grouped
+
+
+def heatmap(data: pd.DataFrame, x: str, y: str) -> dict:
+    grouped = group_data(data, x, y)
+    z = "response"
+    graph = (
+        alt.Chart(grouped)
+        .mark_rect()
+        .encode(
+            alt.X(x),
+            alt.Y(y),
+            alt.Color(z),
+        )
+        .properties(
+            width=500,
+            height=500,
+        )
+    )
+
+    insight = {
+        "data": grouped,
+        "chart": graph,
+    }
+    return insight
 
 
 if __name__ == "__main__":
