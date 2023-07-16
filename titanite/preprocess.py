@@ -32,6 +32,7 @@ def preprocess_data(data: pd.DataFrame, category: dict) -> pd.DataFrame:
 
     return data
 
+
 def replace_data(data: pd.DataFrame) -> pd.DataFrame:
     """
     いくつかのカラムの値を置換する
@@ -63,6 +64,7 @@ def replace_data(data: pd.DataFrame) -> pd.DataFrame:
     )
     data["q14"] = data["q14"].replace({"No Interest": "No interest"})
     return data
+
 
 def split_data(data: pd.DataFrame) -> pd.DataFrame:
     """
@@ -96,8 +98,6 @@ def split_data(data: pd.DataFrame) -> pd.DataFrame:
     return data
 
 
-
-
 def categorical_data(data: pd.DataFrame, category: dict) -> pd.DataFrame:
     """
     カテゴリー型に変換する
@@ -127,13 +127,13 @@ def categorical_data(data: pd.DataFrame, category: dict) -> pd.DataFrame:
     data["q7"] = data["q7"].astype(category["research_field"])
     data["q8"] = data["q8"].astype(category["research_years"])
     data["q9"] = data["q9"].astype(category["yes_no"])
-    # data["q10"]
+    data["q10"] = data["q10"].astype(int)
     data["q11"] = data["q11"].astype(category["yes_no"])
     data["q12_genderbalance"] = data["q12_genderbalance"].astype(category["good_poor"])
     data["q12_diversity"] = data["q12_diversity"].astype(category["good_poor"])
     data["q12_equity"] = data["q12_equity"].astype(category["good_poor"])
     data["q12_inclusion"] = data["q12_inclusion"].astype(category["good_poor"])
-    # data["q13"]
+    data["q13"] = data["q13"].astype(int)
     data["q14"] = data["q14"].astype(category["good_poor"])
     # data["q15"]
     # data["q16"]
