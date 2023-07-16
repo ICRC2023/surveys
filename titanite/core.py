@@ -4,7 +4,7 @@ import pandas as pd
 from .config import Config
 
 
-def group_data(data: pd.DataFrame, x: str, y: str) -> pd.DataFrame:
+def group_data(data: pd.DataFrame, group: list) -> pd.DataFrame:
     """
     データフレームをグループ化
 
@@ -12,10 +12,8 @@ def group_data(data: pd.DataFrame, x: str, y: str) -> pd.DataFrame:
     ----------
     data : pd.DataFrame
         前処理済みのデータフレーム
-    x : str
-        X軸に設定する質問の番号
-    y : str
-        Y軸に設定する質問の番号
+    group : list
+        X軸やY軸に設定する質問番号
 
     Returns
     -------
@@ -23,14 +21,12 @@ def group_data(data: pd.DataFrame, x: str, y: str) -> pd.DataFrame:
         グループ化したデータフレーム
     """
 
-    names = [x, y]
-    z = "response"
-    grouped = data.groupby(names)[z].sum().reset_index()
+    c = "response"
+    grouped = data.groupby(group)[c].sum().reset_index()
     return grouped
 
 
 def heatmap(data: pd.DataFrame, x: str, y: str) -> dict:
-    grouped = group_data(data, x, y)
     z = "response"
     graph = (
         alt.Chart(grouped)
