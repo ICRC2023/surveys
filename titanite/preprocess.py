@@ -24,69 +24,6 @@ def preprocess_data(data: pd.DataFrame, category: dict) -> pd.DataFrame:
             - マイナス感情 = 関心が高い = 嫌悪的
     """
 
-    def replace_data(data: pd.DataFrame) -> pd.DataFrame:
-        """
-        いくつかのカラムの値を置換する
-
-        アンケートの選択肢のままだと前処理が面倒な場合があります。
-        そのような選択肢はこの関数で整えてください。
-
-        Parameters
-        ----------
-        data : pd.DataFrame
-            入力データフレーム
-
-        Returns
-        -------
-        pd.DataFrame
-            データフレーム
-        """
-        data["q3"] = data["q3"].replace(
-            {
-                "Prefer not to answer": "Prefer not to answer / Prefer not to answer",
-                "Oceania": "Oceania / Oceania",
-            }
-        )
-        data["q4"] = data["q4"].replace(
-            {
-                "Prefer not to answer": "Prefer not to answer / Prefer not to answer",
-                "Oceania": "Oceania / Oceania",
-            }
-        )
-        data["q14"] = data["q14"].replace({"No Interest": "No interest"})
-        return data
-
-    def split_data(data: pd.DataFrame) -> pd.DataFrame:
-        """
-        五大州／地域を分割して、新しいカラムとして追加する
-
-        アンケートの勤務地／出身地の選択肢は"/"で区切って集計することも想定して作成しました。
-        それぞれの質問の回答に、五大州（regional）と地域（subregional）のカラムを追加しています。
-
-        Parameters
-        ----------
-        data : pd.DataFrame
-            データフレーム
-
-        Returns
-        -------
-        pd.DataFrame
-            データフレーム
-        """
-        _q3 = data["q3"].str.split("/", expand=True)
-        _q3[0] = _q3[0].str.strip()
-        _q3[1] = _q3[1].str.strip()
-        _q3 = _q3.rename(columns={0: "q3_regional", 1: "q3_subregional"})
-
-        _q4 = data["q4"].str.split("/", expand=True)
-        _q4[0] = _q4[0].str.strip()
-        _q4[1] = _q4[1].str.strip()
-        _q4 = _q4.rename(columns={0: "q4_regional", 1: "q4_subregional"})
-
-        data = pd.concat([data, _q3], axis=1)
-        data = pd.concat([data, _q4], axis=1)
-        return data
-
     data["timestamp"] = pd.to_datetime(data["timestamp"])
     data["response"] = 1
     data = replace_data(data)
@@ -94,6 +31,71 @@ def preprocess_data(data: pd.DataFrame, category: dict) -> pd.DataFrame:
     data = categorical_data(data, category)
 
     return data
+
+def replace_data(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    いくつかのカラムの値を置換する
+
+    アンケートの選択肢のままだと前処理が面倒な場合があります。
+    そのような選択肢はこの関数で整えてください。
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        入力データフレーム
+
+    Returns
+    -------
+    pd.DataFrame
+        データフレーム
+    """
+    data["q3"] = data["q3"].replace(
+        {
+            "Prefer not to answer": "Prefer not to answer / Prefer not to answer",
+            "Oceania": "Oceania / Oceania",
+        }
+    )
+    data["q4"] = data["q4"].replace(
+        {
+            "Prefer not to answer": "Prefer not to answer / Prefer not to answer",
+            "Oceania": "Oceania / Oceania",
+        }
+    )
+    data["q14"] = data["q14"].replace({"No Interest": "No interest"})
+    return data
+
+def split_data(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    五大州／地域を分割して、新しいカラムとして追加する
+
+    アンケートの勤務地／出身地の選択肢は"/"で区切って集計することも想定して作成しました。
+    それぞれの質問の回答に、五大州（regional）と地域（subregional）のカラムを追加しています。
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        データフレーム
+
+    Returns
+    -------
+    pd.DataFrame
+        データフレーム
+    """
+    _q3 = data["q3"].str.split("/", expand=True)
+    _q3[0] = _q3[0].str.strip()
+    _q3[1] = _q3[1].str.strip()
+    _q3 = _q3.rename(columns={0: "q3_regional", 1: "q3_subregional"})
+
+    _q4 = data["q4"].str.split("/", expand=True)
+    _q4[0] = _q4[0].str.strip()
+    _q4[1] = _q4[1].str.strip()
+    _q4 = _q4.rename(columns={0: "q4_regional", 1: "q4_subregional"})
+
+    data = pd.concat([data, _q3], axis=1)
+    data = pd.concat([data, _q4], axis=1)
+    return data
+
+
 
 
 def categorical_data(data: pd.DataFrame, category: dict) -> pd.DataFrame:
