@@ -5,7 +5,7 @@ import typer
 from loguru import logger
 
 from .config import Config
-from .core import preprocess_data
+from .preprocess import preprocess_data
 
 app = typer.Typer()
 
