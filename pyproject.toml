@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "titanite"
-version = "0.1.1"
+version = "0.1.2"
 description = ""
 authors = ["Shota Takahashi <shotakaha@kmi.nagoya-u.ac.jp>"]
 readme = "README.md"

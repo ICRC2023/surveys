@@ -1,3 +1,21 @@
+## 0.1.2 (2023-07-16)
+
+### Fix
+
+- **notebooks**: ノートを追加した
+- **titanite/core.py**: ヒートマップをつくる関数を追加した
+- **titanite/preprocess.py**: 回答が整数値のカラムをint型に変換した
+- **pyproject.toml**: add geopandas
+- **titanite/core.py**: グループ化する関数を追加した
+- **titanite/core.py**: グループ化するコマンドを追加した
+- **notebooks/20_gender.ipynb**: ジェンダーを軸にして分析するノートブックを追加した
+- **notebooks/10_quick_summary.ipynb**: 前処理をcategorical_dataに置き換えた
+- **notebooks/00_config.ipynb**: volumesセクションの確認を追加した
+- **sandbox/config.toml**: 地域名の並びを変更した
+- **renamed**: ファイル名をpreprocess.pyに変更した
+- **renamed**: ノートブックの名前を変更した
+- **notebooks/comments.ipynb**: コメントを整理するためのノートブックを作成した
+
 ## 0.1.1 (2023-07-16)
 
 ### Fix
