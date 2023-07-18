@@ -24,11 +24,45 @@ def load_data():
     data = ti.categorical_data(data, category)
     return data
 
+st.set_page_config(layout="wide")
 
-st.title("ICRC2023 Diversity Pre-Surveys")
 data_load_state = st.text("Loading data ...")
 data = load_data()
 data_load_state.text("Loading data ... done!")
 
-st.subheader("Raw data")
-st.write(data)
+
+date_min = data["timestamp"].iat[0].date()
+date_max = data["timestamp"].iat[-1].date()
+st.text(date_min)
+st.text(date_max)
+
+
+st.title("ICRC2023 Diversity Pre-Surveys")
+st.sidebar.title("Dashboard")
+st.sidebar.markdown("Settings")
+
+date_start, date_end = st.sidebar.slider(
+    "period",
+    min_value=date_min,
+    max_value=date_max,
+    value=(date_min, date_max)
+
+)
+
+st.sidebar.text(f"Start: {date_start}")
+st.sidebar.text(f"End: {date_end}")
+
+
+base = alt.Chart(data).properties(
+    height=300,
+    width=600,
+    )
+
+gender = base.mark_rect().encode(
+    alt.X("yearmonthdate(timestamp)"),
+    alt.Y("hours(timestamp)"),
+    alt.Color("count()")
+)
+
+left_column, right_column = st.columns(2)
+left_column.altair_chart(gender)
