@@ -160,13 +160,21 @@ def sentiment_data(data):
             blob = TextBlob(text)
             return blob.sentiment.polarity
         except TypeError as e:
-            logger.debug(e)
+            # logger.debug(e)
             return np.nan
 
     def subjectivity(text):
         try:
             blob = TextBlob(text)
             return blob.sentiment.subjectivity
+        except TypeError as e:
+            # logger.debug(e)
+            return np.nan
+
+    def translation(text):
+        try:
+            blob = TextBlob(text)
+            return blob.translate(from_lang="en", to="ja")
         except TypeError as e:
             logger.debug(e)
             return np.nan
@@ -183,6 +191,9 @@ def sentiment_data(data):
         data[h] = data[header].apply(polarity)
         h = f"{header}_subjectivity"
         data[h] = data[header].apply(subjectivity)
+        h = f"{header}_ja"
+        data[h] = data[header].apply(translation)
+
     return data
 
 
