@@ -151,6 +151,18 @@ def categorical_data(data: pd.DataFrame, category: dict) -> pd.DataFrame:
     return data
 
 
+def sentiment_data(data):
+    from textblob import TextBlob
+
+    # 自由記述の回答のカラム
+    cols = ["q15", "q16", "q18", "q20", "q21", "q22"]
+
+    for col in cols:
+        responses = data[col].tolist()
+        for response in responses:
+            sentiment = TextBlob(response).sentiment.polarity
+            print(f"Sentiment score: {sentiment}")
+
 if __name__ == "__main__":
     logger.debug("Test core.py")
 
