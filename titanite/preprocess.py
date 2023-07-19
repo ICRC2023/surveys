@@ -28,6 +28,7 @@ def preprocess_data(data: pd.DataFrame, category: dict) -> pd.DataFrame:
     data["response"] = 1
     data = replace_data(data)
     data = split_data(data)
+    data = sentiment_data(data)
     data = categorical_data(data, category)
 
     return data
@@ -97,7 +98,6 @@ def split_data(data: pd.DataFrame) -> pd.DataFrame:
     data = pd.concat([data, _q4], axis=1)
     return data
 
-
 def categorical_data(data: pd.DataFrame, category: dict) -> pd.DataFrame:
     """
     カテゴリー型に変換する
@@ -152,16 +152,39 @@ def categorical_data(data: pd.DataFrame, category: dict) -> pd.DataFrame:
 
 
 def sentiment_data(data):
+    import numpy as np
     from textblob import TextBlob
 
-    # 自由記述の回答のカラム
-    cols = ["q15", "q16", "q18", "q20", "q21", "q22"]
+    def polarity(text):
+        try:
+            blob = TextBlob(text)
+            return blob.sentiment.polarity
+        except TypeError as e:
+            logger.debug(e)
+            return np.nan
 
-    for col in cols:
-        responses = data[col].tolist()
-        for response in responses:
-            sentiment = TextBlob(response).sentiment.polarity
-            print(f"Sentiment score: {sentiment}")
+    def subjectivity(text):
+        try:
+            blob = TextBlob(text)
+            return blob.sentiment.subjectivity
+        except TypeError as e:
+            logger.debug(e)
+            return np.nan
+
+    # やりたいこと
+    # data["q15_polarity"] = data["q15"].apply(polarity)
+    # data["q15_subjectivity"] = data["q15"].apply(subjectivity)
+
+    # 自由記述の回答のカラム
+    headers = ["q15", "q16", "q18", "q20", "q21", "q22"]
+
+    for header in headers:
+        h = f"{header}_polarity"
+        data[h] = data[header].apply(polarity)
+        h = f"{header}_subjectivity"
+        data[h] = data[header].apply(subjectivity)
+    return data
+
 
 if __name__ == "__main__":
     logger.debug("Test core.py")
