@@ -154,6 +154,7 @@ def categorical_data(data: pd.DataFrame, category: dict) -> pd.DataFrame:
 def sentiment_data(data):
     import numpy as np
     from textblob import TextBlob
+    from tqdm import tqdm
 
     def polarity(text):
         try:
@@ -183,16 +184,20 @@ def sentiment_data(data):
     # data["q15_polarity"] = data["q15"].apply(polarity)
     # data["q15_subjectivity"] = data["q15"].apply(subjectivity)
 
+
     # 自由記述の回答のカラム
     headers = ["q15", "q16", "q18", "q20", "q21", "q22"]
 
+    tqdm.pandas()
     for header in headers:
+        logger.info(f"Processing {header} ...")
         h = f"{header}_polarity"
-        data[h] = data[header].apply(polarity)
+        data[h] = data[header].progress_apply(polarity)
         h = f"{header}_subjectivity"
-        data[h] = data[header].apply(subjectivity)
+        data[h] = data[header].progress_apply(subjectivity)
         h = f"{header}_ja"
-        data[h] = data[header].apply(translation)
+        data[h] = data[header].progress_apply(translation)
+        logger.info(f"Processing {header} ... done !")
 
     return data
 
