@@ -1,5 +1,8 @@
 #set page(
-    header: "2023/07/20",
+    header: [
+        #set text(8pt)
+        #h(1fr) updated: 2023/07/20
+        ],
     numbering: "1 / 1",
 )
 
@@ -12,7 +15,7 @@
     lang: "ja"
 )
 
-#let answers = json("comment_q20.json")
+#let answers = json("../test_data/q20.json")
 
 = 【Q20】Do you have any concerns / problems related to DE&I initiatives in science ?
 

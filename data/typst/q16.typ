@@ -1,5 +1,8 @@
 #set page(
-    header: "2023/07/20",
+    header: [
+        #set text(8pt)
+        #h(1fr) updated: 2023/07/20
+        ],
     numbering: "1 / 1",
 )
 
@@ -12,7 +15,7 @@
     lang: "ja"
 )
 
-#let answers = json("comment_q16.json")
+#let answers = json("../test_data/q16.json")
 
 = 【Q16】Please let us know if there is anything your group needs to work on or if your group has any problems related to DE&I.
 
