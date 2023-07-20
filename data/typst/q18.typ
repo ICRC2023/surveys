@@ -1,5 +1,8 @@
 #set page(
-    header: "2023/07/20",
+    header: [
+        #set text(8pt)
+        #h(1fr) updated: 2023/07/20
+        ],
     numbering: "1 / 1",
 )
 
@@ -12,7 +15,7 @@
     lang: "ja"
 )
 
-#let answers = json("comment_q18.json")
+#let answers = json("../test_data/q18.json")
 
 = 【Q18】Could you tell us more about your thoughts (agree / disagree) ?
 
