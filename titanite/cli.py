@@ -5,6 +5,7 @@ import typer
 from loguru import logger
 
 from .config import Config
+from .core import comment_json
 from .preprocess import preprocess_data
 
 app = typer.Typer()
@@ -30,7 +31,7 @@ def config(load_from: str = "config.toml", show: bool = True):
 @app.command()
 def prepare(
     read_from: str,
-    write_to: str = "tmp_preprocessed.csv",
+    write_dir: str = "../data/test_data/",
     load_from: str = "config.toml",
 ):
     """
@@ -44,15 +45,22 @@ def prepare(
 
     data = pd.read_csv(read_from, skiprows=1)
     data = preprocess_data(data, category)
-    data.to_csv(write_to, index=False)
-    msg = f"Saved as {write_to}"
+    fname = Path(write_dir) / "all.csv"
+    data.to_csv(fname, index=False)
+    msg = f"Saved as {fname}"
 
 
     logger.info(msg)
 
 @app.command()
-def delete(item: str):
-    print(f"Deleting item: {item}")
+def comment(
+    read_from: str = "../data/test_data/all.csv",
+    write_dir: str = "../data/test_data/."
+    ) -> None:
+    print(f"Read from: {read_from}")
+    data = pd.read_csv(read_from, parse_dates=["timestamp"])
+    comment_json(data, write_dir)
+    return
 
 
 @app.command()

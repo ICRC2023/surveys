@@ -1,5 +1,8 @@
+from pathlib import Path
+
 import altair as alt
 import pandas as pd
+from loguru import logger
 
 from .config import Config
 
@@ -48,9 +51,28 @@ def heatmap(data: pd.DataFrame, x: str, y: str) -> dict:
     }
     return insight
 
+def comment_json(data:pd.DataFrame, write_dir: str) -> None:
+    """
+    Parse comment data
+
+    1. 自由記述の回答を抽出する（無回答を削除）
+    2. 自動で翻訳する
+    3. 質問番号ごとにJSONファイルに出力する
+    """
+
+    attributes = ["q1", "q2", "q3", "q5", "q6", "q7"]
+    headers = ["q15", "q16", "q18", "q20", "q21", "q22"]
+    for header in headers:
+        q = data.dropna(subset=header)
+        # print(f"{header}: {len(q)}")
+        h = attributes + [header, f"{header}_ja", f"{header}_polarity", f"{header}_subjectivity"]
+        fname = Path(write_dir) / f"{header}.json"
+        q[h].sort_values(by=header).to_json(fname, orient="records")
+        logger.info(f"Saved as {fname}")
+    return
+
 
 if __name__ == "__main__":
-    from loguru import logger
 
     import titanite as ti
 
@@ -64,5 +86,5 @@ if __name__ == "__main__":
     data = ti.categorical_data(data, category)
     logger.debug(len(sorted(data.columns)))
 
-    grouped = group(data, x="q1", y="q2")
+    grouped = group_data(data, x="q1", y="q2")
     logger.debug(len(sorted(grouped.columns)))
