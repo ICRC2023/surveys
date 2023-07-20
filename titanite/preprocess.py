@@ -176,7 +176,7 @@ def sentiment_data(data):
             blob = TextBlob(text)
             return blob.translate(from_lang="en", to="ja")
         except TypeError as e:
-            logger.debug(e)
+            # logger.debug(e)
             return np.nan
 
     # やりたいこと
