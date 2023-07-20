@@ -12,7 +12,7 @@
     lang: "ja"
 )
 
-#let answers = json("comment_q20.json")
+#let answers = json("comment_q21.json")
 
 = 【Q21】What reasons do you think are hindering DE&I initiatives in science ?
 
