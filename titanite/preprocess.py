@@ -26,9 +26,17 @@ def preprocess_data(data: pd.DataFrame, category: dict) -> pd.DataFrame:
 
     data["timestamp"] = pd.to_datetime(data["timestamp"])
     data["response"] = 1
+
+    logger.info("Replace")
     data = replace_data(data)
+
+    logger.info("Split")
     data = split_data(data)
+
+    logger.info("Sentiment Analysis")
     data = sentiment_data(data)
+
+    logger.info("Categorize")
     data = categorical_data(data, category)
 
     return data
