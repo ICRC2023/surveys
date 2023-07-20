@@ -28,13 +28,16 @@ def config(load_from: str = "config.toml", show: bool = True):
 
 
 @app.command()
-def create(
+def prepare(
     read_from: str,
     write_to: str = "tmp_preprocessed.csv",
     load_from: str = "config.toml",
 ):
     """
-    Create preprocessed data
+    Prepare data
+
+    CSV形式で出力したGoogleスプレッドシートの回答を読み込み、
+    前処理したデータを生成します。
     """
     cfg = config(load_from, show=False)
     category = cfg.categories()
@@ -43,8 +46,9 @@ def create(
     data = preprocess_data(data, category)
     data.to_csv(write_to, index=False)
     msg = f"Saved as {write_to}"
-    logger.info(msg)
 
+
+    logger.info(msg)
 
 @app.command()
 def delete(item: str):
