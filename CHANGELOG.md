@@ -2,48 +2,35 @@
 
 ### Feat
 
-- **titanite/cli.py**: コマンド名を変更した: create -> prepare
-- **data/typst**: 自由記述をPDFに変換するTypstのテンプレを追加した
-- **titanite/preprocess.py**: 自由記述を自動翻訳することにした
-- **titanite/preprocess.py**: 自由記入に対して感情分析できるようにした
+- **data/typst**: 自由回答のTypstテンプレートを追加した
+- **titanite/cli.py**: コマンド名 create -> prepare に変更した
+- **titanite/preprocess.py**: 自由回答の感情分析を追加した
+- **titanite/preprocess.py**: 自由回答の自動翻訳を追加した
 
 ### Fix
 
-- **notebooks/10_quick_summary.ipynb**: crosstabに合計（margins）も追加した
-- **report/slide.typ**: レポートの書式を変更した
-- **notebooks/10_quick_summary.ipynb**: クロス集計を総当たりにした
-- **notebooks/30_comments.ipynb**: データを更新した
-- **report/slide.typ**: カイ二乗検定を追記した
-- **pyproject.toml**: add scipy
-- **notebooks/20_interest.ipynb**: Q19用のノートブックを作成した
-- **notebooks/10_quick_summary.ipynb**: q10とq13をビンにした（仮）
-- **report/slide.typ**: 報告用資料を更新した
-- **report/slide.typ**: 拡張子を修正した
-- **report/slide.type**: スライド用のTypstファイルを作成した
-- **notebooks/10_quick_summary.ipynb**: 出力を全消し
-- **notebooks/01_preprocess.ipynb**: q10とq13の回答をビン分割しようとしている
-- **data/typst/**: コメント分析を更新した
-- **titanite/cli.py**: デフォルトの出力ファイル名を変更した
-- **data/typst/**: ヘッダーの形式とデータ名を修正した
-- **titanite/preprocess.py**: 処理の経過を表示した
-- **titanite/preprocess.py**: 進捗バーを追加した
-- **pyproject.toml**: add tqdm
-- **titanite/preprocess.py**: 自動翻訳時のデバッグ表示をオフにした
-- **data/typst/q21.typ**: 読み込むデータ名を修正した
-- **notebooks/10_quick_summary.ipynb**: データを更新した
-- **notebooks/30_comments.ipynb**: 自由記述をJSONで書き出すことにした
+- **data/typst/**: Typstテンプレートのヘッダー形式とデータ名を修正した
 - **notebooks/01_preprocess.ipynb**: 感情解析のサンプルを追加した
-- **titanite/preprocess.py**: 自由記述を感情分析する関数を追加した（テスト中）
-- **pyproject.toml**: add textblob
-- **notebooks/10_quick_summary.ipynb**: 積み上げグラフ（割合）に変更してみた
-- **notebooks/10_quick_summary.ipynb**: データを更新した
+- **notebooks/10_quick_summary.ipynb**: クロス集計の結果に合計（margins）を追加した
+- **notebooks/10_quick_summary.ipynb**: q10とq13の回答をビン分割した
+- **notebooks/10_quick_summary.ipynb**: クロス集計の項目をitertoolsを使って総当たりにした
+- **notebooks/10_quick_summary.ipynb**: ヒストグラムを積み上げグラフ（割合）に変更した
+- **notebooks/20_interest.ipynb**: Q19用のノートブックを作成した
+- **notebooks/30_comments.ipynb**: 自由記述の出力をJSON形式に変更した
+- **report/slide.typ**: カイ二乗検定を追記した
+- **report/slide.typ**: レポートの書式を変更した
+- **sandbox/app.py**: streamlitを追加した
 - **sandbox/app.py**: ヒートマップを追加した
-- **notebooks/30_comments.ipynb**: ノートを修正した
-- **sandbox/app.py**: streamlit appを追加した
-- **pyproject.toml**: add streamlit
-- **renamed**: ファイル名を変更した
-- **notebooks/05_others.ipynb**: mark_pointで作ってみた
+- **titanite/cli.py**: デフォルトの出力ファイル名を変更した
 - **titanite/core.py**: group_dataの引数を変更した
+- **titanite/preprocess.py**: 処理経過の進捗バーを追加した
+
+### Build
+
+- **pyproject.toml**: add scipy
+- **pyproject.toml**: add streamlit
+- **pyproject.toml**: add textblob
+- **pyproject.toml**: add tqdm
 
 ## 0.1.2 (2023-07-16)
 
