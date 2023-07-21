@@ -49,14 +49,13 @@ def prepare(
     data.to_csv(fname, index=False)
     msg = f"Saved as {fname}"
 
-
     logger.info(msg)
+
 
 @app.command()
 def comment(
-    read_from: str = "../data/test_data/all.csv",
-    write_dir: str = "../data/test_data/."
-    ) -> None:
+    read_from: str = "../data/test_data/all.csv", write_dir: str = "../data/test_data/."
+) -> None:
     print(f"Read from: {read_from}")
     data = pd.read_csv(read_from, parse_dates=["timestamp"])
     comment_json(data, write_dir)

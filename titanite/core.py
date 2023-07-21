@@ -51,7 +51,8 @@ def heatmap(data: pd.DataFrame, x: str, y: str) -> dict:
     }
     return insight
 
-def comment_json(data:pd.DataFrame, write_dir: str) -> None:
+
+def comment_json(data: pd.DataFrame, write_dir: str) -> None:
     """
     Parse comment data
 
@@ -65,7 +66,12 @@ def comment_json(data:pd.DataFrame, write_dir: str) -> None:
     for header in headers:
         q = data.dropna(subset=header)
         # print(f"{header}: {len(q)}")
-        h = attributes + [header, f"{header}_ja", f"{header}_polarity", f"{header}_subjectivity"]
+        h = attributes + [
+            header,
+            f"{header}_ja",
+            f"{header}_polarity",
+            f"{header}_subjectivity",
+        ]
         fname = Path(write_dir) / f"{header}.json"
         q[h].sort_values(by=header).to_json(fname, orient="records")
         logger.info(f"Saved as {fname}")
@@ -73,7 +79,6 @@ def comment_json(data:pd.DataFrame, write_dir: str) -> None:
 
 
 if __name__ == "__main__":
-
     import titanite as ti
 
     fname = "../sandbox/config.toml"
