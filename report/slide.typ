@@ -39,6 +39,8 @@
     )
 )
 
+#pagebreak()
+
 = 事前アンケート集計
 
 - 集計期間：2023年7月06日 - 7月21日
@@ -249,15 +251,7 @@
 
 #pagebreak()
 
-= $chi^2$検定
 
-- カテゴリカルデータ（離散変数）を対象とした検定手法
-- 対象とする離散変数の独立性を評価する
-    - 離散変数に"相関がない"帰無仮説を仮定して、期待度数を計算する
-    - 測定量と期待度数の差を計算する
-- p値が0.05以下だと「独立ではない」（＝相関がある）
-    - ある条件下ではイェイツの修正を加える必要がある
-- `scipy`パッケージのカイ二乗検定モジュールが便利そう
 
 #pagebreak()
 
@@ -540,3 +534,38 @@ Gender balanceの取り組みに対して反対の割合は、女性も多い。
 )
 
 #pagebreak()
+
+= $chi^2$検定
+
+$
+chi^2 = sum ("observed" - "expected")^(2) / "expected"
+$
+
+- カテゴリカルデータ（離散変数）を対象とした検定手法
+- 対象とする離散変数の独立性を評価する
+    - 離散変数に"相関がない"帰無仮説を仮定して、期待度数を計算する
+    - 測定量と期待度数の差を計算する
+- p値が0.05以下だと「独立ではない」（＝相関がある）
+    - ある条件下ではイェイツの修正を加える必要がある
+- `scipy`パッケージのカイ二乗検定モジュールが便利そう
+
+```python
+from scipy.stats import chi2_contingency
+
+# List of columns related to question 12
+q12_cols = ['q12_genderbalance', 'q12_diversity', 'q12_equity', 'q12_inclusion']
+
+# Create cross-tabulations and perform Chi-squared tests
+cross_tabs = []
+chi2_results = []
+
+for col in q12_cols:
+    cross_tab = pd.crosstab(df['q2'], df[col])
+    cross_tabs.append(cross_tab)
+
+    # Perform Chi-squared test
+    chi2, p, dof, expected = chi2_contingency(cross_tab)
+    chi2_results.append((col, chi2, p, dof))
+
+cross_tabs, chi2_results
+```
