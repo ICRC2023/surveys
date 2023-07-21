@@ -106,6 +106,7 @@ def split_data(data: pd.DataFrame) -> pd.DataFrame:
     data = pd.concat([data, _q4], axis=1)
     return data
 
+
 def categorical_data(data: pd.DataFrame, category: dict) -> pd.DataFrame:
     """
     カテゴリー型に変換する
@@ -192,7 +193,6 @@ def sentiment_data(data):
     # data["q15_polarity"] = data["q15"].apply(polarity)
     # data["q15_subjectivity"] = data["q15"].apply(subjectivity)
 
-
     # 自由記述の回答のカラム
     headers = ["q15", "q16", "q18", "q20", "q21", "q22"]
 
@@ -207,6 +207,92 @@ def sentiment_data(data):
         data[h] = data[header].progress_apply(translation)
         logger.info(f"Processing {header} ... done !")
 
+    return data
+
+
+def binned_data(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    ビン分割
+
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        入力データ
+
+    Returns
+    -------
+    pd.DataFrame
+        ビン分割したカラムを追加したデータ
+    """
+    data["q10_binned"] = pd.cut(
+        data["q10"],
+        [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 25],
+        labels=[
+            "Prefer not to answer",
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10+",
+        ],
+        right=False,
+    )
+    data["q13_binned"] = pd.cut(
+        data["q13"],
+        [
+            -1,
+            0,
+            10,
+            15,
+            20,
+            25,
+            30,
+            35,
+            40,
+            45,
+            50,
+            55,
+            60,
+            65,
+            70,
+            75,
+            80,
+            85,
+            90,
+            95,
+            100,
+        ],
+        labels=[
+            "Prefer not to answer",
+            "0",
+            "10",
+            "15",
+            "20",
+            "25",
+            "30",
+            "35",
+            "40",
+            "45",
+            "50",
+            "55",
+            "60",
+            "65",
+            "70",
+            "75",
+            "80",
+            "85",
+            "90",
+            "95",
+        ],
+        right=False,
+    )
     return data
 
 
