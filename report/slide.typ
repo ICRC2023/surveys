@@ -17,11 +17,11 @@
 
 #set heading(numbering: "1.1.1." )
 #show heading: it => block(
-    fill: olive,
+    fill: blue,
     inset: 1.5em,
     spacing: 1.5em,
     width: 100%,
-    text(font: "Noto Sans CJK JP")[#it.body]
+    text(font: "Noto Sans CJK JP", fill: white)[#it.body]
     )
 
 #set line(
@@ -74,6 +74,8 @@
 - Male：220 (72.4%)
 - NA：0 (0.0%)
 ]
+
+Diversityセッション参加：約120名
 
 #line()
 
@@ -269,6 +271,8 @@
     caption: [年代]
 )
 
+- 20代〜40代に `non-binary`などの回答がある
+
 #pagebreak()
 
 == 地域
@@ -311,6 +315,10 @@
     caption: [出身地]
 )
 
+
+- 中央アジアと西アジア（中東）は（回答者の）男女比が逆転している
+- 日本の回答者の90%が男性
+
 #pagebreak()
 
 == 肩書き
@@ -320,15 +328,34 @@
     caption: [肩書き]
 )
 
+#pagebreak()
+
+== 所属グループ
+
 #figure(
     image("../data/quick_summary/tmp_q6.png"),
     caption: [所属グループ]
 )
 
+- O&E関係者は女性が多い
+    - 僕の肌感覚も、広報担当者は女性が多いなぁという印象
+
+#pagebreak()
+
+== 理論 or 実験
+
 #figure(
     image("../data/quick_summary/tmp_q7.png"),
     caption: [理論 or 実験]
 )
+
+- これは回答の選択肢が不十分だったかも
+- ``Prefer not to answer``の他に``Others``という回答もある
+    - ``both``とかいたり、``phenomenologist``とかいたり
+
+#pagebreak()
+
+== Diversityセッション登録
 
 #figure(
     image("../data/quick_summary/tmp_q11.png"),
@@ -349,6 +376,9 @@
     caption: [キャリアに満足？]
 )
 
+- 3年から10年にかけて、男性比率がアップしている
+- 3年未満でいちどリセットされる？
+
 #pagebreak()
 
 == 家事・育児・介護
@@ -357,6 +387,8 @@
     image("../data/quick_summary/tmp_q10_binned.png"),
     caption: [1日で家事・育児・介護にかかる平均時間数]
 )
+
+- 男性＝短時間、女性＝長時間という傾向がみられるかと思ったら、そうでもなかった
 
 #pagebreak()
 
@@ -382,9 +414,7 @@
     caption: [Inclusion]
 )
 
-すべての項目に対して、
-男性は「Very Good / Good」と思っていて、
-女性は「Very Poor / Poor」と感じている。
+- ただし、`Gender Balance`、`Diversity`、`Equity`、`Inclusion`のすべての項目に対して、男性は「`Very Good` or `Good`」、女性は「`Very Poor` or `Poor`」と感じている。
 
 
 #pagebreak()
@@ -412,8 +442,8 @@
 )
 
 
-Gender balanceとDiversityに関して「Disagree」の回答が、EquityやInclusionに比べると、少し目立つ気がした。
-Gender balanceの取り組みに対して反対の割合は、女性も多い。
+- `Gender balance` と `Diversity` に関して「Disagree」の回答が少し目立つ気がした。
+- `Gender balance`の取り組みに対して反対の割合は、女性も多い。
 
 #pagebreak()
 
@@ -445,6 +475,50 @@ Gender balanceの取り組みに対して反対の割合は、女性も多い。
 男性の方が早い段階（＝小学校）で興味を持つ。
 ただし、それほど男女差はないのかも？
 地域で見た方がいいのかもしれない？
+
+#pagebreak()
+
+= クロス集計
+
+- まにあっていない🙏
+- カテゴリカルデータ（離散変数）を2つ選び、そのfrequensy tableを作成する
+- 作成した表に対し、相関がないという帰無仮説を仮定し、$chi^(2)$検定をかけて、有意差（p値）を評価する
+- $chi^(2)$検定にはPythonの`scipy`パッケージを使う予定
+
+== $chi^2$検定
+
+$
+chi^2 = sum ("observed" - "expected")^(2) / "expected"
+$
+
+- カテゴリカルデータ（離散変数）を対象とした検定手法
+- 対象とする離散変数の独立性を評価する
+    - 離散変数に"相関がない"帰無仮説を仮定して、期待度数を計算する
+    - 測定量と期待度数の差を計算する
+- p値が0.05以下だと「独立ではない」（＝相関がある）
+    - ある条件下ではイェイツの修正を加える必要がある
+- `scipy`パッケージのカイ二乗検定モジュールが便利そう
+
+```python
+from scipy.stats import chi2_contingency
+
+# List of columns related to question 12
+q12_cols = ['q12_genderbalance', 'q12_diversity', 'q12_equity', 'q12_inclusion']
+
+# Create cross-tabulations and perform Chi-squared tests
+cross_tabs = []
+chi2_results = []
+
+for col in q12_cols:
+    cross_tab = pd.crosstab(df['q2'], df[col])
+    cross_tabs.append(cross_tab)
+
+    # Perform Chi-squared test
+    chi2, p, dof, expected = chi2_contingency(cross_tab)
+    chi2_results.append((col, chi2, p, dof))
+
+cross_tabs, chi2_results
+```
 
 
 #pagebreak()
@@ -534,38 +608,3 @@ Gender balanceの取り組みに対して反対の割合は、女性も多い。
 )
 
 #pagebreak()
-
-= $chi^2$検定
-
-$
-chi^2 = sum ("observed" - "expected")^(2) / "expected"
-$
-
-- カテゴリカルデータ（離散変数）を対象とした検定手法
-- 対象とする離散変数の独立性を評価する
-    - 離散変数に"相関がない"帰無仮説を仮定して、期待度数を計算する
-    - 測定量と期待度数の差を計算する
-- p値が0.05以下だと「独立ではない」（＝相関がある）
-    - ある条件下ではイェイツの修正を加える必要がある
-- `scipy`パッケージのカイ二乗検定モジュールが便利そう
-
-```python
-from scipy.stats import chi2_contingency
-
-# List of columns related to question 12
-q12_cols = ['q12_genderbalance', 'q12_diversity', 'q12_equity', 'q12_inclusion']
-
-# Create cross-tabulations and perform Chi-squared tests
-cross_tabs = []
-chi2_results = []
-
-for col in q12_cols:
-    cross_tab = pd.crosstab(df['q2'], df[col])
-    cross_tabs.append(cross_tab)
-
-    # Perform Chi-squared test
-    chi2, p, dof, expected = chi2_contingency(cross_tab)
-    chi2_results.append((col, chi2, p, dof))
-
-cross_tabs, chi2_results
-```
