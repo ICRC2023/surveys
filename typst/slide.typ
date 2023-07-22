@@ -5,7 +5,6 @@
 
 #set page(
     header: today,
-    footer: "ICRC2023 Diversity Session",
     numbering: "1 / 1",
 )
 
@@ -15,7 +14,7 @@
 
 #set text(
     font: "Noto Serif CJK JP",
-    size: 12pt,
+    size: 10pt,
 )
 
 #set heading(numbering: "1.1.1." )
@@ -501,31 +500,23 @@ $
 - p値が0.05以下だと「独立ではない」（＝相関がある）
     - ある条件下ではイェイツの修正を加える必要がある
 - `scipy`パッケージのカイ二乗検定モジュールが便利そう
+    - デフォルトで`correction=True`。自由度が1のとき、イェーツの連続補正が適用される
 
 ```python
 from scipy.stats import chi2_contingency
-
-# List of columns related to question 12
-q12_cols = ['q12_genderbalance', 'q12_diversity', 'q12_equity', 'q12_inclusion']
-
-# Create cross-tabulations and perform Chi-squared tests
-cross_tabs = []
-chi2_results = []
-
-for col in q12_cols:
-    cross_tab = pd.crosstab(df['q2'], df[col])
-    cross_tabs.append(cross_tab)
-
-    # Perform Chi-squared test
-    chi2, p, dof, expected = chi2_contingency(cross_tab)
-    chi2_results.append((col, chi2, p, dof))
-
-cross_tabs, chi2_results
+cross_tab = pd.crosstab(data[x], data[y])
+chi2, p, dof, expected = chi2_contingency(cross_tab)
 ```
 
+#pagebreak()
+
+== $chi^(2)$検定の結果
+
+p値 < 0.05以下の項目を抽出した
+
 #table(
-    columns: 4,
-    [*Condition*], [*Result*],
+    columns: 5,
+    [*Questions*], [*P-value*], [*Statistic*], [*DoF*], [*PNG*],
     ..p005.flatten(),
 )
 
