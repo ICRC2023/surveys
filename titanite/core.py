@@ -3,6 +3,7 @@ from pathlib import Path
 import altair as alt
 import pandas as pd
 from loguru import logger
+from scipy.stats import chi2_contingency
 
 from .config import Config
 
@@ -105,7 +106,7 @@ def response(data: pd.DataFrame) -> alt.LayerChart:
     mark = base.mark_point().encode(
         alt.Color("count()").title("回答数"),
         alt.Size("count()"),
-        alt.Shape("q3_regional").title("地域（勤務地）"),
+        alt.Shape("q03_regional").title("地域（勤務地）"),
     )
     text = base.mark_text(dx=10, dy=-10).encode(
         alt.Text("count()"),
@@ -117,6 +118,33 @@ def response(data: pd.DataFrame) -> alt.LayerChart:
         height=800,
     )
     return chart
+
+
+def crosstab(data: pd.DataFrame, header: tuple):
+    h0 = header[0]
+    h1 = header[1]
+    v = "response"
+
+    ctab = pd.crosstab(data[h0], data[h1])
+    chi2 = chi2_contingency(ctab)
+
+    melted = ctab.reset_index().melt(id_vars=h0, var_name=h1, value_name=v)
+    base = alt.Chart(melted).encode(
+        alt.X(h1),
+        alt.Y(h0),
+    )
+
+    mark = base.mark_rect().encode(
+        alt.Color(v),
+    )
+
+    text = base.mark_text().encode(alt.Text(v))
+
+    chart = (mark + text).properties(
+        width=800,
+        height=800,
+    )
+    return ctab, chi2, chart
 
 
 if __name__ == "__main__":
