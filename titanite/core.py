@@ -119,8 +119,8 @@ def response(data: pd.DataFrame) -> alt.LayerChart:
     )
     return chart
 
-def crosstab(data: pd.DataFrame, x: str, y: str):
 
+def crosstab(data: pd.DataFrame, x: str, y: str):
     # クロス集計とカイ二乗検定
     cross_tab, chi2_test = crosstab_data(data, x, y)
 
@@ -135,6 +135,7 @@ def crosstab(data: pd.DataFrame, x: str, y: str):
     chart = crosstab_heatmap(melted, x, y)
 
     return cross_tab, chi2_test, chart
+
 
 def crosstab_data(data: pd.DataFrame, x: str, y: str):
     """
@@ -159,6 +160,7 @@ def crosstab_data(data: pd.DataFrame, x: str, y: str):
     cross_tab = pd.crosstab(data[x], data[y])
     chi2_test = chi2_contingency(cross_tab)
     return cross_tab, chi2_test
+
 
 def crosstab_heatmap(data: pd.DataFrame, x: str, y: str) -> alt.LayerChart:
     """
@@ -195,7 +197,25 @@ def crosstab_heatmap(data: pd.DataFrame, x: str, y: str) -> alt.LayerChart:
     )
     return chart
 
-def crosstab_loop(data:pd.DataFrame, headers: list):
+
+def crosstab_loop(data: pd.DataFrame, headers: list):
+    """
+    クロス集計のループ
+
+    任意のカラム名のペア（2つ）のリストを与えて、クロス集計とカイ二乗検定した結果を返します。
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        前処理済みのデータフレーム
+    headers : list
+        カラム名のペアのリスト
+
+    Returns
+    -------
+    _type_
+        いろいろ
+    """
 
     cross_tabs = {}
     heatmaps = {}
@@ -211,9 +231,12 @@ def crosstab_loop(data:pd.DataFrame, headers: list):
         _data = [name, chi2_test.statistic, chi2_test.pvalue, chi2_test.dof]
         chi2_tests.append(_data)
 
-    chi2_data = pd.DataFrame(chi2_tests, columns=["questions", "statistic", "p_value", "dof"])
+    chi2_data = pd.DataFrame(
+        chi2_tests, columns=["questions", "statistic", "p_value", "dof"]
+    )
 
     return cross_tabs, heatmaps, chi2_data
+
 
 if __name__ == "__main__":
     import titanite as ti
