@@ -69,10 +69,11 @@ def comment(
 
 
 @app.command()
-def crosstab(
+def crosstabs(
     read_from: str = "../data/test_data/prepared_data.csv",
     write_dir: str = "../data/test_data/",
     load_from: str = "config.toml",
+    save: bool = False,
 ) -> None:
     """
     Run crosstab
@@ -98,32 +99,30 @@ def crosstab(
     d = Data(read_from=read_from, load_from=load_from)
     data = d.read()
 
+    # 総当たりを組みたいカラム名を整理
+    # headers = [header for header in sorted(data.columns) if header not in ignored]
     headers = []
     for h in sorted(data.columns):
         if h not in d.ignore_from_crosstab:
             headers.append(h)
-    # headers = [header for header in sorted(data.columns) if header not in ignored]
+
+    # 総当たりの組み合わせ
     matches = list(itertools.combinations(headers, 2))
 
-    chi2_tests = []
-    for m in matches:
-        x, y = m
-        cross_tab, chi2_test, heatmap = core.crosstab(data, x, y)
+    # 総当たりでクロス集計
+    cross_tabs, heatmaps, chi2_data = core.crosstab_loop(data, matches)
 
-        x, y = m
-        name = f"{x}-{y}"
-        _data = [name, chi2_test.statistic, chi2_test.pvalue, chi2_test.dof]
-        chi2_tests.append(_data)
+    if save:
+        for name, cross_tab in cross_tabs.items():
+            fname = Path(write_dir) / "crosstab" / f"{name}.csv"
+            # cross_tab.to_csv(fname)
+            logger.info(f"Saved data to: {fname}")
 
-        fname = Path(write_dir) / "crosstab" / f"{name}.csv"
-        cross_tab.to_csv(fname)
-        logger.info(f"Saved data to: {fname}")
+        for name, heatmap in heatmaps.items():
+            fname = Path(write_dir) / "crosstab" / f"{name}.png"
+            # heatmap.save(fname)
+            logger.info(f"Saved chart to: {fname}")
 
-        fname = Path(write_dir) / "crosstab" / f"{name}.png"
-        heatmap.save(fname)
-        logger.info(f"Saved chart to: {fname}")
-
-    chi2_data = pd.DataFrame(chi2_tests, columns=["questions", "statistic", "p-value", "dof"])
     fname = Path(write_dir) / "chi2_test.csv"
     chi2_data.to_csv(fname, index=False)
     logger.info(f"Saved data to: {fname}")
