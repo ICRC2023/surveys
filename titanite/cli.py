@@ -127,6 +127,10 @@ def crosstabs(
     chi2_data.to_csv(fname, index=False)
     logger.info(f"Saved data to: {fname}")
 
+    fname = Path(write_dir) / "chi2_test_p005.csv"
+    chi2_data.query("p_value < 0.05").to_csv(fname, index=False)
+    logger.info(f"Saved data to: {fname}")
+
     return
 
 
