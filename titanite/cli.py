@@ -1,11 +1,12 @@
 from pathlib import Path
 
+import altair as alt
 import pandas as pd
 import typer
 from loguru import logger
 
+from . import core
 from .config import Config
-from .core import comment_json
 from .preprocess import categorical_data, preprocess_data
 
 app = typer.Typer()
@@ -80,7 +81,22 @@ def crosstab(
     data = pd.read_csv(read_from, parse_dates=["timestamp"])
     data = categorical_data(data, category)
 
+    logger.debug(data.info())
+
     pass
+
+@app.command()
+def response(
+    read_from: str,
+    write_dir: str = "../data/test_data/",
+) -> None:
+    logger.info(f"Read data from: {read_from}")
+    data = pd.read_csv(read_from, parse_dates=["timestamp"])
+    chart = core.response(data)
+    fname = Path(write_dir) / "response.png"
+    chart.save(fname)
+    logger.info(f"Saved chart to : {fname}")
+
 
 
 if __name__ == "__main__":

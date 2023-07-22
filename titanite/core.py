@@ -77,6 +77,46 @@ def comment_json(data: pd.DataFrame, write_dir: str) -> None:
         logger.info(f"Saved as {fname}")
     return
 
+def response(data: pd.DataFrame) -> alt.LayerChart:
+    """
+    アンケートの回答状況
+
+    アンケートの回答日時を使って、日時と時刻のヒートマップを作成します。
+    関係するメールを送った反応があったかどうかを調べることができます。
+    （回答日時は日本時間（UTC+0900）で保存されているようです）
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        前処理したデータフレーム
+
+    Returns
+    -------
+    alt.LayerChart
+        回答状況のヒートマップ
+    """
+
+    base = alt.Chart(data).encode(
+        alt.X("yearmonthdate(timestamp)").title("回答した日時"),
+        alt.Y("hours(timestamp)").title("回答した時刻"),
+    )
+
+    mark = base.mark_point().encode(
+        alt.Color("count()").title("回答数"),
+        alt.Size("count()"),
+        alt.Shape("q3_regional").title("地域（勤務地）"),
+    )
+    text = base.mark_text(dx=10, dy=-10).encode(
+        alt.Text("count()"),
+    )
+
+    chart = (mark + text).properties(
+        title="アンケートの回答状況",
+        width=800,
+        height=800,
+
+    )
+    return chart
 
 if __name__ == "__main__":
     import titanite as ti
