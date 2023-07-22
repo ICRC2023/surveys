@@ -58,13 +58,22 @@ def prepare(
 
 
 @app.command()
-def comment(
+def comments(
     read_from: str = "../data/test_data/prepared_data.csv",
     write_dir: str = "../data/test_data/",
+    load_from: str = "config.toml",
 ) -> None:
+
+    cfg = config(load_from, show=False)
+
     logger.info(f"Read data from: {read_from}")
-    data = pd.read_csv(read_from, parse_dates=["timestamp"])
-    comment_json(data, write_dir)
+    d = Data(read_from=read_from, load_from=load_from)
+    data = d.read()
+    comments = core.comment_data(data)
+    for name, comment in comments.items():
+        fname = Path(write_dir) / "comment" / f"{name}.json"
+        comment.to_json(fname, orient="records")
+        logger.info(f"Saved as {fname}")
     return
 
 

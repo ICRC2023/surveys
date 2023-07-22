@@ -53,7 +53,7 @@ def heatmap(data: pd.DataFrame, x: str, y: str) -> dict:
     return insight
 
 
-def comment_json(data: pd.DataFrame, write_dir: str) -> None:
+def comment_data(data: pd.DataFrame) -> dict[str, pd.DataFrame]:
     """
     Parse comment data
 
@@ -62,8 +62,9 @@ def comment_json(data: pd.DataFrame, write_dir: str) -> None:
     3. 質問番号ごとにJSONファイルに出力する
     """
 
-    attributes = ["q1", "q2", "q3", "q5", "q6", "q7"]
+    attributes = ["q01", "q02", "q03", "q05", "q06", "q07"]
     headers = ["q15", "q16", "q18", "q20", "q21", "q22"]
+    comments = {}
     for header in headers:
         q = data.dropna(subset=header)
         # print(f"{header}: {len(q)}")
@@ -73,10 +74,9 @@ def comment_json(data: pd.DataFrame, write_dir: str) -> None:
             f"{header}_polarity",
             f"{header}_subjectivity",
         ]
-        fname = Path(write_dir) / f"{header}.json"
-        q[h].sort_values(by=header).to_json(fname, orient="records")
-        logger.info(f"Saved as {fname}")
-    return
+        comments.update({header: q[h].sort_values(by=header)})
+
+    return comments
 
 
 def response(data: pd.DataFrame) -> alt.LayerChart:
