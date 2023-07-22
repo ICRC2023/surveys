@@ -49,24 +49,49 @@ Saved data to: ../data/test_data/prepared_data.csv
 
 ```console
 $ cd sandbox
-$ ti response ../data/test_data/all.csv
-Read data from: ../data/test_data/all.csv
+$ ti response
+Read data from: ../data/test_data/prepared_data.csv
 Saved chart to: ../data/test_data/response.png
 $ open ../data/test_data/response.png
 ```
+
+- 引数なしで実行できます
+- ``--read_from``で読み込むデータ（前処理済）を変更できます
+- ``--write-dir``で作成した図を保存するディレクトリを変更できます（ファイル名は変更できません）
 
 ## ヒストグラムを作成したい（WIP）
 
 ```console
 $ cd sandbox
-$ ti histogram ../data/test_data/prepared_data.csv
+$ ti histogram --read_from=../data/test_data/prepared_data.csv
 ```
 
-## クロス集計したい（WIP）
+## クロス集計したい
 
 ```console
 $ cd sandbox
-$ ti crosstab ../data/test_data/prepared_data.csv
+$ ti crosstab
+Loaded config from: config.toml
+Read data from: ../data/test_data/prepared_data.csv
+- Categorize
+- Binned
+Saved data to: ../data/test_data/crosstab/q01-q02.csv
+Saved chart to: ../data/test_data/crosstab/q01-q02.png
+Saved data to: ../data/test_data/crosstab/q01-q03.csv
+Saved chart to: ../data/test_data/crosstab/q01-q03.png
+...
+```
+
+- 引数なしで実行できます（ただし、そのうち変えるかも？）
+- ``--read_from``で読み込むデータ（前処理済）を変更できます
+- ``--write-dir``で作成したデータと図を保存するディレクトリを変更できます（ファイル名は変更できません）
+- ``--load_from``で読み込む設定ファイルを変更できます
+
+## カイ二乗検定したい（WIP）
+
+```console
+$ cd sandbox
+$ ti chi2 ../data/test_data/chi2_test.csv
 ```
 
 ## プロットの作成
