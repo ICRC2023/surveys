@@ -120,15 +120,23 @@ def response(data: pd.DataFrame) -> alt.LayerChart:
     return chart
 
 
-def crosstab(data: pd.DataFrame, header: tuple):
-    h0 = header[0]
-    h1 = header[1]
-    v = "response"
+def crosstab(data: pd.DataFrame, headers: tuple):
 
+    # ヘッダー名を分割
+    h0, h1 = headers
+
+    # クロス集計とカイ二乗検定
     ctab = pd.crosstab(data[h0], data[h1])
     chi2 = chi2_contingency(ctab)
 
+    # データをロングデータに変換
+    v = "count"
     melted = ctab.reset_index().melt(id_vars=h0, var_name=h1, value_name=v)
+    # 元データのカテゴリがた情報で上書き
+    melted[h0] = melted[h0].astype(data[h0].dtype)
+    melted[h1] = melted[h1].astype(data[h1].dtype)
+
+    # グラフを作成
     base = alt.Chart(melted).encode(
         alt.X(h1),
         alt.Y(h0),
