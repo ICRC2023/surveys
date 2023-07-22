@@ -1,7 +1,7 @@
 #let author = "Shota Takahashi"
 #let today = "2023/07/20"
 
-#let p005 = csv("../data/test_data/chi2_test/chi2_test_p005.csv")
+#let p005 = json("../data/test_data/chi2_test/chi2_test_p005.json")
 
 #set page(
     header: today,
@@ -35,6 +35,7 @@
 
 #outline(
     indent: auto,
+    depth: 2,
     fill: line(
         length: 90%,
         stroke: 1pt + luma(200),
@@ -132,9 +133,10 @@ Diversityセッション参加：約120名
 
 #pagebreak()
 
-= クラスタリング
+= 分析クラスター
 
-基本属性の項目でクラスタリングして、回答の傾向を調べる
+- 基本属性のそれぞれ項目でクラスタリングして、回答の傾向を調べ、相関が強いもの、かつ、面白そうなものを調べる。
+- 他にも、基本属性の回答を組み合わせて、新しいクラスターを定義できるかも？（ただし、そこまでやる時間はなさそう）。
 
 == 年代（`q1`）
 
@@ -148,7 +150,7 @@ Diversityセッション参加：約120名
 「女性（とその他のジェンダー・マイノリティ）」は当事者として、ジェンダーバランスの取り組みに対する意識が高いのではないだろうか。
 男性はもっとコミットするべき、という根拠がみえてこないだろうか？
 
-== 地域（q3 / q4）: 地域
+== 地域（q3 / q4）
 
 「勤務地」と「出身地」に分けて地域を回答してもらった。
 地域の選択肢は、国連が定義している地理区分をベースにした。
@@ -181,8 +183,7 @@ Diversityセッション参加：約120名
 
 == その他
 
-他にも、基本属性の回答の組み合わせで、新しいクラスターを定義できるかも？
-ただし、そこまでやる時間はなさそう。
+
 
 
 #pagebreak()
@@ -480,12 +481,18 @@ Diversityセッション参加：約120名
 
 #pagebreak()
 
-= クロス集計
+= クロス集計してみた
 
-- まにあっていない🙏
-- カテゴリカルデータ（離散変数）を2つ選び、そのfrequensy tableを作成する
-- 作成した表に対し、相関がないという帰無仮説を仮定し、$chi^(2)$検定をかけて、有意差（p値）を評価する
-- $chi^(2)$検定にはPythonの`scipy`パッケージを使う予定
+- カテゴリカルデータ（離散変数）を2つ選び、そのクロス集計表（frequensy table）を作成する
+- 作成した集計表に対し、相関がないという帰無仮説を仮定し、$chi^(2)$検定をかけて、有意差（p値）を評価する
+- $chi^(2)$検定にはPythonの`scipy`パッケージを使う
+    - デフォルトで`correction=True`。自由度が1のとき、イェーツの連続補正が適用される
+
+```python
+from scipy.stats import chi2_contingency
+cross_tab = pd.crosstab(data[x], data[y])
+chi2, p, dof, expected = chi2_contingency(cross_tab)
+```
 
 == $chi^2$検定
 
@@ -498,27 +505,43 @@ $
     - 離散変数に"相関がない"帰無仮説を仮定して、期待度数を計算する
     - 測定量と期待度数の差を計算する
 - p値が0.05以下だと「独立ではない」（＝相関がある）
-    - ある条件下ではイェイツの修正を加える必要がある
-- `scipy`パッケージのカイ二乗検定モジュールが便利そう
-    - デフォルトで`correction=True`。自由度が1のとき、イェーツの連続補正が適用される
-
-```python
-from scipy.stats import chi2_contingency
-cross_tab = pd.crosstab(data[x], data[y])
-chi2, p, dof, expected = chi2_contingency(cross_tab)
-```
-
-#pagebreak()
 
 == $chi^(2)$検定の結果
 
-p値 < 0.05以下の項目を抽出した
+- p値 < 0.05以下の項目を抽出し、次ページ以降に相関図を載せた
+- 該当数 ＝ #p005.len()
 
-#table(
-    columns: 5,
-    [*Questions*], [*P-value*], [*Statistic*], [*DoF*], [*PNG*],
-    ..p005.flatten(),
-)
+#pagebreak()
+
+#for row in p005 [
+    == #row.questions
+
+    - ファイル名: #row.png
+
+    #figure(
+        image(row.png),
+        caption: [#row.questions]
+    )
+
+    === 検定の結果
+
+    #align(center)[
+    #table(
+        columns: 3,
+        inset: 1em,
+        align: start,
+        /* --- header --- */
+        [**p-value**], [**DoF**], [**Statistic**],
+        /*--- body --- */
+        [#row.p_value],
+        [#row.dof],
+        [#row.statistic],
+    )
+    ]
+
+    #pagebreak()
+]
+
 
 #pagebreak()
 
