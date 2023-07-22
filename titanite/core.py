@@ -119,40 +119,52 @@ def response(data: pd.DataFrame) -> alt.LayerChart:
     )
     return chart
 
-
 def crosstab(data: pd.DataFrame, headers: tuple):
 
-    # ヘッダー名を分割
-    h0, h1 = headers
-
-    # クロス集計とカイ二乗検定
-    ctab = pd.crosstab(data[h0], data[h1])
-    chi2 = chi2_contingency(ctab)
+    cross_tab, chi2_test = crosstab_data(data, headers)
 
     # データをロングデータに変換
+    x, y = headers
     v = "count"
-    melted = ctab.reset_index().melt(id_vars=h0, var_name=h1, value_name=v)
-    # 元データのカテゴリがた情報で上書き
-    melted[h0] = melted[h0].astype(data[h0].dtype)
-    melted[h1] = melted[h1].astype(data[h1].dtype)
+    melted = cross_tab.reset_index().melt(id_vars=x, var_name=y, value_name=v)
+
+    # 元データのカテゴリ型で上書き
+    melted[x] = melted[x].astype(data[x].dtype)
+    melted[y] = melted[y].astype(data[y].dtype)
+
+    chart = crosstab_heatmap(melted, headers)
+    return cross_tab, chi2_test, chart
+
+def crosstab_data(data: pd.DataFrame, headers: tuple):
+
+    # ヘッダー名を分割
+    x, y = headers
+
+    # クロス集計とカイ二乗検定
+    cross_tab = pd.crosstab(data[x], data[y])
+    chi2_test = chi2_contingency(cross_tab)
+    return cross_tab, chi2_test
+
+def crosstab_heatmap(data: pd.DataFrame, headers: tuple):
+
+    # ヘッダー名を分割
+    x, y = headers
+    v = "count"
 
     # グラフを作成
-    base = alt.Chart(melted).encode(
-        alt.X(h1),
-        alt.Y(h0),
+    base = alt.Chart(data).encode(
+        alt.X(x),
+        alt.Y(y),
     )
-
     mark = base.mark_rect().encode(
-        alt.Color(v),
+        alt.Color(v).scale(scheme="blues"),
     )
-
     text = base.mark_text().encode(alt.Text(v))
-
     chart = (mark + text).properties(
         width=800,
         height=800,
     )
-    return ctab, chi2, chart
+    return chart
 
 
 if __name__ == "__main__":
