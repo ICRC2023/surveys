@@ -195,6 +195,25 @@ def crosstab_heatmap(data: pd.DataFrame, x: str, y: str) -> alt.LayerChart:
     )
     return chart
 
+def crosstab_loop(data:pd.DataFrame, headers: list):
+
+    cross_tabs = {}
+    heatmaps = {}
+    chi2_tests = []
+    for h in headers:
+        x, y = h
+        name = f"{x}-{y}"
+
+        cross_tab, chi2_test, heatmap = crosstab(data, x, y)
+        cross_tabs.update({name: cross_tab})
+        heatmaps.update({name: heatmap})
+
+        _data = [name, chi2_test.statistic, chi2_test.pvalue, chi2_test.dof]
+        chi2_tests.append(_data)
+
+    chi2_data = pd.DataFrame(chi2_tests, columns=["questions", "statistic", "p_value", "dof"])
+
+    return cross_tabs, heatmaps, chi2_data
 
 if __name__ == "__main__":
     import titanite as ti
