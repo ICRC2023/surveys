@@ -134,6 +134,18 @@ def response(
     read_from: str = "../data/test_data/prepared_data.csv",
     write_dir: str = "../data/test_data/",
 ) -> None:
+    """
+    Check responses
+
+    アンケートに回答した日時を調べる
+
+    Parameters
+    ----------
+    read_from : str, optional
+        path to preprocessed data file, by default "../data/test_data/prepared_data.csv"
+    write_dir : str, optional
+        path to save processed files, by default "../data/test_data/"
+    """
     logger.info(f"Read data from: {read_from}")
     data = pd.read_csv(read_from, parse_dates=["timestamp"])
     chart = core.response(data)
