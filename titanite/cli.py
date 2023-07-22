@@ -115,12 +115,12 @@ def crosstabs(
     if save:
         for name, cross_tab in cross_tabs.items():
             fname = Path(write_dir) / "crosstab" / f"{name}.csv"
-            # cross_tab.to_csv(fname)
+            cross_tab.to_csv(fname)
             logger.info(f"Saved data to: {fname}")
 
         for name, heatmap in heatmaps.items():
             fname = Path(write_dir) / "crosstab" / f"{name}.png"
-            # heatmap.save(fname)
+            heatmap.save(fname)
             logger.info(f"Saved chart to: {fname}")
 
     fname = Path(write_dir) / "chi2_test.csv"
