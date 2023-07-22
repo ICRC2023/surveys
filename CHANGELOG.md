@@ -1,3 +1,16 @@
+## 0.4.0 (2023-07-22)
+
+### Feat
+
+- **titanite/core.py**: crosstab_loopを追加した
+
+### Fix
+
+- **titanite/cli.py**: crosstabsコマンドにsaveフラグを追加した
+- **notebooks/04_chi2_test.ipynb**: p値を調べた
+- **titanite/cli.py**: p値を保存することにした
+- **titanite/core.py**: crosstab_loopの説明を追加した
+
 ## 0.3.0 (2023-07-22)
 
 ### Feat
