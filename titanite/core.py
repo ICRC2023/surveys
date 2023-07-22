@@ -228,11 +228,11 @@ def crosstab_loop(data: pd.DataFrame, headers: list):
         cross_tabs.update({name: cross_tab})
         heatmaps.update({name: heatmap})
 
-        _data = [name, chi2_test.statistic, chi2_test.pvalue, chi2_test.dof]
+        _data = [name, chi2_test.pvalue, chi2_test.statistic, chi2_test.dof]
         chi2_tests.append(_data)
 
     chi2_data = pd.DataFrame(
-        chi2_tests, columns=["questions", "statistic", "p_value", "dof"]
+        chi2_tests, columns=["questions", "p_value", "statistic", "dof"]
     )
 
     return cross_tabs, heatmaps, chi2_data
