@@ -62,13 +62,13 @@ def comment_data(data: pd.DataFrame) -> dict[str, pd.DataFrame]:
     3. 質問番号ごとにJSONファイルに出力する
     """
 
-    attributes = ["q01", "q02", "q03", "q05", "q06", "q07"]
+    clusters = ["q01", "q02", "q03", "q05", "q06", "q07", "q11"]
     headers = ["q15", "q16", "q18", "q20", "q21", "q22"]
     comments = {}
     for header in headers:
         q = data.dropna(subset=header)
         # print(f"{header}: {len(q)}")
-        h = attributes + [
+        h = clusters + [
             header,
             f"{header}_ja",
             f"{header}_polarity",
