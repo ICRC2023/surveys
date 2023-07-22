@@ -6,10 +6,11 @@
 
 ### Fix
 
-- **titanite/cli.py**: crosstabsコマンドにsaveフラグを追加した
-- **notebooks/04_chi2_test.ipynb**: p値を調べた
-- **titanite/cli.py**: p値を保存することにした
-- **titanite/core.py**: crosstab_loopの説明を追加した
+- **notebooks**
+  - 04_chi2_test.ipynb: p値を確認するノートブックを作った
+- **titanite/cli.py**
+  - crosstabsコマンドにsaveフラグを追加した
+  - カイ二乗検定の結果をCSVに保存することにした
 
 ## 0.3.0 (2023-07-22)
 
