@@ -37,6 +37,17 @@ $ cd sandbox
 $ ti create ../data/test_data/回答のスプレッドシート名.csv --write-to=tmp_preprocessed.csv --load-from=config.toml
 ```
 
+## 回答日時を調べたい
+
+```console
+$ cd sandbox
+$ ti response ../data/test_data/all.csv
+Read data from: ../data/test_data/all.csv
+Saved chart to: ../data/test_data/response.png
+$ open ../data/test_data/response.png
+```
+
+
 # プロットの作成
 
 Altairのギャラリーからサンプルを見繕っておきました
