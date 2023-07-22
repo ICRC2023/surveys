@@ -56,13 +56,13 @@ def replace_data(data: pd.DataFrame) -> pd.DataFrame:
     pd.DataFrame
         データフレーム
     """
-    data["q3"] = data["q3"].replace(
+    data["q03"] = data["q03"].replace(
         {
             "Prefer not to answer": "Prefer not to answer / Prefer not to answer",
             "Oceania": "Oceania / Oceania",
         }
     )
-    data["q4"] = data["q4"].replace(
+    data["q04"] = data["q04"].replace(
         {
             "Prefer not to answer": "Prefer not to answer / Prefer not to answer",
             "Oceania": "Oceania / Oceania",
@@ -89,15 +89,15 @@ def split_data(data: pd.DataFrame) -> pd.DataFrame:
     pd.DataFrame
         データフレーム
     """
-    _q3 = data["q3"].str.split("/", expand=True)
+    _q3 = data["q03"].str.split("/", expand=True)
     _q3[0] = _q3[0].str.strip()
     _q3[1] = _q3[1].str.strip()
-    _q3 = _q3.rename(columns={0: "q3_regional", 1: "q3_subregional"})
+    _q3 = _q3.rename(columns={0: "q03_regional", 1: "q03_subregional"})
 
-    _q4 = data["q4"].str.split("/", expand=True)
+    _q4 = data["q04"].str.split("/", expand=True)
     _q4[0] = _q4[0].str.strip()
     _q4[1] = _q4[1].str.strip()
-    _q4 = _q4.rename(columns={0: "q4_regional", 1: "q4_subregional"})
+    _q4 = _q4.rename(columns={0: "q04_regional", 1: "q04_subregional"})
 
     data = pd.concat([data, _q3], axis=1)
     data = pd.concat([data, _q4], axis=1)
@@ -121,19 +121,19 @@ def categorical_data(data: pd.DataFrame, category: dict) -> pd.DataFrame:
         データフレーム
     """
     logger.info("Categorize")
-    data["q1"] = data["q1"].astype(category["age"])
-    data["q2"] = data["q2"].astype(category["gender"])
-    data["q3"] = data["q3"].astype(category["geoscheme"])
-    data["q3_regional"] = data["q3_regional"].astype(category["regional"])
-    data["q3_subregional"] = data["q3_subregional"].astype(category["subregional"])
-    data["q4"] = data["q4"].astype(category["geoscheme"])
-    data["q4_regional"] = data["q4_regional"].astype(category["regional"])
-    data["q4_subregional"] = data["q4_subregional"].astype(category["subregional"])
-    data["q5"] = data["q5"].astype(category["job_title"])
-    data["q6"] = data["q6"].astype(category["research_group"])
-    data["q7"] = data["q7"].astype(category["research_field"])
-    data["q8"] = data["q8"].astype(category["research_years"])
-    data["q9"] = data["q9"].astype(category["yes_no"])
+    data["q01"] = data["q01"].astype(category["age"])
+    data["q02"] = data["q02"].astype(category["gender"])
+    data["q03"] = data["q03"].astype(category["geoscheme"])
+    data["q03_regional"] = data["q03_regional"].astype(category["regional"])
+    data["q03_subregional"] = data["q03_subregional"].astype(category["subregional"])
+    data["q04"] = data["q04"].astype(category["geoscheme"])
+    data["q04_regional"] = data["q04_regional"].astype(category["regional"])
+    data["q04_subregional"] = data["q04_subregional"].astype(category["subregional"])
+    data["q05"] = data["q05"].astype(category["job_title"])
+    data["q06"] = data["q06"].astype(category["research_group"])
+    data["q07"] = data["q07"].astype(category["research_field"])
+    data["q08"] = data["q08"].astype(category["research_years"])
+    data["q09"] = data["q09"].astype(category["yes_no"])
     data["q10"] = data["q10"].astype(int)
     data["q11"] = data["q11"].astype(category["yes_no"])
     data["q12_genderbalance"] = data["q12_genderbalance"].astype(category["good_poor"])
