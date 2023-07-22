@@ -2,32 +2,29 @@
 
 ### Feat
 
+- **titanite/cli.py**: クロス集計用のコマンドを追加した
 - **titanite/config.py**: 前処理したデータを読み込むクラスを追加した
 - **titanite/core.py**: クロス集計する機能を追加した
-- **titanite/core.py**: 回答日時を調べた
-- **titanite/preprocess.py**: 前処理の工程を整理した
-- **titanite/cli.py**: クロス集計用のコマンドを追加した
 - **titanite/preprocess.py**: ビン分割する関数を追加した
 
 ### Fix
 
-- **notebooks/q19_interest.ipynb**: p値の結果を追加した
-- **titanite/core.py**: クロス集計する関数の引数を変更した
-- **notebooks/q19_interest.ipynb**: Q19の相関も確認した
-- **notebooks/q02_gender.ipynb**: カイ二乗検定のp値も確認した
-- **notebooks/q02_gender.ipynb**: q02のクロス集計をまとめた
-- **notebooks/03_crosstab.ipynb**: クロス集計するメソッドを作った
-- **titanite/cli.py**: resonseコマンドの説明を追加した
-- **titanite/config.py**: クロス集計から除外するカラムを追加した
-- **titanite/core.py**: 微修正した
-- **titanite/cli.py**: Dataクラスで読み込むようにした
-- **notebooks/03_crosstab.ipynb**: クロス集計の動作確認
-- **titanite/cli.py**: クロス集計から除外するカラム名を追加した
-- **titanite/core.py**: クロス集計でカテゴリ型を維持するようにした
-- **titanite/preprocess.py**: 元データのカラム名を変更した
-- **titanite/cli.py**: 前処理したデータのファイル名のデフォルト値を変更した
-- **titanite/cli.py**: タイポを修正した
-- **renamed**: ノートブックの名前を変更した
+- **notebooks**
+  - 03_crosstab.ipynb: クロス集計するメソッドを作った
+  - q02_gender.ipynb: カイ二乗検定のp値も確認した
+  - q19_interest.ipynb: Q19の相関も確認した
+  - renamed: ノートブックの名前を変更した
+- **titanite/cli.py**:
+  - Dataクラスで読み込むようにした
+  - responseコマンドの説明を追加した
+  - 前処理したデータのファイル名のデフォルト値を変更した
+- **titanite/config.py**:
+  - クロス集計から除外するカラムを追加した
+- **titanite/core.py**:
+  - クロス集計でカテゴリ型を維持するようにした
+  - クロス集計する関数の引数を変更した
+- **titanite/preprocess.py**:
+  - 元データのカラム名を変更した
 
 ## 0.2.0 (2023-07-21)
 
