@@ -133,12 +133,21 @@ def crosstabs(
             logger.info(f"Saved chart to: {fname}")
 
     # カイ二乗検定の結果を保存
+    fname = Path(write_dir) / "crosstab"
+    chi2_data["png"] = str(fname) + "/" + chi2_data["questions"] + ".png"
     fname = Path(write_dir) / "chi2_test" / "chi2_test.csv"
     chi2_data.to_csv(fname, index=False)
     logger.info(f"Saved data to: {fname}")
+    fname = fname.with_suffix(".json")
+    chi2_data.to_json(fname, orient="records")
+    logger.info(f"Saved data to: {fname}")
 
+    chi2_p005 = chi2_data.query("p_value < 0.05")
     fname = Path(write_dir) / "chi2_test" / "chi2_test_p005.csv"
-    chi2_data.query("p_value < 0.05").to_csv(fname, index=False)
+    chi2_p005.to_csv(fname, index=False)
+    logger.info(f"Saved data to: {fname}")
+    fname = fname.with_suffix(".json")
+    chi2_p005.to_json(fname, orient="records")
     logger.info(f"Saved data to: {fname}")
 
     return
