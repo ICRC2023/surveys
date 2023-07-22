@@ -1,5 +1,5 @@
 #let Q = "【Q15】Please let us know If your group has any good practice examples related to DE&I ?"
-#let answers = json("../test_data/q15.json")
+#let answers = json("../data/test_data/comment/q15.json")
 
 #set document(
     title: Q
@@ -48,12 +48,12 @@
     #let ja = answer.q15_ja
     #let polarity = answer.q15_polarity
     #let subjectivity = answer.q15_subjectivity
-    #let age = answer.q1
-    #let gender = answer.q2
-    #let work = answer.q3
-    #let job = answer.q5
-    #let group = answer.q6
-    #let field = answer.q7
+    #let age = answer.q01
+    #let gender = answer.q02
+    #let work = answer.q03
+    #let job = answer.q05
+    #let group = answer.q06
+    #let field = answer.q07
 
     #parbreak()
     #heading(level: 1, numbering: "【回答 1.1.】")[
