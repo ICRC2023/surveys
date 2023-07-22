@@ -77,6 +77,7 @@ def comment_json(data: pd.DataFrame, write_dir: str) -> None:
         logger.info(f"Saved as {fname}")
     return
 
+
 def response(data: pd.DataFrame) -> alt.LayerChart:
     """
     アンケートの回答状況
@@ -114,9 +115,9 @@ def response(data: pd.DataFrame) -> alt.LayerChart:
         title="アンケートの回答状況",
         width=800,
         height=800,
-
     )
     return chart
+
 
 if __name__ == "__main__":
     import titanite as ti
