@@ -94,6 +94,29 @@ $ cd sandbox
 $ ti chi2 ../data/test_data/chi2_test.csv
 ```
 
+## Jupyterノートブック
+
+データはまずノートブックで確認しています。
+いくつかのノートブックは整理が必要です。
+
+### モジュールの開発・確認
+
+- ``00_config.ipynb``
+- ``01_preprocess.ipynb``
+- ``02_insight.ipynb``
+- ``03_crosstab.ipynb``
+- ``05_others.ipynb``
+
+### とりあえず分析
+
+- ``10_quick_summary.ipynb``
+- ``30_comments.ipynb``
+
+### クロス集計の詳細を確認
+
+- ``q02_gender.ipynb``
+- ``q19_gender.ipynb``
+
 ## プロットの作成
 
 Altairのギャラリーからサンプルを見繕っておきました
