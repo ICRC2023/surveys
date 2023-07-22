@@ -1,6 +1,8 @@
 #let author = "Shota Takahashi"
 #let today = "2023/07/20"
 
+#let p005 = csv("../data/test_data/chi2_test/chi2_test_p005.csv")
+
 #set page(
     header: today,
     footer: "ICRC2023 Diversity Session",
@@ -521,6 +523,11 @@ for col in q12_cols:
 cross_tabs, chi2_results
 ```
 
+#table(
+    columns: 4,
+    [*Condition*], [*Result*],
+    ..p005.flatten(),
+)
 
 #pagebreak()
 
