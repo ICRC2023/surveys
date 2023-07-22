@@ -52,16 +52,16 @@ def prepare(
     data = pd.read_csv(read_from, skiprows=1)
     data = preprocess_data(data)
     data = categorical_data(data, category)
-    fname = Path(write_dir) / "all.csv"
+    fname = Path(write_dir) / "prepared_data.csv"
     data.to_csv(fname, index=False)
     logger.info(f"Saved data to: {fname}")
 
+
 @app.command()
 def comment(
-    read_from: str = "../data/test_data/all.csv",
-    write_dir: str = "../data/test_data/"
+    read_from: str = "../data/test_data/prepared_data.csv",
+    write_dir: str = "../data/test_data/",
 ) -> None:
-
     logger.info(f"Read data from: {read_from}")
     data = pd.read_csv(read_from, parse_dates=["timestamp"])
     comment_json(data, write_dir)
@@ -70,9 +70,9 @@ def comment(
 
 @app.command()
 def crosstab(
-    read_from: str,
+    read_from: str = "../data/test_data/prepared_data.csv",
     write_dir: str = "../data/test_data/",
-    load_from: str = "config.toml"
+    load_from: str = "config.toml",
 ) -> None:
     cfg = config(load_from, show=False)
     category = cfg.categories()
@@ -85,9 +85,10 @@ def crosstab(
 
     pass
 
+
 @app.command()
 def response(
-    read_from: str,
+    read_from: str = "../data/test_data/prepared_data.csv",
     write_dir: str = "../data/test_data/",
 ) -> None:
     logger.info(f"Read data from: {read_from}")
@@ -95,8 +96,7 @@ def response(
     chart = core.response(data)
     fname = Path(write_dir) / "response.png"
     chart.save(fname)
-    logger.info(f"Saved chart to : {fname}")
-
+    logger.info(f"Saved chart to: {fname}")
 
 
 if __name__ == "__main__":
