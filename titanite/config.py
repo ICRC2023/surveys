@@ -67,6 +67,7 @@ class Config(BaseModel):
 
         return
 
+
 class Data(BaseModel):
     read_from: str | Path
     load_from: str = "config.toml"
@@ -108,6 +109,7 @@ class Data(BaseModel):
         data = pd.read_csv(self.read_from, parse_dates=["timestamp"])
         data = categorical_data(data, category)
         return data
+
 
 if __name__ == "__main__":
     settings = {"confd": "../sandbox/", "fname": "config.toml"}

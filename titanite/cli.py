@@ -129,6 +129,7 @@ def crosstabs(
 
     return
 
+
 @app.command()
 def response(
     read_from: str = "../data/test_data/prepared_data.csv",
