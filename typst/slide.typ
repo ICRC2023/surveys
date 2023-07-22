@@ -3,7 +3,8 @@
 
 #set page(
     header: today,
-    footer: "ICRC2023 Diversity Session"
+    footer: "ICRC2023 Diversity Session",
+    numbering: "1 / 1",
 )
 
 #set par(
