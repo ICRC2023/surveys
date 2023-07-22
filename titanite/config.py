@@ -70,6 +70,36 @@ class Config(BaseModel):
 class Data(BaseModel):
     read_from: str | Path
     load_from: str = "config.toml"
+    ignore_from_crosstab: list[str] = [
+        "q10",
+        "q13",
+        "q15",
+        "q15_ja",
+        "q15_polarity",
+        "q15_subjectivity",
+        "q16",
+        "q16_ja",
+        "q16_polarity",
+        "q16_subjectivity",
+        "q18",
+        "q18_ja",
+        "q18_polarity",
+        "q18_subjectivity",
+        "q20",
+        "q20_ja",
+        "q20_polarity",
+        "q20_subjectivity",
+        "q21",
+        "q21_ja",
+        "q21_polarity",
+        "q21_subjectivity",
+        "q22",
+        "q22_ja",
+        "q22_polarity",
+        "q22_subjectivity",
+        "response",
+        "timestamp",
+    ]
 
     def read(self):
         config = Config(fname=self.load_from)

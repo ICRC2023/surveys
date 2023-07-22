@@ -74,6 +74,22 @@ def crosstab(
     write_dir: str = "../data/test_data/",
     load_from: str = "config.toml",
 ) -> None:
+    """
+    Run crosstab
+
+    アンケート項目をクロス集計し、相関関係を調べます。
+    離散変数になっている2つの質問を総当たりして、相関データを生成します。
+    相関関係はカイ二乗検定で評価します。
+
+    Parameters
+    ----------
+    read_from : str, optional
+        path to preprocessed data file, by default "../data/test_data/prepared_data.csv"
+    write_dir : str, optional
+        path to save processed files, by default "../data/test_data/"
+    load_from : str, optional
+        path to configuration file, by default "config.toml"
+    """
     import itertools
 
     cfg = config(load_from, show=False)
@@ -82,60 +98,36 @@ def crosstab(
     d = Data(read_from=read_from, load_from=load_from)
     data = d.read()
 
-    ignored = [
-        "q10",
-        "q13",
-        "q15",
-        "q15_ja",
-        "q15_polarity",
-        "q15_subjectivity",
-        "q16",
-        "q16_ja",
-        "q16_polarity",
-        "q16_subjectivity",
-        "q18",
-        "q18_ja",
-        "q18_polarity",
-        "q18_subjectivity",
-        "q20",
-        "q20_ja",
-        "q20_polarity",
-        "q20_subjectivity",
-        "q21",
-        "q21_ja",
-        "q21_polarity",
-        "q21_subjectivity",
-        "q22",
-        "q22_ja",
-        "q22_polarity",
-        "q22_subjectivity",
-        "response",
-        "timestamp",
-    ]
-
     headers = []
     for h in sorted(data.columns):
-        if h not in ignored:
+        if h not in d.ignore_from_crosstab:
             headers.append(h)
     # headers = [header for header in sorted(data.columns) if header not in ignored]
     matches = list(itertools.combinations(headers, 2))
 
-    chi2tests = {}
-    for m in matches[:100]:
-        _ctab, chi2test, _chart = core.crosstab(data, m)
+    chi2_tests = []
+    for m in matches:
+        cross_tab, chi2_test, heatmap = core.crosstab(data, m)
 
-        name = f"{m[0]}-{m[1]}"
+        x, y = m
+        name = f"{x}-{y}"
+        _data = [name, chi2_test.statistic, chi2_test.pvalue, chi2_test.dof]
+        chi2_tests.append(_data)
+
         fname = Path(write_dir) / "crosstab" / f"{name}.csv"
-        _ctab.to_csv(fname)
+        cross_tab.to_csv(fname)
         logger.info(f"Saved data to: {fname}")
-        fname = Path(write_dir) / "crosstab" / f"{name}.png"
-        _chart.save(fname)
-        logger.info(f"Saved chart to: {fname}")
-        print(chi2test.pvalue)
-        # ctabs.append(ctab)
-        # chi2s.append(chi2)
-        # charts.append(chart)
 
+        fname = Path(write_dir) / "crosstab" / f"{name}.png"
+        heatmap.save(fname)
+        logger.info(f"Saved chart to: {fname}")
+
+    chi2_data = pd.DataFrame(chi2_tests, columns=["questions", "statistic", "p-value", "dof"])
+    fname = Path(write_dir) / "chi2_test.csv"
+    chi2_data.to_csv(fname, index=False)
+    logger.info(f"Saved data to: {fname}")
+
+    return
 
 @app.command()
 def response(
