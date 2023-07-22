@@ -123,11 +123,12 @@ def crosstabs(
             heatmap.save(fname)
             logger.info(f"Saved chart to: {fname}")
 
-    fname = Path(write_dir) / "chi2_test.csv"
+    # カイ二乗検定の結果を保存
+    fname = Path(write_dir) / "chi2_test" / "chi2_test.csv"
     chi2_data.to_csv(fname, index=False)
     logger.info(f"Saved data to: {fname}")
 
-    fname = Path(write_dir) / "chi2_test_p005.csv"
+    fname = Path(write_dir) / "chi2_test" / "chi2_test_p005.csv"
     chi2_data.query("p_value < 0.05").to_csv(fname, index=False)
     logger.info(f"Saved data to: {fname}")
 
