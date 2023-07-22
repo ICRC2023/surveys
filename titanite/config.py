@@ -1,8 +1,11 @@
 import tomllib
 from pathlib import Path
 
+import pandas as pd
 from loguru import logger
 from pydantic import BaseModel
+
+from .preprocess import categorical_data
 
 
 class Config(BaseModel):
@@ -64,6 +67,17 @@ class Config(BaseModel):
 
         return
 
+class Data(BaseModel):
+    read_from: str | Path
+    load_from: str = "config.toml"
+
+    def read(self):
+        config = Config(fname=self.load_from)
+        config.load()
+        category = config.categories()
+        data = pd.read_csv(self.read_from, parse_dates=["timestamp"])
+        data = categorical_data(data, category)
+        return data
 
 if __name__ == "__main__":
     settings = {"confd": "../sandbox/", "fname": "config.toml"}
