@@ -6,7 +6,7 @@ import typer
 from loguru import logger
 
 from . import core
-from .config import Config
+from .config import Config, Data
 from .preprocess import categorical_data, preprocess_data
 
 app = typer.Typer()
@@ -77,11 +77,10 @@ def crosstab(
     import itertools
 
     cfg = config(load_from, show=False)
-    category = cfg.categories()
 
     logger.info(f"Read data from: {read_from}")
-    data = pd.read_csv(read_from, parse_dates=["timestamp"])
-    data = categorical_data(data, category)
+    d = Data(read_from=read_from, load_from=load_from)
+    data = d.read()
 
     ignored = [
         "q10",
@@ -119,10 +118,10 @@ def crosstab(
         if h not in ignored:
             headers.append(h)
     # headers = [header for header in sorted(data.columns) if header not in ignored]
-    matches = itertools.combinations(headers, 2)
+    matches = list(itertools.combinations(headers, 2))
 
     chi2tests = {}
-    for m in matches:
+    for m in matches[:100]:
         _ctab, chi2test, _chart = core.crosstab(data, m)
 
         name = f"{m[0]}-{m[1]}"
