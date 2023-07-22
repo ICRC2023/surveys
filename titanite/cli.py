@@ -74,6 +74,8 @@ def crosstab(
     write_dir: str = "../data/test_data/",
     load_from: str = "config.toml",
 ) -> None:
+    import itertools
+
     cfg = config(load_from, show=False)
     category = cfg.categories()
 
@@ -81,9 +83,45 @@ def crosstab(
     data = pd.read_csv(read_from, parse_dates=["timestamp"])
     data = categorical_data(data, category)
 
-    logger.debug(data.info())
+    ignored = [
+        "q15",
+        "q15_ja",
+        "q16",
+        "q16_ja",
+        "q18",
+        "q18_ja",
+        "q20",
+        "q20_ja",
+        "q21",
+        "q21_ja",
+        "q22",
+        "q22_ja",
+        "response",
+        "timestamp",
+    ]
 
-    pass
+    headers = []
+    for h in sorted(data.columns):
+        if h not in ignored:
+            headers.append(h)
+    # headers = [header for header in sorted(data.columns) if header not in ignored]
+    matches = itertools.combinations(headers, 2)
+
+    chi2tests = {}
+    for m in matches:
+        _ctab, chi2test, _chart = core.crosstab(data, m)
+
+        name = f"{m[0]}-{m[1]}"
+        fname = Path(write_dir) / "crosstab" / f"{name}.csv"
+        _ctab.to_csv(fname)
+        logger.info(f"Saved data to: {fname}")
+        fname = Path(write_dir) / "crosstab" / f"{name}.png"
+        _chart.save(fname)
+        logger.info(f"Saved chart to: {fname}")
+        print(chi2test.pvalue)
+        # ctabs.append(ctab)
+        # chi2s.append(chi2)
+        # charts.append(chart)
 
 
 @app.command()
