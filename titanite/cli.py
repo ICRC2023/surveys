@@ -71,7 +71,10 @@ def comments(
     data = d.read()
     comments = core.comment_data(data)
     for name, comment in comments.items():
-        fname = Path(write_dir) / "comment" / f"{name}.json"
+        fname = Path(write_dir) / "comment" / f"{name}.csv"
+        comment.to_csv(fname, index=False)
+        logger.info(f"Saved as {fname}")
+        fname = fname.with_suffix(".json")
         comment.to_json(fname, orient="records")
         logger.info(f"Saved as {fname}")
     return
