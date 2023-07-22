@@ -107,7 +107,8 @@ def crosstab(
 
     chi2_tests = []
     for m in matches:
-        cross_tab, chi2_test, heatmap = core.crosstab(data, m)
+        x, y = m
+        cross_tab, chi2_test, heatmap = core.crosstab(data, x, y)
 
         x, y = m
         name = f"{x}-{y}"
