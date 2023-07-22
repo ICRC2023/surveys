@@ -34,7 +34,15 @@ CSV形式でダウンロードしたGoogleスプレッドシートを前処理�
 
 ```console
 $ cd sandbox
-$ ti create ../data/test_data/回答のスプレッドシート名.csv --write-to=tmp_preprocessed.csv --load-from=config.toml
+$ ti prepare ../data/raw_data/回答のスプレッドシート名.csv
+Loaded config from: config.toml
+Read data from: ../data/raw_data/20230720_icrc2023_diversity_presurvey_answers.csv
+- Replace data
+- Split data
+- Sentiment Analysis ... done!
+- Categorize data
+- Binned data
+Saved data to: ../data/test_data/prepared_data.csv
 ```
 
 ## 回答日時を調べたい
@@ -47,8 +55,21 @@ Saved chart to: ../data/test_data/response.png
 $ open ../data/test_data/response.png
 ```
 
+## ヒストグラムを作成したい（WIP）
 
-# プロットの作成
+```console
+$ cd sandbox
+$ ti histogram ../data/test_data/prepared_data.csv
+```
+
+## クロス集計したい（WIP）
+
+```console
+$ cd sandbox
+$ ti crosstab ../data/test_data/prepared_data.csv
+```
+
+## プロットの作成
 
 Altairのギャラリーからサンプルを見繕っておきました
 
