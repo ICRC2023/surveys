@@ -2,7 +2,7 @@ import pandas as pd
 from loguru import logger
 
 
-def preprocess_data(data: pd.DataFrame, category: dict) -> pd.DataFrame:
+def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
     """
     データの前処理
 
@@ -35,9 +35,6 @@ def preprocess_data(data: pd.DataFrame, category: dict) -> pd.DataFrame:
 
     logger.info("Sentiment Analysis")
     data = sentiment_data(data)
-
-    logger.info("Categorize")
-    data = categorical_data(data, category)
 
     return data
 
@@ -123,6 +120,7 @@ def categorical_data(data: pd.DataFrame, category: dict) -> pd.DataFrame:
     pd.DataFrame
         データフレーム
     """
+    logger.info("Categorize")
     data["q1"] = data["q1"].astype(category["age"])
     data["q2"] = data["q2"].astype(category["gender"])
     data["q3"] = data["q3"].astype(category["geoscheme"])
@@ -157,6 +155,9 @@ def categorical_data(data: pd.DataFrame, category: dict) -> pd.DataFrame:
     # data["q20"]
     # data["q21"]
     # data["q22"]
+
+    data = binned_data(data)
+
     return data
 
 
@@ -225,6 +226,7 @@ def binned_data(data: pd.DataFrame) -> pd.DataFrame:
     pd.DataFrame
         ビン分割したカラムを追加したデータ
     """
+    logger.info("Binned")
     data["q10_binned"] = pd.cut(
         data["q10"],
         [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 25],
