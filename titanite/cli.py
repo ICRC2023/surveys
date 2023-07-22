@@ -50,7 +50,7 @@ def prepare(
     logger.info(f"Read data from: {read_from}")
     data = pd.read_csv(read_from, skiprows=1)
     data = preprocess_data(data)
-    data =
+    data = categorical_data(data, category)
     fname = Path(write_dir) / "all.csv"
     data.to_csv(fname, index=False)
     logger.info(f"Saved data to: {fname}")
@@ -79,7 +79,6 @@ def crosstab(
     logger.info(f"Read data from: {read_from}")
     data = pd.read_csv(read_from, parse_dates=["timestamp"])
     data = categorical_data(data, category)
-
 
     pass
 
