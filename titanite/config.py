@@ -71,6 +71,48 @@ class Config(BaseModel):
 class Data(BaseModel):
     read_from: str | Path
     load_from: str = "config.toml"
+    numerical_headers: list[str] = [
+        "q10",
+        "q13",
+        "q15_polarity",
+        "q15_subjectivity",
+        "q16_polarity",
+        "q16_subjectivity",
+        "q18_polarity",
+        "q18_subjectivity",
+        "q20_polarity",
+        "q20_subjectivity",
+        "q21_polarity",
+        "q21_subjectivity",
+        "q22_polarity",
+        "q22_subjectivity",
+    ]
+    categorical_headers: list[str] = [
+        "q01",
+        "q02",
+        "q03_regional",
+        "q03_subregional",
+        "q04_regional",
+        "q04_subregional",
+        "q05",
+        "q06",
+        "q07",
+        "q08",
+        "q09",
+        "q10_binned",
+        "q11",
+        "q12_genderbalance",
+        "q12_diversity",
+        "q12_equity",
+        "q12_inclusion",
+        "q13_binned",
+        "q14",
+        "q17_genderbalance",
+        "q17_diversity",
+        "q17_equity",
+        "q17_inclusion",
+        "q19",
+    ]
     crosstab_ignore: list[str] = [
         "q03",
         "q04",
@@ -112,7 +154,7 @@ class Data(BaseModel):
         data = categorical_data(data, category)
         return data
 
-    def crosstab_headers(self, x:list[str], y:list[str]) -> list:
+    def crosstab_headers(self, x: list[str], y: list[str]) -> list:
         """
         クロス集計のカラム名
 
@@ -136,10 +178,10 @@ class Data(BaseModel):
             集計するカラム名のリスト
         """
         import itertools
+
         ignored = self.crosstab_ignore
         columns = [col for col in y if col not in ignored]
         return [[_x, _y] for _x, _y in itertools.product(x, columns) if _x != _y]
-
 
 
 if __name__ == "__main__":
