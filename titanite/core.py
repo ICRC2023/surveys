@@ -139,7 +139,19 @@ def crosstab(data: pd.DataFrame, x: str, y: str):
 
 def crosstab_data(data: pd.DataFrame, x: str, y: str):
     """
-    クロス集計
+    クロス集計とカイ二乗検定
+
+    カラムXとカラムYの2つの離散変数に対して、
+    ``pd.crosstab(index, columns)``でクロス集計し、
+    ``scipy.stats.chi2_contigency(observed)``で
+    （ピアソンの）カイ二乗検定します。
+
+    カイ二乗検定はデフォルトで``correction=True``となっていて、
+    自由度が1のとき、Yates'の連続補正がかかります。
+    これは集計数が少ないときにp値を大きくするための補正です。
+
+    クロス集計したデータフレーム（``cross_tab``）と、
+    検定の結果（``statistic``、``pvalue``、``dof``、``expected``）を返します。
 
     Parameters
     ----------
@@ -165,6 +177,13 @@ def crosstab_data(data: pd.DataFrame, x: str, y: str):
 def crosstab_heatmap(data: pd.DataFrame, x: str, y: str) -> alt.LayerChart:
     """
     クロス集計のヒートマップを作成
+
+    入力データは、クロス集計表をロングデータに変換したものを与えてください。
+    クロス集計表をヒートマップ（``mark_rect``）に描いた上に、
+    頻度をテキスト表示（``mark_text``）をした``altair.LayerChart``を返します。
+
+    プロットサイズはデフォルトで800x800にしていますが、
+    受け取ったあとに自由に変更してください。
 
     Parameters
     ----------
