@@ -2,38 +2,39 @@
 
 ### Fix
 
-- **titanite/core.py**: グラフのフォントサイズを大きくした
-- **notebooks/q03_region.ipynb**: 地域との相関を確認した
-- **titanite/config.py**: q03, q04をクロス集計の対象から除外した
-- **titanite/core.py**: 頻度 > 0 だけテキスト表示するようにした
-- **notebooks/q13_gender_ratio.ipynb**: 女性研究者の比率を確認した
-- **notebooks**: 再度実行した
-- **titanite/cli.py**: 内部変数の変更を修正した
-- **sandbox/config.toml**: research_fieldにOthersを追加した
-- **notebooks/01_preprocess.ipynb**: カテゴリ型にキャストする方法を修正した
-- **data/test_data/prepared_data.csv**: メインデータを追加した
-- **titanite/preprocess.py**: ビンのラベルにパーセントを追加した
-- **notebooks/q12_group_initiatives.ipynb**: グループと個人の意識について相関を確認した
-- **notebooks/q19_interest.ipynb**: カラムの求め方を置き換えた
-- **titanite/config.py**: クロス集計のカラム名を取得する機能を追加した
-- **notebooks/q02_gender.ipynb**: ヘッダーの求め方を汎用化した
-- **notebooks/q19_interest.ipynb**: p値を確認できるようにした
-- **notebooks/q02_gender.ipynb**: q02の相関を確認できるようにした
-- **titanite/core.py**: crosstab_dataの引数を追加した
-- **typst/slide.typ**: クロス集計した結果を追加した
-- **titanite/cli.py**: コメントの分析結果をCSVでも保存することにした
-- **titanite/core.py**: クラスター属性を追加した
-- **titanite/core.py**: クラスターを追加した
-- **typst/slide.typ**: scipyのコードサンプルを短くした
-- **notebooks/04_chi2_test.ipynb**: 画像のパスも保存できるようにした
-- **titanite/cli.py**: カイ二乗検定の結果をJSONでも保存することにした
-- **typst/slide.typ**: p値のCSVを追加した
-- **typst/slide.typ**: フッターを修正した
-- **typst**: テンプレートを微修正した
-- **typst/q18.typ**: 極性によって色を変更した
-- **moved**: Typstファイルを移動した
-- **titanite/core.py**: コメントのデータ処理だけにした
-- **titanite/cli.py**: 結果の保存先を修正した
+- **data/test_data/prepared_data.csv**
+  - メインデータを追加した
+- **notebooks**
+  - 01_preprocess.ipynb: カテゴリ型にキャストする方法を修正した
+  - 04_chi2_test.ipynb: データフレームに画像のパスを追加した
+  - q02_gender.ipynb: ジェンダーとの相関を確認した
+  - q03_region.ipynb: 地域との相関を確認した
+  - q12_group_initiatives.ipynb: グループの取り組みとの相関を確認した
+  - q17_indiviudal_initiatives.ipynb: 個人の意識との相関を確認した
+  - q13_gender_ratio.ipynb: グループ内の女性研究者の比率との相関を確認した
+  - q19_interest.ipynb: 科学に興味をもった時期との相関を確認した
+- **sandbox/config.toml**
+  - 研究分野（実験／理論）のカテゴリにOthersを追加した
+- **titanite/cli.py**:
+  - カイ二乗検定の結果をJSONで保存できるようにした
+  - コメントの分析結果をCSVで保存できるようにした
+- **titanite/config.py**
+  - crostab_ignore: クロス集計の総当たり確認の対象からq03とq04を除外した
+  - crosstab_headers: クロス集計の相手となるカラム名を取得する機能を追加した
+  - crosstab_data: 引数を追加した
+  - comment_data: クラスター属性にカラム名を追加した
+  - comment_data: コメントのデータ処理だけにした（ファイル保存をやめた）
+  - crosstab_heatmap: グラフのフォントサイズを大きくした
+  - crosstab_heatmap: 0より大きい部分だけテキスト表示するようにした
+- **titanite/preprocess.py**:
+  - binned_data: ビンのラベルにパーセントを追加した
+- **typst/q18.typ**:
+  - コメントの極性によって色が変わるようにした
+- **typst/slide.typ**:
+  - カイ二乗検定のJSONを追加した
+  - クロス集計した結果を追加した
+  - scipyのコードサンプルを短くした
+  - フッターにページ番号が表示されるように修正した
 
 ## 0.4.0 (2023-07-22)
 
