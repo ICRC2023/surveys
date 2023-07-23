@@ -131,7 +131,7 @@ def categorical_data(data: pd.DataFrame, category: dict) -> pd.DataFrame:
     data["q04_subregional"] = data["q04_subregional"].astype(category["subregional"])
     data["q05"] = data["q05"].astype(category["job_title"])
     data["q06"] = data["q06"].astype(category["research_group"])
-    data["q07"] = data["q07"].astype(category["research_field"])
+    data["q07"] = data["q07"].astype(category["research_field"]).fillna("Others")
     data["q08"] = data["q08"].astype(category["research_years"])
     data["q09"] = data["q09"].astype(category["yes_no"])
     data["q10"] = data["q10"].astype(int)

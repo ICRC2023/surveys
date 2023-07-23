@@ -125,6 +125,7 @@ research_group = [
 research_field = [
     "Theorist",
     "Experimentalist",
+    "Others",
     "Prefer not to answer",
 ]
 research_years = [
