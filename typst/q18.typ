@@ -4,12 +4,12 @@
 #set document(
     title: Q
 )
+
 #set page(
     header: [
         #set text(8pt)
-        #h(1fr) updated: 2023/07/20
+        #h(1fr) updated: 2023/07/23
         ],
-    footer: "ICRC2023 Diversity Session",
     numbering: "1 / 1",
 )
 
@@ -26,7 +26,7 @@
 #show heading: it => block(
     spacing: 1.2em,
     text(font: "Noto Sans CJK JP")[#it.body]
-    )
+)
 
 #heading(level:1)[#Q]
 
@@ -43,18 +43,23 @@
     #let job = answer.q05
     #let group = answer.q06
     #let field = answer.q07
+    #let session = answer.q11
 
     #line(length: 100%)
     #parbreak()
 
     #heading(level: 1, numbering: "【回答 1.1.】")[#gender / #age / #job]
     #let bg = teal
+    #let fg = teal
     #if polarity > 0 {
-        bg = aqua
+        bg = olive
+        fg = olive
     } else if polarity < 0 {
         bg = orange
+        fg = orange
     } else {
-        bg = olive
+        bg = silver
+        fg = gray
     }
 
     #align(center)[
@@ -62,7 +67,8 @@
             #align(start)[#en \ （#ja）]
         ]
     ]
-    - 感情分析：極性: #polarity / 主観度 : #subjectivity
-    - 地域（勤務地）：#work
+    - 感情分析：極性: #text(fill: fg)[#polarity] / 主観度 : #subjectivity
     - グループ：#group / #field
+    - 地域（勤務地）：#work
+    - Diversityセッション参加: #session
     ]
