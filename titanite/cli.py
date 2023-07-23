@@ -63,7 +63,6 @@ def comments(
     write_dir: str = "../data/test_data/",
     load_from: str = "config.toml",
 ) -> None:
-
     cfg = config(load_from, show=False)
 
     logger.info(f"Read data from: {read_from}")
