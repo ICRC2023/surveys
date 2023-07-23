@@ -204,13 +204,13 @@ def crosstab_heatmap(data: pd.DataFrame, x: str, y: str, z: str) -> alt.LayerCha
 
     # グラフを作成
     base = alt.Chart(data).encode(
-        alt.X(x),
-        alt.Y(y),
+        alt.X(x).axis(labelFontSize=20, titleFontSize=50),
+        alt.Y(y).axis(labelFontSize=20, titleFontSize=50),
     )
     mark = base.mark_rect().encode(
         alt.Color(z).scale(scheme="blues"),
     )
-    text = base.mark_text().encode(
+    text = base.mark_text(fontSize=20).encode(
         text = alt.condition(
             alt.datum[z] > 0,
             alt.Text(f"{z}:Q"),
