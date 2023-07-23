@@ -210,7 +210,13 @@ def crosstab_heatmap(data: pd.DataFrame, x: str, y: str, z: str) -> alt.LayerCha
     mark = base.mark_rect().encode(
         alt.Color(z).scale(scheme="blues"),
     )
-    text = base.mark_text().encode(alt.Text(z))
+    text = base.mark_text().encode(
+        text = alt.condition(
+            alt.datum[z] > 0,
+            alt.Text(f"{z}:Q"),
+            alt.value(""),
+        )
+        )
     chart = (mark + text).properties(
         width=800,
         height=800,
