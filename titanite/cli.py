@@ -156,6 +156,63 @@ def crosstabs(
 
 
 @app.command()
+def p005(
+    header: str,
+    read_from: str = "../data/test_data/prepared_data.csv",
+    write_dir: str = "../data/test_data/p005/",
+    load_from: str = "config.toml",
+) -> None:
+    """
+    Show p < 0.05
+
+    引数 header に対してクロス集計し、相関がある（＝``p< 0.05``）の項目のみデータを生成します。
+
+    Parameters
+    ----------
+    header : str
+        name of column
+    read_from : str, optional
+        path to preprocessed data file, by default "../data/test_data/prepared_data.csv"
+    write_dir : str, optional
+        path to save processed files, by default "../data/test_data/p005/"
+    """
+
+    d = Data(read_from=read_from, load_from=load_from)
+
+    if header in d.crosstab_ignore:
+        logger.error(f"header '{header}' is in crosstab_ignore. Bye")
+        raise typer.Exit(code=1)
+
+    data = d.read()
+    headers = d.crosstab_headers([header], list(data.columns))
+    cross_tabs, heatmaps, chi2_data = core.crosstab_loop(data, headers)
+
+    chi2_p005 = chi2_data.query("p_value < 0.05").copy()
+    chi2_p005["png"] = (
+        str(Path(write_dir) / header) + "/" + chi2_p005["questions"] + ".png"
+    )
+    fname = Path(write_dir) / header / f"p005_{header}.csv"
+    chi2_p005.to_csv(fname, index=False)
+    logger.info(f"Saved data to {fname}")
+
+    for index, row in chi2_p005.iterrows():
+        name = row.questions
+        fname = row.png
+        hm = heatmaps.get(name)
+        hm = hm.properties(
+            title={
+                "text": name,
+                "fontSize": 40,
+            },
+            width=800,
+            height=800,
+        )
+        hm.save(fname)
+        logger.info(f"Saved chart to {fname}")
+    return
+
+
+@app.command()
 def response(
     read_from: str = "../data/test_data/prepared_data.csv",
     write_dir: str = "../data/test_data/",
