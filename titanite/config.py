@@ -71,7 +71,7 @@ class Config(BaseModel):
 class Data(BaseModel):
     read_from: str | Path
     load_from: str = "config.toml"
-    ignore_from_crosstab: list[str] = [
+    crosstab_ignore: list[str] = [
         "q10",
         "q13",
         "q15",
@@ -109,6 +109,35 @@ class Data(BaseModel):
         data = pd.read_csv(self.read_from, parse_dates=["timestamp"])
         data = categorical_data(data, category)
         return data
+
+    def crosstab_headers(self, x:list[str], y:list[str]) -> list:
+        """
+        クロス集計のカラム名
+
+        x と y の二つの文字列リストを引数として受け取り、
+        x の各要素と y の各要素のすべての組み合わせを生成します。
+
+        ただし、y のリストからは以下の要素を除外しています。
+        - クロス集計から除外したいカラム名
+        - x の値（自分自身とクロス集計できないため）
+
+        Parameters
+        ----------
+        x : list[str]
+            とくにフォーカスしたい集計カラム名
+        y : list[str]
+            クロス集計結果に含まれるすべてのカラム名
+
+        Returns
+        -------
+        _type_
+            集計するカラム名のリスト
+        """
+        import itertools
+        ignored = self.crosstab_ignore
+        columns = [col for col in y if col not in ignored]
+        return [[_x, _y] for _x, _y in itertools.product(x, columns) if _x != _y]
+
 
 
 if __name__ == "__main__":
