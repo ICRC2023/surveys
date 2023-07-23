@@ -146,8 +146,13 @@ class Data(BaseModel):
         "timestamp",
     ]
 
+    def config(self):
+        c = Config(fname=self.load_from)
+        c.load()
+        return c
+
     def read(self):
-        config = Config(fname=self.load_from)
+        config = self.config()
         config.load()
         category = config.categories()
         data = pd.read_csv(self.read_from, parse_dates=["timestamp"])
