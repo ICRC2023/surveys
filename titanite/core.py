@@ -114,12 +114,16 @@ def response(data: pd.DataFrame) -> alt.LayerChart:
         alt.Y("hours(timestamp)").title("回答した時刻"),
     )
 
-    mark = base.mark_point().encode(
-        alt.Color("count()").title("回答数"),
-        alt.Size("count()"),
-        alt.Shape("q03_regional").title("地域（勤務地）"),
+    # mark = base.mark_point().encode(
+    #     alt.Color("count()").title("回答数"),
+    #     alt.Size("count()"),
+    #     alt.Shape("q03_regional").title("地域（勤務地）"),
+    # )
+    mark = base.mark_rect().encode(
+        alt.Color("count()").title("回答数").scale(scheme="blues"),
     )
-    text = base.mark_text(dx=10, dy=-10).encode(
+
+    text = base.mark_text(dx=30, dy=-15).encode(
         alt.Text("count()"),
     )
 
