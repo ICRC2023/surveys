@@ -115,7 +115,7 @@ def crosstabs(
     # headers = [header for header in sorted(data.columns) if header not in ignored]
     headers = []
     for h in sorted(data.columns):
-        if h not in d.ignore_from_crosstab:
+        if h not in d.crosstab_ignore:
             headers.append(h)
 
     # 総当たりの組み合わせ
