@@ -70,7 +70,7 @@ $ ti histogram --read_from=../data/test_data/prepared_data.csv
 
 ```console
 $ cd sandbox
-$ ti crosstab
+$ ti crosstab --save
 Loaded config from: config.toml
 Read data from: ../data/test_data/prepared_data.csv
 - Categorize
@@ -86,13 +86,23 @@ Saved chart to: ../data/test_data/crosstab/q01-q03.png
 - ``--read_from``で読み込むデータ（前処理済）を変更できます
 - ``--write-dir``で作成したデータと図を保存するディレクトリを変更できます（ファイル名は変更できません）
 - ``--load_from``で読み込む設定ファイルを変更できます
+- ``--save``で図を保存します
 
-## カイ二乗検定したい（WIP）
+## カイ二乗検定したい
 
 ```console
 $ cd sandbox
-$ ti chi2 ../data/test_data/chi2_test.csv
+$ ti p005 カラム名 --save
 ```
+
+- 引数にカラム名を指定し、相関がある（＝``p < 0.05``）の項目を確認できます
+  - カラム名はデータフレームにある項目を使ってください
+  - ただし、クロス集計から除外対象にしている項目は使えません
+  - 範囲外の値を指定した場合はエラーが出て終了します
+- ``--read_from``で読み込むデータ（前処理済）を変更できます
+- ``--write-dir``で作成したデータと図を保存するディレクトリを変更できます（ファイル名は変更できません）
+- ``--load_from``で読み込む設定ファイルを変更できます
+- ``--save``で図を保存します
 
 ## Jupyterノートブック
 
