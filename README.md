@@ -121,6 +121,11 @@ $ ti chi2 ../data/test_data/chi2_test.csv
 
 Altairのギャラリーからサンプルを見繕っておきました
 
+- 数値型 vs 数値型 → 散布図（``mark_point``）
+- カテゴリ型 vs 数値型 → 箱ヒゲ図（``mark_boxplot``）
+- カテゴリ型 vs カテゴリ型 → ヒートマップ（``mark_rect``）
+- テキスト表示（``mark_text``）
+
 - [ヒストグラム](https://altair-viz.github.io/gallery/simple_histogram.html)
 - [散布図のマトリックス](https://altair-viz.github.io/gallery/scatter_matrix.html)
 - [散布図とヒストグラム](https://altair-viz.github.io/gallery/scatter_marginal_hist.html)
