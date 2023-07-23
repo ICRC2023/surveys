@@ -72,6 +72,8 @@ class Data(BaseModel):
     read_from: str | Path
     load_from: str = "config.toml"
     crosstab_ignore: list[str] = [
+        "q03",
+        "q04",
         "q10",
         "q13",
         "q15",
