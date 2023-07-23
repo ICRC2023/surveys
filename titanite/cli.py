@@ -161,6 +161,7 @@ def p005(
     read_from: str = "../data/test_data/prepared_data.csv",
     write_dir: str = "../data/test_data/p005/",
     load_from: str = "config.toml",
+    save: bool = False,
 ) -> None:
     """
     Show p < 0.05
@@ -178,37 +179,57 @@ def p005(
     """
 
     d = Data(read_from=read_from, load_from=load_from)
+    data = d.read()
 
-    if header in d.crosstab_ignore:
-        logger.error(f"header '{header}' is in crosstab_ignore. Bye")
+    # header がデータフレームにない場合は終了する
+    if not header in data.columns:
+        logger.error(f"Given header '{header}' is not in dataframe.")
+        logger.warning(f"Please choose from  '{list(data.columns)}'.")
         raise typer.Exit(code=1)
+
+    # header が crosstab_ignore に含まれている場合は終了する
+    if header in d.crosstab_ignore:
+        logger.error(f"Given header '{header}' is in crosstab_ignore.")
+        logger.warning(f"Please avoid choosing from  '{d.crosstab_ignore}'.")
+        raise typer.Exit(code=1)
+
+    save_dir = Path(write_dir) / header
+    if not save_dir.exists():
+        logger.error(f"No directory found: {save_dir}.")
+        logger.warning(f"Make sure if the path is correct or please create it first.")
+        raise typer.Exit(code=1)
+
 
     data = d.read()
     headers = d.crosstab_headers([header], list(data.columns))
     cross_tabs, heatmaps, chi2_data = core.crosstab_loop(data, headers)
 
+    # p < 0.05 の項目を抽出
     chi2_p005 = chi2_data.query("p_value < 0.05").copy()
-    chi2_p005["png"] = (
-        str(Path(write_dir) / header) + "/" + chi2_p005["questions"] + ".png"
-    )
-    fname = Path(write_dir) / header / f"p005_{header}.csv"
+    chi2_p005["png"] = (str(save_dir) + "/" + chi2_p005["questions"] + ".png")
+    # データフレームをCSVとJSONで保存
+    fname = Path(write_dir) / header / f"chi2_test_p005_{header}.csv"
     chi2_p005.to_csv(fname, index=False)
     logger.info(f"Saved data to {fname}")
+    fname = fname.with_suffix(".json")
+    chi2_p005.to_json(fname, orient="records")
+    logger.info(f"Saved data to {fname}")
 
-    for index, row in chi2_p005.iterrows():
-        name = row.questions
-        fname = row.png
-        hm = heatmaps.get(name)
-        hm = hm.properties(
-            title={
-                "text": name,
-                "fontSize": 40,
-            },
-            width=800,
-            height=800,
-        )
-        hm.save(fname)
-        logger.info(f"Saved chart to {fname}")
+    if save:
+        for index, row in chi2_p005.iterrows():
+            name = row.questions
+            fname = row.png
+            hm = heatmaps.get(name)
+            hm = hm.properties(
+                title={
+                    "text": name,
+                    "fontSize": 40,
+                },
+                width=800,
+                height=800,
+            )
+            hm.save(fname)
+            logger.info(f"Saved chart to {fname}")
     return
 
 
