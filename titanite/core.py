@@ -62,7 +62,17 @@ def comment_data(data: pd.DataFrame) -> dict[str, pd.DataFrame]:
     3. 質問番号ごとにJSONファイルに出力する
     """
 
-    clusters = ["q01", "q02", "q03", "q03_regional", "q03_subregional", "q05", "q06", "q07", "q11"]
+    clusters = [
+        "q01",
+        "q02",
+        "q03",
+        "q03_regional",
+        "q03_subregional",
+        "q05",
+        "q06",
+        "q07",
+        "q11",
+    ]
     headers = ["q15", "q16", "q18", "q20", "q21", "q22"]
     comments = {}
     for header in headers:
@@ -211,12 +221,12 @@ def crosstab_heatmap(data: pd.DataFrame, x: str, y: str, z: str) -> alt.LayerCha
         alt.Color(z).scale(scheme="blues"),
     )
     text = base.mark_text(fontSize=20).encode(
-        text = alt.condition(
+        text=alt.condition(
             alt.datum[z] > 0,
             alt.Text(f"{z}:Q"),
             alt.value(""),
         )
-        )
+    )
     chart = (mark + text).properties(
         width=800,
         height=800,
