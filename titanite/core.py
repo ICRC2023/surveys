@@ -84,7 +84,8 @@ def comment_data(data: pd.DataFrame) -> dict[str, pd.DataFrame]:
             f"{header}_polarity",
             f"{header}_subjectivity",
         ]
-        comments.update({header: q[h].sort_values(by=header)})
+        comment = q[h]
+        comments.update({header: comment.sort_values(by="q11")})
 
     return comments
 
