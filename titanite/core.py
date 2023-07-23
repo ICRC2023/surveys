@@ -125,14 +125,14 @@ def crosstab(data: pd.DataFrame, x: str, y: str):
     cross_tab, chi2_test = crosstab_data(data, x, y)
 
     # データをロングデータに変換
-    v = "count"
-    melted = cross_tab.reset_index().melt(id_vars=x, var_name=y, value_name=v)
+    z = "count"
+    melted = cross_tab.reset_index().melt(id_vars=x, var_name=y, value_name=z)
     # 元データのカテゴリ型で上書き
     melted[x] = melted[x].astype(data[x].dtype)
     melted[y] = melted[y].astype(data[y].dtype)
 
     # ヒートマップを作成
-    chart = crosstab_heatmap(melted, x, y)
+    chart = crosstab_heatmap(melted, x, y, z)
 
     return cross_tab, chi2_test, chart
 
@@ -174,7 +174,7 @@ def crosstab_data(data: pd.DataFrame, x: str, y: str):
     return cross_tab, chi2_test
 
 
-def crosstab_heatmap(data: pd.DataFrame, x: str, y: str) -> alt.LayerChart:
+def crosstab_heatmap(data: pd.DataFrame, x: str, y: str, z: str) -> alt.LayerChart:
     """
     クロス集計のヒートマップを作成
 
@@ -193,6 +193,8 @@ def crosstab_heatmap(data: pd.DataFrame, x: str, y: str) -> alt.LayerChart:
         集計結果のカラム名（X軸）
     y : str
         集計結果のカラム名（Y軸）
+    color : str
+        集計結果のカラム名（Z軸・カラー）
 
     Returns
     -------
@@ -200,16 +202,15 @@ def crosstab_heatmap(data: pd.DataFrame, x: str, y: str) -> alt.LayerChart:
         集計結果のヒートマップ
     """
 
-    v = "count"
     # グラフを作成
     base = alt.Chart(data).encode(
         alt.X(x),
         alt.Y(y),
     )
     mark = base.mark_rect().encode(
-        alt.Color(v).scale(scheme="blues"),
+        alt.Color(z).scale(scheme="blues"),
     )
-    text = base.mark_text().encode(alt.Text(v))
+    text = base.mark_text().encode(alt.Text(z))
     chart = (mark + text).properties(
         width=800,
         height=800,
@@ -221,7 +222,8 @@ def crosstab_loop(data: pd.DataFrame, headers: list):
     """
     クロス集計のループ
 
-    任意のカラム名のペア（2つ）のリストを与えて、クロス集計とカイ二乗検定した結果を返します。
+    集計したい離散変数（カラムXとカラムYのペア）のリストを与えて、
+    一括してクロス集計とカイ二乗検定した結果を返します。
 
     Parameters
     ----------
@@ -239,6 +241,7 @@ def crosstab_loop(data: pd.DataFrame, headers: list):
     cross_tabs = {}
     heatmaps = {}
     chi2_tests = []
+
     for h in headers:
         x, y = h
         name = f"{x}-{y}"
