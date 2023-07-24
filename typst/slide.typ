@@ -1,7 +1,7 @@
 #let author = "Shota Takahashi"
 #let today = "2023/07/20"
 
-#let p005 = json("../data/test_data/chi2_test/chi2_test_p005.json")
+#let p005 = json("data/test_data/chi2_test/chi2_test_p005.json")
 
 #set page(
     header: today,
@@ -183,9 +183,6 @@ Diversityセッション参加：約120名
 
 == その他
 
-
-
-
 #pagebreak()
 
 = 分析用データの手順
@@ -265,12 +262,12 @@ Diversityセッション参加：約120名
 == 性別と年代
 
 #figure(
-    image("../data/quick_summary/tmp_q2.png"),
+    image("data/quick_summary/tmp_q02.png"),
     caption: [性別]
 )
 
 #figure(
-    image("../data/quick_summary/tmp_q1.png"),
+    image("data/quick_summary/tmp_q01.png"),
     caption: [年代]
 )
 
@@ -281,12 +278,12 @@ Diversityセッション参加：約120名
 == 地域
 
 #figure(
-    image("../data/quick_summary/tmp_q3.png"),
+    image("data/quick_summary/tmp_q03.png"),
     caption: [勤務地]
 )
 
 #figure(
-    image("../data/quick_summary/tmp_q4.png"),
+    image("data/quick_summary/tmp_q04.png"),
     caption: [出身地]
 )
 
@@ -295,12 +292,12 @@ Diversityセッション参加：約120名
 == 地域（五大州）
 
 #figure(
-    image("../data/quick_summary/tmp_q3_regional.png"),
+    image("data/quick_summary/tmp_q03_regional.png"),
     caption: [勤務地]
 )
 
 #figure(
-    image("../data/quick_summary/tmp_q4_regional.png"),
+    image("data/quick_summary/tmp_q04_regional.png"),
     caption: [出身地]
 )
 
@@ -309,12 +306,12 @@ Diversityセッション参加：約120名
 == 地域（詳細）
 
 #figure(
-    image("../data/quick_summary/tmp_q3_subregional.png"),
+    image("data/quick_summary/tmp_q03_subregional.png"),
     caption: [勤務地]
 )
 
 #figure(
-    image("../data/quick_summary/tmp_q4_subregional.png"),
+    image("data/quick_summary/tmp_q04_subregional.png"),
     caption: [出身地]
 )
 
@@ -327,7 +324,7 @@ Diversityセッション参加：約120名
 == 肩書き
 
 #figure(
-    image("../data/quick_summary/tmp_q5.png"),
+    image("data/quick_summary/tmp_q05.png"),
     caption: [肩書き]
 )
 
@@ -336,7 +333,7 @@ Diversityセッション参加：約120名
 == 所属グループ
 
 #figure(
-    image("../data/quick_summary/tmp_q6.png"),
+    image("data/quick_summary/tmp_q06.png"),
     caption: [所属グループ]
 )
 
@@ -348,7 +345,7 @@ Diversityセッション参加：約120名
 == 理論 or 実験
 
 #figure(
-    image("../data/quick_summary/tmp_q7.png"),
+    image("data/quick_summary/tmp_q07.png"),
     caption: [理論 or 実験]
 )
 
@@ -361,7 +358,7 @@ Diversityセッション参加：約120名
 == Diversityセッション登録
 
 #figure(
-    image("../data/quick_summary/tmp_q11.png"),
+    image("data/quick_summary/tmp_q11.png"),
     caption: [Diversityセッション登録の有無]
 )
 
@@ -370,12 +367,12 @@ Diversityセッション参加：約120名
 == キャリア
 
 #figure(
-    image("../data/quick_summary/tmp_q8.png"),
+    image("data/quick_summary/tmp_q08.png"),
     caption: [キャリアの長さ]
 )
 
 #figure(
-    image("../data/quick_summary/tmp_q9.png"),
+    image("data/quick_summary/tmp_q09.png"),
     caption: [キャリアに満足？]
 )
 
@@ -387,7 +384,7 @@ Diversityセッション参加：約120名
 == 家事・育児・介護
 
 #figure(
-    image("../data/quick_summary/tmp_q10_binned.png"),
+    image("data/quick_summary/tmp_q10_binned.png"),
     caption: [1日で家事・育児・介護にかかる平均時間数]
 )
 
@@ -398,22 +395,22 @@ Diversityセッション参加：約120名
 == 所属グループのDEI取り組み
 
 #figure(
-    image("../data/quick_summary/tmp_q12_genderbalance.png"),
+    image("data/quick_summary/tmp_q12_genderbalance.png"),
     caption: [Gender Balance]
 )
 
 #figure(
-    image("../data/quick_summary/tmp_q12_diversity.png"),
+    image("data/quick_summary/tmp_q12_diversity.png"),
     caption: [Diversity]
 )
 
 #figure(
-    image("../data/quick_summary/tmp_q12_equity.png"),
+    image("data/quick_summary/tmp_q12_equity.png"),
     caption: [Equity]
 )
 
 #figure(
-    image("../data/quick_summary/tmp_q12_inclusion.png"),
+    image("data/quick_summary/tmp_q12_inclusion.png"),
     caption: [Inclusion]
 )
 
@@ -425,22 +422,22 @@ Diversityセッション参加：約120名
 == 個人のDEI意識
 
 #figure(
-    image("../data/quick_summary/tmp_q17_genderbalance.png"),
+    image("data/quick_summary/tmp_q17_genderbalance.png"),
     caption: [Gender Balance]
 )
 
 #figure(
-    image("../data/quick_summary/tmp_q17_diversity.png"),
+    image("data/quick_summary/tmp_q17_diversity.png"),
     caption: [Diversity]
 )
 
 #figure(
-    image("../data/quick_summary/tmp_q17_equity.png"),
+    image("data/quick_summary/tmp_q17_equity.png"),
     caption: [Equity]
 )
 
 #figure(
-    image("../data/quick_summary/tmp_q17_inclusion.png"),
+    image("data/quick_summary/tmp_q17_inclusion.png"),
     caption: [Inclusion]
 )
 
@@ -453,12 +450,12 @@ Diversityセッション参加：約120名
 == グループ内の女性研究者の割合
 
 #figure(
-    image("../data/quick_summary/tmp_q13_binned.png"),
+    image("data/quick_summary/tmp_q13_binned.png"),
     caption: [所属グループの女性研究者の割合]
 )
 
 #figure(
-    image("../data/quick_summary/tmp_q14.png"),
+    image("data/quick_summary/tmp_q14.png"),
     caption: [上記の割合についてどう思うか]
 )
 
@@ -468,7 +465,7 @@ Diversityセッション参加：約120名
 == 科学にはじめて興味を持った時期
 
 #figure(
-    image("../data/quick_summary/tmp_q19.png"),
+    image("data/quick_summary/tmp_q19.png"),
     caption: [科学への興味]
 )
 
