@@ -523,17 +523,19 @@ $
     === 検定の結果
 
     #align(center)[
-    #table(
-        columns: 3,
-        inset: 1em,
-        align: start,
-        /* --- header --- */
-        [**p-value**], [**DoF**], [**Statistic**],
-        /*--- body --- */
-        [#row.p_value],
-        [#row.dof],
-        [#row.statistic],
-    )
+        #table(
+            columns: 3,
+            inset: 1em,
+            align: start,
+            /* --- header --- */
+            [**p-value**],
+            [**DoF**],
+            [**Statistic**],
+            /*--- body --- */
+            [#row.p_value],
+            [#row.dof],
+            [#row.statistic],
+        )
     ]
 
     #pagebreak()
