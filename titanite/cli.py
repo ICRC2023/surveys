@@ -84,7 +84,6 @@ def crosstabs(
     read_from: str = "../data/test_data/prepared_data.csv",
     write_dir: str = "../data/test_data/crosstab/",
     load_from: str = "config.toml",
-    save: bool = False,
 ) -> None:
     """
     Run crosstab
@@ -98,24 +97,44 @@ def crosstabs(
     read_from : str, optional
         path to preprocessed data file, by default "../data/test_data/prepared_data.csv"
     write_dir : str, optional
-        path to save processed files, by default "../data/test_data/"
+        path to save processed files, by default "../data/test_data/crosstab/"
     load_from : str, optional
         path to configuration file, by default "config.toml"
     """
+
+    # 総当たりでクロス集計
+    cross_tabs, heatmaps = chi2(
+        read_from=read_from,
+        write_dir=write_dir,
+        load_from=load_from,
+    )
+
+    for name, cross_tab in cross_tabs.items():
+        fname = Path(write_dir) / f"{name}.csv"
+        cross_tab.to_csv(fname)
+        logger.info(f"Saved data to: {fname}")
+
+    for name, heatmap in heatmaps.items():
+        fname = Path(write_dir) / f"{name}.png"
+        heatmap.save(fname)
+        logger.info(f"Saved chart to: {fname}")
+
+    return
+
+@app.command()
+def chi2(
+    read_from: str = "../data/test_data/prepared_data.csv",
+    write_dir: str = "../data/test_data/chi2_test/",
+    load_from: str = "config.toml",
+    )-> tuple:
+
     import itertools
-
-    cfg = config(load_from, show=False)
-
     logger.info(f"Read data from: {read_from}")
     d = Data(read_from=read_from, load_from=load_from)
     data = d.read()
 
-    # 総当たりを組みたいカラム名を整理
-    # headers = [header for header in sorted(data.columns) if header not in ignored]
-    headers = []
-    for h in sorted(data.columns):
-        if h not in d.crosstab_ignore:
-            headers.append(h)
+    # 総当たりしたいカラム名を整理
+    headers = [h for h in sorted(data.columns) if h not in d.crosstab_ignore]
 
     # 総当たりの組み合わせ
     matches = list(itertools.combinations(headers, 2))
@@ -123,38 +142,24 @@ def crosstabs(
     # 総当たりでクロス集計
     cross_tabs, heatmaps, chi2_data = core.crosstab_loop(data, matches)
 
-    if save:
-        for name, cross_tab in cross_tabs.items():
-            fname = Path(write_dir) / f"{name}.csv"
-            cross_tab.to_csv(fname)
-            logger.info(f"Saved data to: {fname}")
-
-        for name, heatmap in heatmaps.items():
-            fname = Path(write_dir) / f"{name}.png"
-            heatmap.save(fname)
-            logger.info(f"Saved chart to: {fname}")
-
-    # カイ二乗検定の結果を保存
-    save_dir = Path(write_dir)
-    chi2_data["png"] = str(save_dir) + "/" + chi2_data["questions"] + ".png"
-
-    save_dir = Path(write_dir).parent / "chi2_test"
-    fname = save_dir / "chi2_test.csv"
+    # カイ二乗検定の結果を保存する
+    fname = Path(write_dir) / "chi2_test.csv"
     chi2_data.to_csv(fname, index=False)
     logger.info(f"Saved data to: {fname}")
     fname = fname.with_suffix(".json")
     chi2_data.to_json(fname, orient="records")
     logger.info(f"Saved data to: {fname}")
 
-    chi2_p005 = chi2_data.query("p_value < 0.05")
-    fname = save_dir / "chi2_test_p005.csv"
-    chi2_p005.to_csv(fname, index=False)
+    # p < 0.05 の結果を保存する
+    p005 = chi2_data.query("p_value < 0.05")
+    fname = Path(write_dir) / "chi2_test_p005.csv"
+    p005.to_csv(fname, index=False)
     logger.info(f"Saved data to: {fname}")
     fname = fname.with_suffix(".json")
-    chi2_p005.to_json(fname, orient="records")
+    p005.to_json(fname, orient="records")
     logger.info(f"Saved data to: {fname}")
 
-    return
+    return cross_tabs, heatmaps
 
 
 @app.command()
@@ -164,7 +169,7 @@ def p005(
     write_dir: str = "../data/test_data/p005/",
     load_from: str = "config.toml",
     save: bool = False,
-) -> None:
+    ) -> None:
     """
     Show p < 0.05
 
