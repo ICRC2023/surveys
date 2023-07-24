@@ -236,6 +236,50 @@ Diversityセッション参加：約120名
 
 #pagebreak()
 
+= 確認したこと
+
+== 年齢（`q01`）、職種（`q05`）、研究歴（`q08`）の相関
+
+#figure(
+    image("data/test_data/crosstab/q01-q05.png"),
+    caption: [年代と職種]
+)
+
+#figure(
+    image("data/test_data/crosstab/q01-q08.png"),
+    caption: [年代と研究歴],
+    )
+
+#figure(
+    image("data/test_data/crosstab/q05-q08.png"),
+    caption: [職種と研究歴]
+)
+
+
+== 勤務地（`q03`）と出身地（`q04`）の相関
+
+#figure(
+    image("data/test_data/crosstab/q03_regional-q04_regional.png"),
+    caption: [勤務地（大州）と出身地（大州）]
+)
+
+#figure(
+    image("data/test_data/crosstab/q03_subregional-q04_subregional.png"),
+    caption: [勤務地（地域）と出身地（地域）]
+)
+
+- 出身地で勤務している場合が多い
+- ヨーロッパ、アジア、アメリカは他の地域と比べて、行ったり来たりが少しだけ多い？
+
+
+== 女性研究者の比率（`q13`）とその充足度（`q14`）の相関
+
+#figure(
+    image("data/test_data/crosstab/q13_binned-q14.png"),
+    caption: [女性研究者の割合とその充足度]
+)
+
+== 科学に関心を持った時期（`q19`）と地域
 
 
 #pagebreak()
