@@ -135,9 +135,10 @@ def crosstabs(
             logger.info(f"Saved chart to: {fname}")
 
     # カイ二乗検定の結果を保存
-    save_dir = Path(write_dir).parent / "chi2_test"
+    save_dir = Path(write_dir)
     chi2_data["png"] = str(save_dir) + "/" + chi2_data["questions"] + ".png"
 
+    save_dir = Path(write_dir).parent / "chi2_test"
     fname = save_dir / "chi2_test.csv"
     chi2_data.to_csv(fname, index=False)
     logger.info(f"Saved data to: {fname}")
