@@ -29,6 +29,23 @@ def group_data(data: pd.DataFrame, group: list) -> pd.DataFrame:
     grouped = data.groupby(group)[c].sum().reset_index()
     return grouped
 
+def hbar(data: pd.DataFrame, x:str, y:str, z:str) -> alt.LayerChart:
+    base = alt.Chart(data).encode(
+        alt.X(x),
+        alt.Y(y),
+    ).properties(
+        width=800,
+        height=800,
+    )
+    mark = base.mark_bar().encode(
+        alt.Color(z),
+    )
+    text = base.mark_text().encode(
+        alt.Text(y)
+    )
+    chart = mark + text
+    return chart
+
 
 def heatmap(data: pd.DataFrame, x: str, y: str) -> dict:
     z = "response"
