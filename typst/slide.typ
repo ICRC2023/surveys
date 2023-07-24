@@ -89,7 +89,7 @@ Diversityセッション参加：約120名
 
 = アンケートの項目と回答
 
-== 基本属性
+== 基本属性（8項目）
 
 + 【Q1】What is your age ?
 + 【Q2】What gender do you identify as ?
@@ -100,7 +100,7 @@ Diversityセッション参加：約120名
 + 【Q7】What is your research type ?
 + 【Q11】Did you already sign up for the diversity session in ICRC2023 ?
 
-== グループの実態調査
+== グループの実態調査（5項目）
 
 + 【Q12】What do you think about the initiatives on DE&I of your group ?
     - [Gender balance]
@@ -112,7 +112,7 @@ Diversityセッション参加：約120名
 + 【Q15】Please let us know If your group has any good practice examples related to DE&I ?
 + 【Q16】Please let us know if there is anything your group needs to work on or if your group has any problems related to DE&I.
 
-== 個人の意識調査
+== 個人の意識調査（8項目）
 
 + 【Q8】How long have you been in this field ?
 + 【Q9】Are you satisfied with your career to date ?
@@ -128,6 +128,9 @@ Diversityセッション参加：約120名
 + 【Q21】What reasons do you think are hindering DE&I initiatives in science ?
 + 【Q22】Comments
 
+== 備考
+
+
 アンケートのとき、Q8, Q9, Q10は「基本属性」のセクションで聞いてしまったが、
 分析するときは「個人の意識（状況）」として、相関をとる変数としたほうがよさそう。
 
@@ -135,82 +138,62 @@ Diversityセッション参加：約120名
 
 = 分析クラスター
 
-- 基本属性のそれぞれ項目でクラスタリングして、回答の傾向を調べ、相関が強いもの、かつ、面白そうなものを調べる。
+- 最初は、基本属性の項目でクラスタリングして、回答の傾向を調べる
+- 相関が強いもの、かつ、面白そうなものを探して、新しいクラスターを追加する
 - 他にも、基本属性の回答を組み合わせて、新しいクラスターを定義できるかも？（ただし、そこまでやる時間はなさそう）。
 
-== 年代（`q1`）
 
-若い世代とシニアな世代に違いはないのか。
-たとえば、若い世代にとって「ジェンダーバランス」の考えは受け入れやすく、取り組みに対して意欲が高かったりしないだろうか。
-逆に、シニアな世代はこれまでの慣習・偏見をもっている方が多く、反対や無関心だったりするのではないか？
-それとも、シニアな世代も取り組んでいるが、やっぱり世界観は簡単に変わらないのか？
-
-== 性別（性自認）（`q2`)
-
-「女性（とその他のジェンダー・マイノリティ）」は当事者として、ジェンダーバランスの取り組みに対する意識が高いのではないだろうか。
-男性はもっとコミットするべき、という根拠がみえてこないだろうか？
-
-== 地域（q3 / q4）
-
-「勤務地」と「出身地」に分けて地域を回答してもらった。
-地域の選択肢は、国連が定義している地理区分をベースにした。
-「五大州（`_regional`）」と「地域（`_subreagional`）」で計算できるようにした。
-
-（いわゆる）先進諸国と発展途上国でDEIに対する意識に違いがあるかもしれない。
-
-
-== 職種（`q5`）
-
-年代（`q1`）と同じ相関になるかもしれない。
-学生、任期付き、パーマネントで意識に違いがあるかもしれない。
-もしくは、シニアのほうが大学などの役職で、男女参画に触れることが多いので、意外と意識が高かったりするかもしれない。
-
-== 所属グループ（`q6`）
-
-コラボレーションによっては、DEIのサブグループを作っていたりする。
-そういったグループに所属するメンバーは意識が高いのではないだろうか？
-また、研究グループの間の違いはあるのだろうか？
-
-== 実験屋と理論屋（`q7`）
-
-「実験屋」「理論屋」「その他」で聞いてしまって、ちょっと失敗したかも。
-実験屋に比べて、理論屋の共同研究グループは数が少ないはず。
-関係者が少ないので、DEIはとくに問題にならず、無関心が多いのではないか？
-
-== Diversityセッション参加／不参加（`q11`）
-
-セッション参加者は意識が高いのではないか？
+/ 年代（`q01`）: 10代から90代の範囲で回答をお願いした。
+/ 性別（`q02`): 性自認の回答をお願いした。
+/ 地域（q03 / q04）: 勤務地と出身地の回答をお願いした。選択肢はWikipediaにあった #link("https://ja.wikipedia.org/wiki/%E5%9B%BD%E9%80%A3%E3%81%AB%E3%82%88%E3%82%8B%E4%B8%96%E7%95%8C%E5%9C%B0%E7%90%86%E5%8C%BA%E5%88%86")[国連による世界地理区分]を参考にした。
+/ 職種（`q5`）: 身分の回答をお願いした。
+/ 所属グループ（`q6`）: 選択肢はICRC2023のセッションと同じにした。
+/ 実験屋と理論屋（`q7`）: 選択肢の用意を間違えたかも。「その他」に現象論や両方と書く人がちらほら。まとめて「Others」にした。
+/ Diversityセッション参加／不参加（`q11`）: セッションに登録済かどうかの回答をお願いした。
 
 == その他
 
 #pagebreak()
 
-= 分析用データの手順
+= 分析データの準備手順
 
 + アンケートの回答（Googleスプレッドシート）をCSV形式でダウンロードする
     - 保存先 : `data/raw_data/YYYYMMDD_icrc2023_diversity_presurveys.csv`
-+ データを前処理する
-    - ``Pandas``データフレーム
-    - 表記が揺れてしまった回答を置換する
++ データを前処理する（`pandas`パッケージを利用する）
+    - データフレームに変換する
+    - 表記揺れを置換する
     - 地域の回答を「五大州」と「地域」に分割する
     - 順序ありのカテゴリカルデータ（離散変数）に変換する
-    - 自由記述の感情分析（極性と主観度）を追加する
-        - ``textblob``パッケージを利用する
-    - 自由記述の自動翻訳（英語→日本語）を追加する
-    - 保存先 : `data/test_data/all.csv`
+    - 自由記述の感情分析（極性と主観度）を追加する（`textblob`パッケージを利用する）
+    - 自由記述の自動翻訳（英語→日本語）を追加する（`textblob`パッケージを利用する）
+    - 保存先 : `data/test_data/prepared_data.csv`
++ 基本分布を確認する（`pandas`パッケージを利用する）
+    - 保存先 : `data/test_data/hbar/*.csv`
+    - 保存先 : `data/test_data/hbar/*.png`
++ クロス集計する（`pandas`パッケージを利用する）
+    - クロス集計可能な回答（＝カテゴリカルデータ）を総当たりで集計する
+    - 保存先 : `data/test_data/crosstab/*.csv`
+    - 保存先 : `data/test_data/crosstab/*.png`
++ カイ二乗検定する（`scipy`パッケージを利用する）
+    - 保存先 : `data/test_data/chi2_test/chi2_test.csv`
+    - 保存先 : `data/test_data/chi2_test/chi2_test_p005.csv`
++ `p < 0.05`の項目を確認する
+    - 保存先 : `data/test_data/p005/質問番号/chi2_test_p005_質問番号.csv`
 + 自由記述をJSON形式で保存する
-    - 保存先 : `data/test_data/質問番号.json`
+    - 保存先 : `data/test_data/comments/質問番号.json`
 
 #pagebreak()
 
-= 確認したいことを列挙
+= 確認したいこと
 
-+ Q12（グループの取り組み具合）の各項目との相関
-    + `q12` and `q1`
-        - `q12_genderbalance` and `q1`
-        - `q12_diversity` and `q1`
-        - `q12_equity` and `q1`
-        - `q12_inclusion` and `q1`
+== Q12（グループの取り組み具合）の各項目との相関
+
+=== `q12` and `q1`
+    - `q12_genderbalance` and `q1`
+    - `q12_diversity` and `q1`
+    - `q12_equity` and `q1`
+    - `q12_inclusion` and `q1`
+
     + q12 and q2
     + q12 and q3 / q3_regional / q3_subretional
     + q12 and q4 / q4_regional / q4_subretional
@@ -257,7 +240,7 @@ Diversityセッション参加：約120名
 
 #pagebreak()
 
-= いろいろ図を作ってみる
+= 基本分布を作ってみた
 
 == 性別と年代
 
@@ -513,10 +496,12 @@ $
 #for row in p005 [
     == #row.questions
 
-    - ファイル名: #row.png
+    #let png = "data/test_data/crosstab/" + row.questions + ".png"
+
+    - ファイル名: #png
 
     #figure(
-        image(row.png),
+        image(png),
         caption: [#row.questions]
     )
 
