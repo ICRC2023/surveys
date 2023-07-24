@@ -112,6 +112,11 @@ Saved data to: ../data/test_data/chi2_test/chi2_test_p005.json
 ```console
 $ cd sandbox
 $ ti p005 カラム名 --save
+- Categorize
+- Binned
+Saved data to ../data/test_data/p005/カラム名/chi2_test_p005_カラム名.csv
+Saved data to ../data/test_data/p005/カラム名/chi2_test_p005_カラム名.json
+Saved chart to ../data/test_data/p005/カラム名/カラム名-相手カラム名.png
 ```
 
 - 引数にカラム名を指定し、相関がある（＝``p < 0.05``）の項目を確認できます

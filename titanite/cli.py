@@ -86,7 +86,7 @@ def comments(
     return
 
 @app.command()
-def hbar(
+def hbars(
     read_from: str = "../data/test_data/prepared_data.csv",
     write_dir: str = "../data/test_data/hbar/",
     load_from: str = "config.toml",
@@ -123,6 +123,7 @@ def hbar(
             logger.info(f"Saved chart to: {fname}")
 
     return
+
 
 
 @app.command()
@@ -284,6 +285,40 @@ def p005(
             hm.save(fname)
             logger.info(f"Saved chart to {fname}")
     return
+
+@app.command()
+def hbar(
+    header: str,
+    read_from: str = "../data/test_data/prepared_data.csv",
+    write_dir: str = "../data/test_data/hbar/",
+    load_from: str = "config.toml",
+    ):
+    """
+    Create histograms.
+
+    保存先:
+        - "../data/test/data/hbar/カラム名/カラム名-色カラム名.csv"
+        - "../data/test/data/hbar/カラム名/カラム名-色カラム名.json"
+        - "../data/test/data/hbar/カラム名/カラム名-色カラム名.png"
+    """
+    pass
+
+@app.command()
+def crosstab(
+    header: str,
+    read_from: str = "../data/test_data/prepared_data.csv",
+    write_dir: str = "../data/test_data/hbar/",
+    load_from: str = "config.toml",
+    ):
+    """
+    Create crosstabs.
+
+    保存先:
+        - "../data/test/data/crosstab/カラム名/カラム名-相手カラム名.csv"
+        - "../data/test/data/crosstab/カラム名/カラム名-相手カラム名.json"
+        - "../data/test/data/crosstab/カラム名/カラム名-相手カラム名.png"
+    """
+    pass
 
 
 @app.command()
