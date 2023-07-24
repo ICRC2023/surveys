@@ -60,7 +60,7 @@ def prepare(
 @app.command()
 def comments(
     read_from: str = "../data/test_data/prepared_data.csv",
-    write_dir: str = "../data/test_data/",
+    write_dir: str = "../data/test_data/comment/",
     load_from: str = "config.toml",
 ) -> None:
     cfg = config(load_from, show=False)
@@ -70,7 +70,7 @@ def comments(
     data = d.read()
     comments = core.comment_data(data)
     for name, comment in comments.items():
-        fname = Path(write_dir) / "comment" / f"{name}.csv"
+        fname = Path(write_dir) / f"{name}.csv"
         comment.to_csv(fname, index=False)
         logger.info(f"Saved as {fname}")
         fname = fname.with_suffix(".json")
@@ -82,7 +82,7 @@ def comments(
 @app.command()
 def crosstabs(
     read_from: str = "../data/test_data/prepared_data.csv",
-    write_dir: str = "../data/test_data/",
+    write_dir: str = "../data/test_data/crosstab/",
     load_from: str = "config.toml",
     save: bool = False,
 ) -> None:
@@ -125,19 +125,20 @@ def crosstabs(
 
     if save:
         for name, cross_tab in cross_tabs.items():
-            fname = Path(write_dir) / "crosstab" / f"{name}.csv"
+            fname = Path(write_dir) / f"{name}.csv"
             cross_tab.to_csv(fname)
             logger.info(f"Saved data to: {fname}")
 
         for name, heatmap in heatmaps.items():
-            fname = Path(write_dir) / "crosstab" / f"{name}.png"
+            fname = Path(write_dir) / f"{name}.png"
             heatmap.save(fname)
             logger.info(f"Saved chart to: {fname}")
 
     # カイ二乗検定の結果を保存
-    fname = Path(write_dir) / "crosstab"
-    chi2_data["png"] = str(fname) + "/" + chi2_data["questions"] + ".png"
-    fname = Path(write_dir) / "chi2_test" / "chi2_test.csv"
+    save_dir = Path(write_dir).parent / "chi2_test"
+    chi2_data["png"] = str(save_dir) + "/" + chi2_data["questions"] + ".png"
+
+    fname = save_dir / "chi2_test.csv"
     chi2_data.to_csv(fname, index=False)
     logger.info(f"Saved data to: {fname}")
     fname = fname.with_suffix(".json")
@@ -145,7 +146,7 @@ def crosstabs(
     logger.info(f"Saved data to: {fname}")
 
     chi2_p005 = chi2_data.query("p_value < 0.05")
-    fname = Path(write_dir) / "chi2_test" / "chi2_test_p005.csv"
+    fname = save_dir / "chi2_test_p005.csv"
     chi2_p005.to_csv(fname, index=False)
     logger.info(f"Saved data to: {fname}")
     fname = fname.with_suffix(".json")
