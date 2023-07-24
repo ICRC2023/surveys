@@ -19,7 +19,12 @@ class Config(BaseModel):
         self.choices = config.get("choices")
 
     def load_toml(self):
+        import typer
         fname = Path(self.fname)
+        if not fname.exists():
+            logger.error(f"File not found: {fname}")
+            raise typer.Exit(code=1)
+
         with fname.open("rb") as f:
             config = tomllib.load(f)
         return config
