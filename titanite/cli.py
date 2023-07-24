@@ -78,13 +78,52 @@ def comments(
         logger.info(f"Saved as {fname}")
     return
 
+@app.command()
+def hbar(
+    read_from: str = "../data/test_data/prepared_data.csv",
+    write_dir: str = "../data/test_data/hbar/",
+    load_from: str = "config.toml",
+    save: bool = False
+    ):
+
+    logger.info(f"Read data from: {read_from}")
+    d = Data(read_from=read_from, load_from=load_from)
+    data = d.read()
+    matches = d.matches(list(data.columns))
+
+    grouped_data = {}
+    hbars = {}
+    for m in list(matches):
+        x, z = m
+        name = f"{x}_{z}"
+        grouped = core.group_data(data, list(m))
+        grouped_data.update({name: grouped})
+
+        y = "response"
+        h = core.hbar(grouped, x, y, z)
+        hbars.update({name: h})
+
+    if save:
+        for name, gdata in grouped_data.items():
+            fname = Path(write_dir) / f"{name}.csv"
+            gdata.to_csv(fname, index=False)
+            logger.info(f"Saved data to: {fname}")
+
+
+        for name, hbar in hbars.items():
+            fname = Path(write_dir) / f"{name}.png"
+            hbar.save(fname)
+            logger.info(f"Saved chart to: {fname}")
+
+    return
+
 
 @app.command()
 def crosstabs(
     read_from: str = "../data/test_data/prepared_data.csv",
     write_dir: str = "../data/test_data/crosstab/",
     load_from: str = "config.toml",
-) -> None:
+    ) -> None:
     """
     Run crosstab
 
