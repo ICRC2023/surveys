@@ -13,24 +13,31 @@ app = typer.Typer()
 
 
 @app.command()
-def config(load_from: str = "config.toml", show: bool = True):
+def config(
+    load_from: str = "config.toml",
+    questions: bool = False,
+    choices: bool = False
+    ):
     """Show configuration"""
     _fname = Path(load_from)
     logger.info(f"Loaded config from: {_fname}")
-
-    if not _fname.exists():
-        msg = f"File Not Found: {_fname} ({_fname.resolve()})"
-        logger.error(msg)
-        raise typer.Exit(code=1)
-
     cfg = Config(fname=_fname)
     cfg.load()
 
-    if show:
-        cfg.show()
-        return
+    if questions:
+        print("=== Questions ===")
+        for k, v in cfg.questions.items():
+            print(k, v)
 
-    return cfg
+    if choices:
+        print("=== Choices ===")
+        for k, v in cfg.choices.items():
+            print(k, v)
+
+    if not (questions and choices):
+        cfg.show()
+
+    return
 
 
 @app.command()
@@ -45,7 +52,7 @@ def prepare(
     CSV形式で出力したGoogleスプレッドシートの回答を読み込み、
     前処理したデータを生成します。
     """
-    cfg = config(load_from, show=False)
+    cfg = Config(fname=load_from)
     category = cfg.categories()
 
     logger.info(f"Read data from: {read_from}")
@@ -63,12 +70,11 @@ def comments(
     write_dir: str = "../data/test_data/comment/",
     load_from: str = "config.toml",
 ) -> None:
-    cfg = config(load_from, show=False)
-
     logger.info(f"Read data from: {read_from}")
     d = Data(read_from=read_from, load_from=load_from)
     data = d.read()
     comments = core.comment_data(data)
+
     for name, comment in comments.items():
         fname = Path(write_dir) / f"{name}.csv"
         comment.to_csv(fname, index=False)
@@ -76,6 +82,7 @@ def comments(
         fname = fname.with_suffix(".json")
         comment.to_json(fname, orient="records")
         logger.info(f"Saved as {fname}")
+
     return
 
 @app.command()
