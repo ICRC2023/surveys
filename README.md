@@ -70,7 +70,7 @@ $ ti histogram --read_from=../data/test_data/prepared_data.csv
 
 ```console
 $ cd sandbox
-$ ti crosstab --save
+$ ti crosstab
 Loaded config from: config.toml
 Read data from: ../data/test_data/prepared_data.csv
 - Categorize
@@ -86,9 +86,28 @@ Saved chart to: ../data/test_data/crosstab/q01-q03.png
 - ``--read_from``で読み込むデータ（前処理済）を変更できます
 - ``--write-dir``で作成したデータと図を保存するディレクトリを変更できます（ファイル名は変更できません）
 - ``--load_from``で読み込む設定ファイルを変更できます
-- ``--save``で図を保存します
 
 ## カイ二乗検定したい
+
+```console
+$ cd sandbox
+$ ti chi2
+Loaded config from: config.toml
+Read data from: ../data/test_data/prepared_data.csv
+- Categorize
+- Binned
+Saved data to: ../data/test_data/chi2_test/chi2_test.csv
+Saved data to: ../data/test_data/chi2_test/chi2_test.json
+Saved data to: ../data/test_data/chi2_test/chi2_test_p005.csv
+Saved data to: ../data/test_data/chi2_test/chi2_test_p005.json
+```
+
+- 引数なしで実行できます（ただし、そのうち変えるかも？）
+- ``--read_from``で読み込むデータ（前処理済）を変更できます
+- ``--write-dir``で作成したデータと図を保存するディレクトリを変更できます（ファイル名は変更できません）
+- ``--load_from``で読み込む設定ファイルを変更できます
+
+## ``p < 0.05`` したい
 
 ```console
 $ cd sandbox
