@@ -52,13 +52,13 @@ def prepare(
     CSV形式で出力したGoogleスプレッドシートの回答を読み込み、
     前処理したデータを生成します。
     """
-    cfg = Config(fname=load_from)
-    category = cfg.categories()
+    c = Config(load_from=load_from)
+    categories = c.categorical()
 
     logger.info(f"Read data from: {read_from}")
     data = pd.read_csv(read_from, skiprows=1)
     data = preprocess_data(data)
-    data = categorical_data(data, category)
+    data = categorical_data(data, categories)
     fname = Path(write_dir) / "prepared_data.csv"
     data.to_csv(fname, index=False)
     logger.info(f"Saved data to: {fname}")
