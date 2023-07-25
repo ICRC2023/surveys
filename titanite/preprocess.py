@@ -138,6 +138,7 @@ def categorical_data(data: pd.DataFrame, categories: dict) -> pd.DataFrame:
     good_poor = categories.get("good_poor", "category")
     agree_disagree = categories.get("agree_disagree", "category")
     school = categories.get("school", "category")
+    cluster = categories.get("cluster", "category")
 
     data["q01"] = data["q01"].astype(age)
     data["q02"] = data["q02"].astype(gender)
@@ -171,6 +172,11 @@ def categorical_data(data: pd.DataFrame, categories: dict) -> pd.DataFrame:
     # data["q20"]
     # data["q21"]
     # data["q22"]
+
+    # cluster
+    data["q01_clustered"] = data["q01_clustered"].astype(cluster)
+    data["q01q02_clustered"] = data["q01q02_clustered"].astype(cluster)
+    data["q13q14_clustered"] = data["q13q14_clustered"].astype(cluster)
 
     data = binned_data(data)
 
