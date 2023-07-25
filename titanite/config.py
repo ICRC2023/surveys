@@ -11,6 +11,7 @@ from .preprocess import categorical_data
 class Config(BaseModel):
     fname: str | Path = "config.toml"
     load_from: str = "config.toml"
+    categories: dict = {}
 
     def load(self):
         config = self.load_config()
@@ -30,16 +31,19 @@ class Config(BaseModel):
         config = self.load_toml()
         return config
 
-    def categories(self):
+    def categorical(self):
         from pandas.api.types import CategoricalDtype
 
         config = self.load_config()
-        _categories = {}
+        categories = {}
 
         for k, v in config.get("choices").items():
-            _categories[k] = CategoricalDtype(categories=v, ordered=True)
+            dtype = CategoricalDtype(categories=v, ordered=True)
+            categories.update({k: dtype})
 
-        return _categories
+        self.categories = categories
+
+        return categories
 
     def show(self):
         """
@@ -181,16 +185,15 @@ class Data(BaseModel):
     ]
 
     def config(self):
-        c = Config(fname=self.load_from)
-        c.load()
-        return c
+        c = Config(load_from=self.load_from)
+        return c.load_config()
 
     def read(self):
-        config = self.config()
-        config.load()
-        category = config.categories()
+        c = Config(load_from=self.load_from)
+        #config = self.config()
+        categories = c.categorical()
         data = pd.read_csv(self.read_from, parse_dates=["timestamp"])
-        data = categorical_data(data, category)
+        data = categorical_data(data, categories)
         return data
 
     def matches(self, columns: list):
@@ -203,8 +206,6 @@ class Data(BaseModel):
         # 総当たりの組み合わせ
         matches = list(itertools.combinations(headers, 2))
         return matches
-
-
 
     def crosstab_headers(self, x: list[str], y: list[str]) -> list:
         """
