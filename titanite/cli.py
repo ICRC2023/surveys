@@ -70,6 +70,18 @@ def comments(
     write_dir: str = "../data/test_data/comment/",
     load_from: str = "config.toml",
 ) -> None:
+    """
+    Create comment sentiment analysis data.
+
+    Parameters
+    ----------
+    read_from : str, optional
+        _description_, by default "../data/test_data/prepared_data.csv"
+    write_dir : str, optional
+        _description_, by default "../data/test_data/comment/"
+    load_from : str, optional
+        _description_, by default "config.toml"
+    """
     logger.info(f"Read data from: {read_from}")
     d = Data(read_from=read_from, load_from=load_from)
     data = d.read()
@@ -92,6 +104,20 @@ def hbars(
     load_from: str = "config.toml",
     save: bool = False
     ):
+    """
+    Run hbar for all headers.
+
+    Parameters
+    ----------
+    read_from : str, optional
+        _description_, by default "../data/test_data/prepared_data.csv"
+    write_dir : str, optional
+        _description_, by default "../data/test_data/hbar/"
+    load_from : str, optional
+        _description_, by default "config.toml"
+    save : bool, optional
+        _description_, by default False
+    """
 
     logger.info(f"Read data from: {read_from}")
     d = Data(read_from=read_from, load_from=load_from)
@@ -133,7 +159,7 @@ def crosstabs(
     load_from: str = "config.toml",
     ) -> None:
     """
-    Run crosstab
+    Run crosstab for all headers.
 
     アンケート項目をクロス集計し、相関関係を調べます。
     離散変数になっている2つの質問を総当たりして、相関データを生成します。
@@ -174,6 +200,23 @@ def chi2(
     write_dir: str = "../data/test_data/chi2_test/",
     load_from: str = "config.toml",
     )-> tuple:
+    """
+    Create chi2_test
+
+    Parameters
+    ----------
+    read_from : str, optional
+        _description_, by default "../data/test_data/prepared_data.csv"
+    write_dir : str, optional
+        _description_, by default "../data/test_data/chi2_test/"
+    load_from : str, optional
+        _description_, by default "config.toml"
+
+    Returns
+    -------
+    tuple
+        _description_
+    """
 
     import itertools
     logger.info(f"Read data from: {read_from}")
@@ -218,7 +261,7 @@ def p005(
     save: bool = False,
     ) -> None:
     """
-    Show p < 0.05
+    Create p < 0.05 data.
 
     引数 header に対してクロス集計し、相関がある（＝``p< 0.05``）の項目のみデータを生成します。
 
@@ -233,26 +276,10 @@ def p005(
     """
 
     d = Data(read_from=read_from, load_from=load_from)
-    data = d.read()
-
-    # header がデータフレームにない場合は終了する
-    if not header in data.columns:
-        logger.error(f"Given header '{header}' is not in dataframe.")
-        logger.warning(f"Please choose from  '{list(data.columns)}'.")
-        raise typer.Exit(code=1)
-
-    # header が crosstab_ignore に含まれている場合は終了する
-    if header in d.crosstab_ignore:
-        logger.error(f"Given header '{header}' is in crosstab_ignore.")
-        logger.warning(f"Please avoid choosing from  '{d.crosstab_ignore}'.")
-        raise typer.Exit(code=1)
+    is_valid_header(header, d.crosstab_valid)
 
     save_dir = Path(write_dir) / header
-    if not save_dir.exists():
-        logger.error(f"No directory found: {save_dir}.")
-        logger.warning(f"Make sure if the path is correct or please create it first.")
-        raise typer.Exit(code=1)
-
+    is_valid_path(save_dir)
 
     data = d.read()
     headers = d.crosstab_headers([header], list(data.columns))
@@ -294,7 +321,7 @@ def hbar(
     load_from: str = "config.toml",
     ):
     """
-    Create histograms.
+    (WIP) Create histogram.
 
     保存先:
         - "../data/test/data/hbar/カラム名/カラム名-色カラム名.csv"
@@ -311,15 +338,45 @@ def crosstab(
     load_from: str = "config.toml",
     ):
     """
-    Create crosstabs.
+    (WIP) Create crosstab.
 
     保存先:
         - "../data/test/data/crosstab/カラム名/カラム名-相手カラム名.csv"
         - "../data/test/data/crosstab/カラム名/カラム名-相手カラム名.json"
         - "../data/test/data/crosstab/カラム名/カラム名-相手カラム名.png"
     """
+    d = Data(read_from=read_from, load_from=load_from)
+    data = d.read()
+
     pass
 
+def is_valid_header(test_header:str, valid_headers:list) -> None:
+    """
+    header が処理してよい値か確認する
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        description_
+    header : str
+        _description_
+
+    Raises
+    ------
+    typer.Exit
+        _description_
+    """
+
+    if not test_header in valid_headers:
+        logger.error(f"Given header '{test_header}' is invalid.")
+        logger.warning(f"Please choose from {valid_headers}")
+        raise typer.Exit(code=1)
+
+def is_valid_path(path:Path) -> None:
+    if not path.exists():
+        logger.error(f"No file/directory found: {path}")
+        logger.error(f"Make sure if the path is correct or please create it first.")
+        raise typer.Exit(code=1)
 
 @app.command()
 def response(
