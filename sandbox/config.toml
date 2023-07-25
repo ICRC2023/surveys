@@ -163,3 +163,10 @@ school = [
     "University",
     "Prefer not to answer",
 ]
+cluster = [
+    "Cluster1",
+    "Cluster2",
+    "Cluster3",
+    "Cluster4",
+    "Others",
+]
