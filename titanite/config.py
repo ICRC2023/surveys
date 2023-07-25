@@ -10,17 +10,14 @@ from .preprocess import categorical_data
 
 class Config(BaseModel):
     fname: str | Path = "config.toml"
-    questions: dict | None = {}
-    choices: dict | None = {}
+    load_from: str = "config.toml"
 
     def load(self):
-        config = self.load_toml()
-        self.questions = config.get("questions")
-        self.choices = config.get("choices")
+        config = self.load_config()
 
-    def load_toml(self):
+    def load_toml(self) -> dict:
         import typer
-        fname = Path(self.fname)
+        fname = Path(self.load_from)
         if not fname.exists():
             logger.error(f"File not found: {fname}")
             raise typer.Exit(code=1)
@@ -29,12 +26,17 @@ class Config(BaseModel):
             config = tomllib.load(f)
         return config
 
+    def load_config(self) -> dict:
+        config = self.load_toml()
+        return config
+
     def categories(self):
         from pandas.api.types import CategoricalDtype
 
+        config = self.load_config()
         _categories = {}
 
-        for k, v in self.choices.items():
+        for k, v in config.get("choices").items():
             _categories[k] = CategoricalDtype(categories=v, ordered=True)
 
         return _categories
@@ -43,9 +45,10 @@ class Config(BaseModel):
         """
         Print configuration
         """
-        f = Path(self.fname)
-        q = self.questions
-        c = self.choices
+        f = Path(self.load_from)
+        config = self.load_config()
+        q = config.get("questions")
+        c = config.get("choices")
 
         print("=" * 80)
         print("Configuration file")
