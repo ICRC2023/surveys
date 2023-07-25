@@ -150,6 +150,32 @@ class Data(BaseModel):
         "response",
         "timestamp",
     ]
+    crosstab_valid: list[str] = [
+        "q01",
+        "q02",
+        "q03_regional",
+        "q03_subregional",
+        "q04_regional",
+        "q04_subregional",
+        "q05",
+        "q06",
+        "q07",
+        "q08",
+        "q09",
+        "q10_binned",
+        "q11",
+        "q12_genderbalance",
+        "q12_diversity",
+        "q12_equity",
+        "q12_inclusion",
+        "q13_binned",
+        "q14",
+        "q17_genderbalance",
+        "q17_diversity",
+        "q17_equity",
+        "q17_inclusion",
+        "q19",
+    ]
 
     def config(self):
         c = Config(fname=self.load_from)
