@@ -1,25 +1,25 @@
+#from titanite import config
 from titanite import config
 
 
 def init_config():
-    settings = {"confd": "../sandbox/", "fname": "config.toml"}
-
+    settings = {"load_from": "../sandbox/config.toml"}
     c = config.Config(**settings)
-    c.load()
+    cfg = c.load_config()
 
-    q = c.get("questions").keys()
-    x = c.get("choices").keys()
+    q = cfg.get("questions").keys()
+    x = cfg.get("choices").keys()
 
     expected_q = [
-        "q1",
-        "q2",
-        "q3",
-        "q4",
-        "q5",
-        "q6",
-        "q7",
-        "q8",
-        "q9",
+        "q01",
+        "q02",
+        "q03",
+        "q04",
+        "q05",
+        "q06",
+        "q07",
+        "q08",
+        "q09",
         "q10",
         "q11",
         "q12",
@@ -47,6 +47,7 @@ def init_config():
         "good_poor",
         "agree_disagree",
         "school",
+        "cluster",
     ]
 
     assert q == expected_q
