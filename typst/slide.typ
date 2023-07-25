@@ -26,6 +26,11 @@
     text(font: "Noto Sans CJK JP", fill: white)[#it.body]
     )
 
+#show raw: it => text(
+    fill: orange,
+    [#it]
+    )
+
 #set line(
     length: 100%,
     stroke: 1pt + olive,
@@ -143,9 +148,12 @@ Diversityセッション参加：約120名
 - 他にも、基本属性の回答を組み合わせて、新しいクラスターを定義できるかも？（ただし、そこまでやる時間はなさそう）。
 
 
+== 基本クラスター（`q01` / `q02` / `q03` / `q04` / `q05` / `q06` / `q07` / `q11`）
+
+
 / 年代（`q01`）: 10代から90代の範囲で回答をお願いした。
-/ 性別（`q02`): 性自認の回答をお願いした。
-/ 地域（q03 / q04）: 勤務地と出身地の回答をお願いした。選択肢はWikipediaにあった #link("https://ja.wikipedia.org/wiki/%E5%9B%BD%E9%80%A3%E3%81%AB%E3%82%88%E3%82%8B%E4%B8%96%E7%95%8C%E5%9C%B0%E7%90%86%E5%8C%BA%E5%88%86")[国連による世界地理区分]を参考にした。
+/ 性別（`q02`）: ジェンダー・性自認の回答をお願いした。
+/ 地域（`q03` / `q04`）: 勤務地と出身地の回答をお願いした。選択肢はWikipediaにあった #link("https://ja.wikipedia.org/wiki/%E5%9B%BD%E9%80%A3%E3%81%AB%E3%82%88%E3%82%8B%E4%B8%96%E7%95%8C%E5%9C%B0%E7%90%86%E5%8C%BA%E5%88%86")[国連による世界地理区分]を参考にした。
 / 職種（`q5`）: 身分の回答をお願いした。
 / 所属グループ（`q6`）: 選択肢はICRC2023のセッションと同じにした。
 / 実験屋と理論屋（`q7`）: 選択肢の用意を間違えたかも。「その他」に現象論や両方と書く人がちらほら。まとめて「Others」にした。
@@ -285,6 +293,103 @@ Diversityセッション参加：約120名
 #pagebreak()
 
 = 基本分布を作ってみた
+
+== 年代（`q01`）とその内訳
+
+#figure(
+    columns(2)[
+        #image("data/test_data/hbar/q01_q02.png"),
+        #colbreak(),
+        #image("data/test_data/crosstab/q01-q02.png"),
+    ],
+    caption: [回答者の年代と性別の内訳]
+)
+
+- 若い世代（20代と30代）の回答が多い
+- 日本の"若手研究者"は40歳まで。海外でも同じ？
+    - 40歳を境目に若手（Young）とシニア（Senior）に区別したクラスターを作ってもよさそう
+    - 国ごとに境目の年齢が違うなら、それを反映させたほうがいいのかもしれない
+
+#figure(
+    columns(2)[
+        #image("data/test_data/hbar/q01_q04_subregional.png"),
+        #colbreak(),
+        #image("data/test_data/crosstab/q01-q04_subregional.png"),
+    ],
+    caption: [回答者の年代と地域（勤務地）の内訳]
+)
+
+#figure(
+    columns(2)[
+        #image("data/test_data/hbar/q01_q05.png"),
+        #colbreak(),
+        #image("data/test_data/crosstab/q01-q05.png"),
+    ],
+    caption: [回答者の年代と職種の内訳]
+)
+
+#figure(
+    columns(2)[
+        #image("data/test_data/hbar/q01_q06.png"),
+        #colbreak(),
+        #image("data/test_data/crosstab/q01-q06.png"),
+    ],
+    caption: [回答者の年代と研究グループの内訳]
+)
+
+- `GA` / `NU` / `MM&GW` のグループは若い傾向（20代が多い）
+- `CRI`はどの年代も多く答えてくれた
+
+#figure(
+    columns(2)[
+        #image("data/test_data/hbar/q01_q07.png"),
+        #colbreak(),
+        #image("data/test_data/crosstab/q01-q07.png"),
+    ],
+    caption: [回答者の年代と研究分野の内訳]
+)
+
+#figure(
+    columns(2)[
+        #image("data/test_data/hbar/q01_q08.png"),
+        #colbreak(),
+        #image("data/test_data/crosstab/q01-q08.png"),
+    ],
+    caption: [回答者の年代と研究キャリアの内訳]
+)
+
+#figure(
+    columns(2)[
+        #image("data/test_data/hbar/q01_q09.png"),
+        #colbreak(),
+        #image("data/test_data/crosstab/q01-q09.png"),
+    ],
+    caption: [回答者の年代と研究キャリア満足度の内訳]
+)
+
+- 30代で`No`という回答が多い？
+
+
+#figure(
+    columns(2)[
+        #image("data/test_data/hbar/q01_q10_binned.png"),
+        #colbreak(),
+        #image("data/test_data/crosstab/q01-q10_binned.png"),
+    ],
+    caption: [回答者の年代と研究以外（家事・育児・介護）の時間の内訳]
+)
+
+- 1 - 2時間という回答が多い
+
+#figure(
+    columns(2)[
+        #image("data/test_data/hbar/q01_q11.png"),
+        #colbreak(),
+        #image("data/test_data/crosstab/q01-q11.png"),
+    ],
+    caption: [回答者の年代とセッション参加の内訳]
+)
+
 
 == 性別と年代
 
