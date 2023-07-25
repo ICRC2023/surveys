@@ -14,10 +14,8 @@ app = typer.Typer()
 
 @app.command()
 def config(
-    load_from: str = "config.toml",
-    questions: bool = False,
-    choices: bool = False
-    ):
+    load_from: str = "config.toml", questions: bool = False, choices: bool = False
+):
     """Show configuration"""
     _fname = Path(load_from)
     logger.info(f"Loaded config from: {_fname}")
@@ -97,13 +95,14 @@ def comments(
 
     return
 
+
 @app.command()
 def hbars(
     read_from: str = "../data/test_data/prepared_data.csv",
     write_dir: str = "../data/test_data/hbar/",
     load_from: str = "config.toml",
-    save: bool = False
-    ):
+    save: bool = False,
+):
     """
     Run hbar for all headers.
 
@@ -142,7 +141,6 @@ def hbars(
             gdata.to_csv(fname, index=False)
             logger.info(f"Saved data to: {fname}")
 
-
         for name, hbar in hbars.items():
             fname = Path(write_dir) / f"{name}.png"
             hbar.save(fname)
@@ -151,13 +149,12 @@ def hbars(
     return
 
 
-
 @app.command()
 def crosstabs(
     read_from: str = "../data/test_data/prepared_data.csv",
     write_dir: str = "../data/test_data/crosstab/",
     load_from: str = "config.toml",
-    ) -> None:
+) -> None:
     """
     Run crosstab for all headers.
 
@@ -194,12 +191,13 @@ def crosstabs(
 
     return
 
+
 @app.command()
 def chi2(
     read_from: str = "../data/test_data/prepared_data.csv",
     write_dir: str = "../data/test_data/chi2_test/",
     load_from: str = "config.toml",
-    )-> tuple:
+) -> tuple:
     """
     Create chi2_test
 
@@ -219,6 +217,7 @@ def chi2(
     """
 
     import itertools
+
     logger.info(f"Read data from: {read_from}")
     d = Data(read_from=read_from, load_from=load_from)
     data = d.read()
@@ -259,7 +258,7 @@ def p005(
     write_dir: str = "../data/test_data/p005/",
     load_from: str = "config.toml",
     save: bool = False,
-    ) -> None:
+) -> None:
     """
     Create p < 0.05 data.
 
@@ -287,7 +286,7 @@ def p005(
 
     # p < 0.05 の項目を抽出
     chi2_p005 = chi2_data.query("p_value < 0.05").copy()
-    chi2_p005["png"] = (str(save_dir) + "/" + chi2_p005["questions"] + ".png")
+    chi2_p005["png"] = str(save_dir) + "/" + chi2_p005["questions"] + ".png"
     # データフレームをCSVとJSONで保存
     fname = Path(write_dir) / header / f"chi2_test_p005_{header}.csv"
     chi2_p005.to_csv(fname, index=False)
@@ -313,13 +312,14 @@ def p005(
             logger.info(f"Saved chart to {fname}")
     return
 
+
 @app.command()
 def hbar(
     header: str,
     read_from: str = "../data/test_data/prepared_data.csv",
     write_dir: str = "../data/test_data/hbar/",
     load_from: str = "config.toml",
-    ):
+):
     """
     (WIP) Create histogram.
 
@@ -330,13 +330,14 @@ def hbar(
     """
     pass
 
+
 @app.command()
 def crosstab(
     header: str,
     read_from: str = "../data/test_data/prepared_data.csv",
     write_dir: str = "../data/test_data/hbar/",
     load_from: str = "config.toml",
-    ):
+):
     """
     (WIP) Create crosstab.
 
@@ -350,7 +351,8 @@ def crosstab(
 
     pass
 
-def is_valid_header(test_header:str, valid_headers:list) -> None:
+
+def is_valid_header(test_header: str, valid_headers: list) -> None:
     """
     header が処理してよい値か確認する
 
@@ -372,11 +374,13 @@ def is_valid_header(test_header:str, valid_headers:list) -> None:
         logger.warning(f"Please choose from {valid_headers}")
         raise typer.Exit(code=1)
 
-def is_valid_path(path:Path) -> None:
+
+def is_valid_path(path: Path) -> None:
     if not path.exists():
         logger.error(f"No file/directory found: {path}")
         logger.error(f"Make sure if the path is correct or please create it first.")
         raise typer.Exit(code=1)
+
 
 @app.command()
 def response(

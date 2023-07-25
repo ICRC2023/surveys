@@ -18,6 +18,7 @@ class Config(BaseModel):
 
     def load_toml(self) -> dict:
         import typer
+
         fname = Path(self.load_from)
         if not fname.exists():
             logger.error(f"File not found: {fname}")
@@ -190,7 +191,7 @@ class Data(BaseModel):
 
     def read(self):
         c = Config(load_from=self.load_from)
-        #config = self.config()
+        # config = self.config()
         categories = c.categorical()
         data = pd.read_csv(self.read_from, parse_dates=["timestamp"])
         data = categorical_data(data, categories)
