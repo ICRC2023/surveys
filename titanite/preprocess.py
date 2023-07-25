@@ -41,6 +41,7 @@ def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
 
     return data
 
+
 def replace_data(data: pd.DataFrame) -> pd.DataFrame:
     """
     いくつかのカラムの値を置換する
@@ -106,7 +107,7 @@ def split_data(data: pd.DataFrame) -> pd.DataFrame:
     return data
 
 
-def categorical_data(data: pd.DataFrame, category: dict) -> pd.DataFrame:
+def categorical_data(data: pd.DataFrame, categories: dict) -> pd.DataFrame:
     """
     カテゴリー型に変換する
 
@@ -114,7 +115,7 @@ def categorical_data(data: pd.DataFrame, category: dict) -> pd.DataFrame:
     ----------
     data : pd.DataFrame
         データフレーム
-    category : dict
+    categories : dict
         カテゴリー型
 
     Returns
@@ -123,37 +124,50 @@ def categorical_data(data: pd.DataFrame, category: dict) -> pd.DataFrame:
         データフレーム
     """
     logger.info("Categorize")
-    data["q01"] = data["q01"].astype(category["age"])
-    data["q02"] = data["q02"].astype(category["gender"])
-    data["q03"] = data["q03"].astype(category["geoscheme"])
-    data["q03_regional"] = data["q03_regional"].astype(category["regional"])
-    data["q03_subregional"] = data["q03_subregional"].astype(category["subregional"])
-    data["q04"] = data["q04"].astype(category["geoscheme"])
-    data["q04_regional"] = data["q04_regional"].astype(category["regional"])
-    data["q04_subregional"] = data["q04_subregional"].astype(category["subregional"])
-    data["q05"] = data["q05"].astype(category["job_title"])
-    data["q06"] = data["q06"].astype(category["research_group"])
-    data["q07"] = data["q07"].astype(category["research_field"]).fillna("Others")
-    data["q08"] = data["q08"].astype(category["research_years"])
-    data["q09"] = data["q09"].astype(category["yes_no"])
+
+    age = categories.get("age", "category")
+    gender = categories.get("gender", "category")
+    geoscheme = categories.get("geoscheme", "category")
+    regional = categories.get("regional", "category")
+    subregional = categories.get("subregional", "category")
+    job_title = categories.get("job_title", "category")
+    research_group = categories.get("research_group", "category")
+    research_field = categories.get("research_field", "category")
+    research_years = categories.get("research_years", "category")
+    yes_no = categories.get("yes_no", "category")
+    good_poor = categories.get("good_poor", "category")
+    agree_disagree = categories.get("agree_disagree", "category")
+    school = categories.get("school", "category")
+
+    data["q01"] = data["q01"].astype(age)
+    data["q02"] = data["q02"].astype(gender)
+    data["q03"] = data["q03"].astype(geoscheme)
+    data["q03_regional"] = data["q03_regional"].astype(regional)
+    data["q03_subregional"] = data["q03_subregional"].astype(subregional)
+    data["q04"] = data["q04"].astype(geoscheme)
+    data["q04_regional"] = data["q04_regional"].astype(regional)
+    data["q04_subregional"] = data["q04_subregional"].astype(subregional)
+    data["q05"] = data["q05"].astype(job_title)
+    data["q06"] = data["q06"].astype(research_group)
+    data["q07"] = data["q07"].astype(research_field).fillna("Others")
+    data["q08"] = data["q08"].astype(research_years)
+    data["q09"] = data["q09"].astype(yes_no)
     data["q10"] = data["q10"].astype(int)
-    data["q11"] = data["q11"].astype(category["yes_no"])
-    data["q12_genderbalance"] = data["q12_genderbalance"].astype(category["good_poor"])
-    data["q12_diversity"] = data["q12_diversity"].astype(category["good_poor"])
-    data["q12_equity"] = data["q12_equity"].astype(category["good_poor"])
-    data["q12_inclusion"] = data["q12_inclusion"].astype(category["good_poor"])
+    data["q11"] = data["q11"].astype(yes_no)
+    data["q12_genderbalance"] = data["q12_genderbalance"].astype(good_poor)
+    data["q12_diversity"] = data["q12_diversity"].astype(good_poor)
+    data["q12_equity"] = data["q12_equity"].astype(good_poor)
+    data["q12_inclusion"] = data["q12_inclusion"].astype(good_poor)
     data["q13"] = data["q13"].astype(int)
-    data["q14"] = data["q14"].astype(category["good_poor"])
+    data["q14"] = data["q14"].astype(good_poor)
     # data["q15"]
     # data["q16"]
-    data["q17_genderbalance"] = data["q17_genderbalance"].astype(
-        category["agree_disagree"]
-    )
-    data["q17_diversity"] = data["q17_diversity"].astype(category["agree_disagree"])
-    data["q17_equity"] = data["q17_equity"].astype(category["agree_disagree"])
-    data["q17_inclusion"] = data["q17_inclusion"].astype(category["agree_disagree"])
+    data["q17_genderbalance"] = data["q17_genderbalance"].astype(agree_disagree)
+    data["q17_diversity"] = data["q17_diversity"].astype(agree_disagree)
+    data["q17_equity"] = data["q17_equity"].astype(agree_disagree)
+    data["q17_inclusion"] = data["q17_inclusion"].astype(agree_disagree)
     # data["q18"]
-    data["q19"] = data["q19"].astype(category["school"])
+    data["q19"] = data["q19"].astype(school)
     # data["q20"]
     # data["q21"]
     # data["q22"]
@@ -212,6 +226,7 @@ def sentiment_data(data):
 
     return data
 
+
 def cluster_data(data: pd.DataFrame) -> pd.DataFrame:
     """
     クラスター分割
@@ -260,6 +275,7 @@ def cluster_data(data: pd.DataFrame) -> pd.DataFrame:
     data.loc[isT, header] = "Cluster2"
 
     return data
+
 
 def binned_data(data: pd.DataFrame) -> pd.DataFrame:
     """
