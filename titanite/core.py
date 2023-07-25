@@ -29,20 +29,23 @@ def group_data(data: pd.DataFrame, group: list) -> pd.DataFrame:
     grouped = data.groupby(group)[c].sum().reset_index()
     return grouped
 
-def hbar(data: pd.DataFrame, x:str, y:str, z:str) -> alt.LayerChart:
-    base = alt.Chart(data).encode(
-        alt.X(x),
-        alt.Y(y),
-    ).properties(
-        width=800,
-        height=800,
+
+def hbar(data: pd.DataFrame, x: str, y: str, z: str) -> alt.LayerChart:
+    base = (
+        alt.Chart(data)
+        .encode(
+            alt.X(x),
+            alt.Y(y),
+        )
+        .properties(
+            width=800,
+            height=800,
+        )
     )
     mark = base.mark_bar().encode(
         alt.Color(z),
     )
-    text = base.mark_text().encode(
-        alt.Text(y)
-    )
+    text = base.mark_text().encode(alt.Text(y))
     chart = mark + text
     return chart
 
@@ -150,6 +153,65 @@ def response(data: pd.DataFrame) -> alt.LayerChart:
         height=800,
     )
     return chart
+
+
+def group_hbar(data: pd.DataFrame, x: str, y: str, color: str, title="No title"):
+    """
+    groupbyで集計したデータをヒストグラムにする
+
+    ヒストグラムは、積み上げ棒グラフと、割合グラフの2種類作成します。
+    割合グラフには、回答数をテキストでオーバーレイ表示します。
+    Jupyter Notebookで開く場合、受け取ったLayeredChartをinteractiveすることで、
+    tooltipをホバー表示できます。
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        _description_
+    x : str
+        _description_
+    y : str
+        _description_
+    color : str
+        _description_
+    title : str, optional
+        _description_, by default "No title"
+
+    Returns
+    -------
+    _type_
+        _description_
+    """
+    base = (
+        alt.Chart(data)
+        .encode(
+            alt.X(x),
+            alt.Y(y),
+        )
+        .properties(
+            title=title,
+            width=400,
+        )
+    )
+    opacity = 0.5
+
+    mark = base.mark_bar(tooltip=True, opacity=opacity).encode(
+        alt.Y(y),
+        alt.Color(color),
+    )
+
+    stack = base.mark_bar(tooltip=True, opacity=opacity).encode(
+        alt.Y(y).stack("normalize"),
+        alt.Color(color),
+    )
+
+    text = base.mark_text(dy=10).encode(
+        alt.Y(y).stack("normalize"),
+        alt.Text(y),
+        alt.Color(color),
+    )
+
+    return (mark, stack + text)
 
 
 def crosstab(data: pd.DataFrame, x: str, y: str):
