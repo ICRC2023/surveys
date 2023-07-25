@@ -33,11 +33,13 @@ def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
     logger.info("Split")
     data = split_data(data)
 
+    logger.info("Cluster")
+    data = cluster_data(data)
+
     logger.info("Sentiment Analysis")
     data = sentiment_data(data)
 
     return data
-
 
 def replace_data(data: pd.DataFrame) -> pd.DataFrame:
     """
@@ -210,6 +212,54 @@ def sentiment_data(data):
 
     return data
 
+def cluster_data(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    クラスター分割
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        入力データ
+
+    Returns
+    -------
+    pd.DataFrame
+        クラスター分類を追加したデータ
+    """
+    logger.info("Clustered")
+    # q01 cluster : 若手（40歳以下） / シニア
+    header = "q01_clustered"
+    data[header] = "Others"
+    isT = data["q01"] < "40s"
+    data.loc[isT, header] = "Cluster1"
+    isT = data["q01"] >= "40s"
+    data.loc[isT, header] = "Cluster2"
+
+    # q01 x q02 cluster : 若手女性 / 若手男性
+    header = "q01q02_clustered"
+    data[header] = "Others"
+    is_q01 = data["q01"] < "40s"
+    is_q02 = data["q02"].isin(["Female"])
+    isT = is_q01 & is_q02
+    data.loc[isT, header] = "Cluster1"
+    is_q01 = data["q01"] < "40s"
+    is_q02 = data["q02"].isin(["Male"])
+    isT = is_q01 & is_q02
+    data.loc[isT, header] = "Cluster2"
+
+    # q13 x q14 cluster : 20%以下・不満 / 30%以上・満足
+    header = "q13q14_clustered"
+    data[header] = "Others"
+    is_q13 = data["q13"] < 25
+    is_q14 = data["q14"].isin(["Very Poor", "Poor"])
+    isT = is_q13 & is_q14
+    data.loc[isT, header] = "Cluster1"
+    is_q13 = data["q13"] > 25
+    is_q14 = data["q14"].isin(["Very Good", "Good"])
+    isT = is_q13 & is_q14
+    data.loc[isT, header] = "Cluster2"
+
+    return data
 
 def binned_data(data: pd.DataFrame) -> pd.DataFrame:
     """
