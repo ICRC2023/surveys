@@ -198,12 +198,15 @@ class Data(BaseModel):
         return data
 
     def matches(self, columns: list):
+        """
+        総当たりしたいカラム名
+        """
         import itertools
 
         # 総当たりしたいカラム名を整理
         # カラム名は基本的にデータフレームにあるものを与える
         # クロス集計しないことにしたカラムは除外する
-        headers = [h for h in sorted(columns) if h not in self.crosstab_ignore]
+        headers = [h for h in sorted(columns) if h in self.crosstab_valid]
         # 総当たりの組み合わせ
         matches = list(itertools.combinations(headers, 2))
         return matches
