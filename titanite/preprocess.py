@@ -259,9 +259,9 @@ def cluster_data(data: pd.DataFrame) -> pd.DataFrame:
     # q13 cluster : 女性比率 20%以下 / 30%以上
     header = "q13_clustered"
     data[header] = "Others"
-    isT = data["q13"] < 20
+    isT = data["q13"] <= 20
     data.loc[isT, header] = "Cluster1"
-    isT = data["q13"] > 40
+    isT = data["q13"] >= 40
     data.loc[isT, header] = "Cluster2"
 
     # q01 x q02 cluster : 若手女性 / 若手男性
