@@ -126,64 +126,6 @@ class Data(BaseModel):
         "q17_inclusion",
         "q19",
     ]
-    crosstab_ignore: list[str] = [
-        "q03",
-        "q04",
-        "q10",
-        "q13",
-        "q15",
-        "q15_ja",
-        "q15_polarity",
-        "q15_subjectivity",
-        "q16",
-        "q16_ja",
-        "q16_polarity",
-        "q16_subjectivity",
-        "q18",
-        "q18_ja",
-        "q18_polarity",
-        "q18_subjectivity",
-        "q20",
-        "q20_ja",
-        "q20_polarity",
-        "q20_subjectivity",
-        "q21",
-        "q21_ja",
-        "q21_polarity",
-        "q21_subjectivity",
-        "q22",
-        "q22_ja",
-        "q22_polarity",
-        "q22_subjectivity",
-        "response",
-        "timestamp",
-    ]
-    crosstab_valid: list[str] = [
-        "q01",
-        "q02",
-        "q03_regional",
-        "q03_subregional",
-        "q04_regional",
-        "q04_subregional",
-        "q05",
-        "q06",
-        "q07",
-        "q08",
-        "q09",
-        "q10_binned",
-        "q11",
-        "q12_genderbalance",
-        "q12_diversity",
-        "q12_equity",
-        "q12_inclusion",
-        "q13_binned",
-        "q14",
-        "q17_genderbalance",
-        "q17_diversity",
-        "q17_equity",
-        "q17_inclusion",
-        "q19",
-    ]
 
     def config(self):
         c = Config(load_from=self.load_from)
@@ -206,12 +148,12 @@ class Data(BaseModel):
         # 総当たりしたいカラム名を整理
         # カラム名は基本的にデータフレームにあるものを与える
         # クロス集計しないことにしたカラムは除外する
-        headers = [h for h in sorted(columns) if h in self.crosstab_valid]
+        headers = [h for h in sorted(columns) if h in self.categorical_headers]
         # 総当たりの組み合わせ
         matches = list(itertools.combinations(headers, 2))
         return matches
 
-    def crosstab_headers(self, x: list[str], y: list[str]) -> list:
+    def headers(self, x: list[str], y: list[str]) -> list:
         """
         クロス集計のカラム名
 
@@ -236,8 +178,7 @@ class Data(BaseModel):
         """
         import itertools
 
-        ignored = self.crosstab_ignore
-        columns = [col for col in y if col not in ignored]
+        columns = [col for col in y if col in self.categorical_headers]
         return [[_x, _y] for _x, _y in itertools.product(x, columns) if _x != _y]
 
 
