@@ -8,71 +8,6 @@ from scipy.stats import chi2_contingency
 from .config import Config
 
 
-def group_data(data: pd.DataFrame, group: list) -> pd.DataFrame:
-    """
-    データフレームをグループ化
-
-    Parameters
-    ----------
-    data : pd.DataFrame
-        前処理済みのデータフレーム
-    group : list
-        X軸やY軸に設定する質問番号
-
-    Returns
-    -------
-    pd.DataFrame
-        グループ化したデータフレーム
-    """
-
-    c = "response"
-    grouped = data.groupby(group)[c].sum().reset_index()
-    return grouped
-
-
-def hbar(data: pd.DataFrame, x: str, y: str, z: str) -> alt.LayerChart:
-    base = (
-        alt.Chart(data)
-        .encode(
-            alt.X(x),
-            alt.Y(y),
-        )
-        .properties(
-            width=800,
-            height=800,
-        )
-    )
-    mark = base.mark_bar().encode(
-        alt.Color(z),
-    )
-    text = base.mark_text().encode(alt.Text(y))
-    chart = mark + text
-    return chart
-
-
-def heatmap(data: pd.DataFrame, x: str, y: str) -> dict:
-    z = "response"
-    graph = (
-        alt.Chart(grouped)
-        .mark_rect()
-        .encode(
-            alt.X(x),
-            alt.Y(y),
-            alt.Color(z),
-        )
-        .properties(
-            width=500,
-            height=500,
-        )
-    )
-
-    insight = {
-        "data": grouped,
-        "chart": graph,
-    }
-    return insight
-
-
 def comment_data(data: pd.DataFrame) -> dict[str, pd.DataFrame]:
     """
     Parse comment data
@@ -154,8 +89,31 @@ def response(data: pd.DataFrame) -> alt.LayerChart:
     )
     return chart
 
+def group_data(data: pd.DataFrame, x:str, color:str) -> pd.DataFrame:
+    """
+    データフレームをグループ化
 
-def group_hbar(data: pd.DataFrame, x: str, y: str, color: str, title="No title"):
+    Parameters
+    ----------
+    data : pd.DataFrame
+        前処理済みのデータフレーム
+    x: str
+        X軸に設定するカラム名
+    color: str
+        色のグループ化に設定するカラム名
+
+    Returns
+    -------
+    pd.DataFrame
+        グループ化したデータフレーム
+    """
+
+    group = [x, color]
+    c = "response"
+    grouped = data.groupby(group)[c].sum().reset_index()
+    return grouped
+
+def group_hbar(data: pd.DataFrame, x: str, color: str, y:str = "response", title="no_title"):
     """
     groupbyで集計したデータをヒストグラムにする
 
@@ -169,13 +127,13 @@ def group_hbar(data: pd.DataFrame, x: str, y: str, color: str, title="No title")
     data : pd.DataFrame
         _description_
     x : str
-        _description_
-    y : str
-        _description_
+        X軸に設定するカラム名
     color : str
-        _description_
+        色のグループ化に設定するカラム名
+    y : str, optional
+        Y軸に設定するカラム名, by default "response" or "count()"
     title : str, optional
-        _description_, by default "No title"
+        プロットのタイトル, by default "no_title"
 
     Returns
     -------
