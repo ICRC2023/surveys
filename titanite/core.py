@@ -113,7 +113,7 @@ def group_data(data: pd.DataFrame, x:str, color:str) -> pd.DataFrame:
     grouped = data.groupby(group)[c].sum().reset_index()
     return grouped
 
-def group_hbar(data: pd.DataFrame, x: str, color: str, y:str = "response", title="no_title"):
+def group_hbar(data: pd.DataFrame, x: str, color: str, title:str, y:str = "response"):
     """
     groupbyで集計したデータをヒストグラムにする
 
@@ -130,16 +130,17 @@ def group_hbar(data: pd.DataFrame, x: str, color: str, y:str = "response", title
         X軸に設定するカラム名
     color : str
         色のグループ化に設定するカラム名
+    title : str
+        プロットのタイトル
     y : str, optional
         Y軸に設定するカラム名, by default "response" or "count()"
-    title : str, optional
-        プロットのタイトル, by default "no_title"
 
     Returns
     -------
     _type_
         _description_
     """
+    color = f"{color}:N"
     base = (
         alt.Chart(data)
         .encode(
@@ -170,6 +171,24 @@ def group_hbar(data: pd.DataFrame, x: str, color: str, y:str = "response", title
     )
 
     return (mark, stack + text)
+
+def hbar(data:pd.DataFrame, x:str, color:str, title: str):
+    grouped = group_data(data, x, color)
+    h1, h2 = group_hbar(grouped, x, color, title)
+    histograms = (h1 | h2)
+    return grouped, histograms
+
+
+def hbar_loop(data:pd.DataFrame, headers: list):
+    grouped_data:dict = {}
+    hbars_data:dict = {}
+    for h in headers:
+        x, color = h
+        name = f"{x}-{color}"
+        g, h = hbar(data, x=x, color=color, title=name)
+        grouped_data.update({name: g})
+        hbars_data.update({name: h})
+    return grouped_data, hbars_data
 
 
 def crosstab(data: pd.DataFrame, x: str, y: str):
