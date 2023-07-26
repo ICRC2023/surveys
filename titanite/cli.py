@@ -95,6 +95,39 @@ def comments(
 
     return
 
+@app.command()
+def hbar(
+    header: str,
+    read_from: str = "../data/test_data/prepared_data.csv",
+    write_dir: str = "../data/test_data/hbar/",
+    load_from: str = "config.toml",
+):
+    """
+    (WIP) Create histogram.
+
+    保存先:
+        - "../data/test/data/hbar/カラム名/カラム名-色カラム名.csv"
+        - "../data/test/data/hbar/カラム名/カラム名-色カラム名.json"
+        - "../data/test/data/hbar/カラム名/カラム名-色カラム名.png"
+    """
+    d = Data(read_from=read_from, load_from=load_from)
+    config = d.config()
+    questions = config.get("questions")
+    key = header.split("_")[0]
+    t = questions.get(key, "no_title")
+
+    data = d.read()
+    headers = d.headers([header], sorted(data.columns))
+
+    grouped_data = {}
+    hbars_data = {}
+
+    for header2 in headers:
+        name = f"{header}-{header2}"
+        g, h = core.hbar(data, x=header, color=header2, title=t)
+        grouped_data.update({name: g})
+        hbars_data.update({name: h})
+    return
 
 @app.command()
 def hbars(
@@ -104,7 +137,7 @@ def hbars(
     save: bool = False,
 ):
     """
-    Run hbar for all headers.
+    Run hbar for round-robin headers.
 
     Parameters
     ----------
@@ -120,20 +153,12 @@ def hbars(
 
     logger.info(f"Read data from: {read_from}")
     d = Data(read_from=read_from, load_from=load_from)
+    config = d.config()
+    questions = config.get("questions")
+
     data = d.read()
     matches = d.matches(list(data.columns))
-
-    grouped_data = {}
-    hbars = {}
-    for m in list(matches):
-        x, z = m
-        name = f"{x}_{z}"
-        grouped = core.group_data(data, list(m))
-        grouped_data.update({name: grouped})
-
-        y = "response"
-        h = core.hbar(grouped, x, y, z)
-        hbars.update({name: h})
+    grouped_data, hbar_data = core.hbar_loop(data, list(matches))
 
     if save:
         for name, gdata in grouped_data.items():
@@ -141,7 +166,7 @@ def hbars(
             gdata.to_csv(fname, index=False)
             logger.info(f"Saved data to: {fname}")
 
-        for name, hbar in hbars.items():
+        for name, hbar in hbar_data.items():
             fname = Path(write_dir) / f"{name}.png"
             hbar.save(fname)
             logger.info(f"Saved chart to: {fname}")
@@ -313,22 +338,11 @@ def p005(
     return
 
 
-@app.command()
-def hbar(
-    header: str,
-    read_from: str = "../data/test_data/prepared_data.csv",
-    write_dir: str = "../data/test_data/hbar/",
-    load_from: str = "config.toml",
-):
-    """
-    (WIP) Create histogram.
 
-    保存先:
-        - "../data/test/data/hbar/カラム名/カラム名-色カラム名.csv"
-        - "../data/test/data/hbar/カラム名/カラム名-色カラム名.json"
-        - "../data/test/data/hbar/カラム名/カラム名-色カラム名.png"
-    """
-    pass
+
+
+
+
 
 
 @app.command()
