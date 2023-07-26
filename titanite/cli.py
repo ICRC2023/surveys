@@ -113,20 +113,30 @@ def hbar(
     d = Data(read_from=read_from, load_from=load_from)
     config = d.config()
     questions = config.get("questions")
+
     key = header.split("_")[0]
     t = questions.get(key, "no_title")
 
     data = d.read()
     headers = d.headers([header], sorted(data.columns))
+    grouped_data, hbar_data = core.hbar_loop(data, headers)
 
-    grouped_data = {}
-    hbars_data = {}
+    fnames = {}
 
-    for header2 in headers:
-        name = f"{header}-{header2}"
-        g, h = core.hbar(data, x=header, color=header2, title=t)
-        grouped_data.update({name: g})
-        hbars_data.update({name: h})
+    for name, grouped in grouped_data.items():
+        fname = Path(write_dir) / header / f"{name}.csv"
+        grouped.to_csv(fname, index=False)
+        logger.info(f"Saved data to: {fname}")
+        info = {name: {"csv": fname}}
+        fnames.update(info)
+
+    for name, hbar in hbar_data.items():
+        fname = Path(write_dir) / header / f"{name}.png"
+        hbar.save(fname)
+        logger.info(f"Saved chart to: {fname}")
+        info = {name: {"png": fname}}
+        fnames.update(info)
+
     return
 
 @app.command()
