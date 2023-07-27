@@ -181,14 +181,15 @@ def hbars(
             hbar.save(fname)
             logger.info(f"Saved chart to: {fname}")
 
+    logger.info("Finished !")
     return
-
 
 @app.command()
 def crosstabs(
     read_from: str = "../data/test_data/prepared_data.csv",
     write_dir: str = "../data/test_data/crosstab/",
     load_from: str = "config.toml",
+    save: bool = False
 ) -> None:
     """
     Run crosstab for all headers.
@@ -214,16 +215,18 @@ def crosstabs(
         load_from=load_from,
     )
 
-    for name, cross_tab in cross_tabs.items():
-        fname = Path(write_dir) / f"{name}.csv"
-        cross_tab.to_csv(fname)
-        logger.info(f"Saved data to: {fname}")
+    if save:
+        for name, cross_tab in cross_tabs.items():
+            fname = Path(write_dir) / f"{name}.csv"
+            cross_tab.to_csv(fname)
+            logger.info(f"Saved data to: {fname}")
 
-    for name, heatmap in heatmaps.items():
-        fname = Path(write_dir) / f"{name}.png"
-        heatmap.save(fname)
-        logger.info(f"Saved chart to: {fname}")
+        for name, heatmap in heatmaps.items():
+            fname = Path(write_dir) / f"{name}.png"
+            heatmap.save(fname)
+            logger.info(f"Saved chart to: {fname}")
 
+    logger.info("Finished !")
     return
 
 
@@ -258,7 +261,7 @@ def chi2(
     data = d.read()
 
     # 総当たりしたいカラム名を整理
-    headers = [h for h in sorted(data.columns) if h not in d.crosstab_ignore]
+    headers = [h for h in sorted(data.columns) if h in d.categorical_headers]
 
     # 総当たりの組み合わせ
     matches = list(itertools.combinations(headers, 2))
@@ -310,13 +313,13 @@ def p005(
     """
 
     d = Data(read_from=read_from, load_from=load_from)
-    is_valid_header(header, d.crosstab_valid)
+    is_valid_header(header, d.categorical_headers)
 
     save_dir = Path(write_dir) / header
     is_valid_path(save_dir)
 
     data = d.read()
-    headers = d.crosstab_headers([header], list(data.columns))
+    headers = d.headers([header], sorted(data.columns))
     cross_tabs, heatmaps, chi2_data = core.crosstab_loop(data, headers)
 
     # p < 0.05 の項目を抽出
@@ -346,14 +349,6 @@ def p005(
             hm.save(fname)
             logger.info(f"Saved chart to {fname}")
     return
-
-
-
-
-
-
-
-
 
 @app.command()
 def crosstab(
