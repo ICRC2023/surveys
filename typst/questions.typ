@@ -174,3 +174,49 @@ Do you have any current problems related to DE&I initiatives?
 （自由記述）多様性の取り組みを阻害している理由はなんだと思いますか？
 What reasons do you think are hindering DE&I efforts?
 自由記述
+
+
+= $chi^(2)$検定のp値マップ
+
+== ぜんぶ
+
+#figure(
+    image("../data/main_data/chi2.png"),
+    caption: [ぜんぶ]
+)
+
+#pagebreak()
+
+== p < 0.05
+
+#figure(
+    image("../data/main_data/chi2_p005.png"),
+    caption: [p < 0.05]
+)
+
+#pagebreak()
+
+== p < 0.01
+
+#figure(
+    image("../data/main_data/chi2_p001.png"),
+    caption: [p < 0.01]
+)
+
+#pagebreak()
+
+== p < 0.005
+
+#figure(
+    image("../data/main_data/chi2_p0005.png"),
+    caption: [p < 0.005]
+)
+
+#pagebreak()
+
+== p < 0.001
+
+#figure(
+    image("../data/main_data/chi2_p0001.png"),
+    caption: [p < 0.001]
+)
