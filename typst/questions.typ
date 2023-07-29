@@ -6,6 +6,11 @@
     leading: 1.5em,
 )
 
+#show raw: it => text(
+    fill: orange,
+    [#it]
+    )
+
 //#set heading(numbering: "1.1.1." )
 #show heading: it => block(
     fill: blue,
@@ -19,99 +24,84 @@
 
 = 基本属性
 
-== Q1. 年齢（Age） : What is your age ?
+== Q1. 年齢（Age）
 
-+ 10s
-+ 20s
-+ 30s
-+ 40s
-+ 50s
-+ 60s
-+ 70s
-+ 80
-+ 90s+
-+ Prefer not to answer
+What is your age ?
 
-== Q2. 性別（Gender）: What gender do you identify as ?
+- `10s` / `20s` / `30s` / `40s` / `50s` / `60s` / `70s` / `80` / `90s+` / `Prefer not to answer`
 
-+ Female
-+ Male
-+ Non-binary
-+ Prefer to self-identify
-+ Prefer not to answer
+== Q2. 性別（Gender）
 
-== Q3. 勤務地（Workplace）: Which geographical region are you currently working or attending school/university in ?
+What gender do you identify as ?
 
-+ Asia / Japan
-+ Asia / Eastern Asia
-+ Asia / South-Eastern Asia
-+ Asia / Southern Asia
-+ Asia / Central Asia
-+ Asia / Western Asia
-+ Africa / Northern Africa
-+ Africa / Western Africa
-+ Africa / Middle Africa
-+ Africa / Eastern Africa
-+ Africa / Southern Africa
-+ Europe / North Europe
-+ Europe / West Europe
-+ Europe / Central Europe
-+ Europe / East Europe
-+ Europe / South Europe
-+ America / North America
-+ America / Central America
-+ America / South America
-+ Oceania
-+ Prefer not to answer
+- `Female` / `Male` / `Non-binary` / `Prefer to self-identify` / `Prefer not to answer`
 
-==  Q4. 出身地（Hometown）: Which geographical region do you most strongly associate with ?
+== Q3. 勤務地（Workplace）
 
-+ Q3. と同じ
+Which geographical region are you currently working or attending school/university in ?
 
-== Q5. 肩書き（Job Title）: What is your job title ?
++ `Asia / Japan`
++ `Asia / Eastern Asia`
++ `Asia / South-Eastern Asia`
++ `Asia / Southern Asia`
++ `Asia / Central Asia`
++ `Asia / Western Asia`
++ `Africa / Northern Africa`
++ `Africa / Western Africa`
++ `Africa / Middle Africa`
++ `Africa / Eastern Africa`
++ `Africa / Southern Africa`
++ `Europe / North Europe`
++ `Europe / West Europe`
++ `Europe / Central Europe`
++ `Europe / East Europe`
++ `Europe / South Europe`
++ `America / North America`
++ `America / Central America`
++ `America / South America`
++ `Oceania`
++ `Prefer not to answer`
 
-+ Undergraduate
-+ Master
-+ Doctorate
-+ Postdoc
-+ Fixed-tem staff
-+ Permanent staff
-+ Prefer not to answer
+==  Q4. 出身地（Hometown）
 
+Which geographical region do you most strongly associate with ?
 
-== Q6. 研究分野（Research Group） : Which group do you belong to ?
+- Q3. と同じ
 
+== Q5. 肩書き（Job Title）
+
+What is your job title ?
+
+- `Undergraduate` / `Master` / `Doctorate` / `Postdoc` / `Fixed-tem staff` / `Permanent staff` / `Prefer not to answer`
+
+== Q6. 研究分野（Research Group）
+
+Which group do you belong to ?
 (Labels are picked from ICRC2023 session name)
 
-+ CRD: Cosmic-ray physics (Direct)
-+ CRI: Cosmic-ray physics (Indirect)
-+ GA: Gamma-ray astronomy
-+ NU: Neutrino astronomy & physics
-+ SH: Solar & heliospheric physics
-+ DM: Dark-matter physics
-+ MM&GW: Multimessenger & gravitational wave
-+ O&E: Outreach & education
-+ Prefer not to answer
++ `CRD: Cosmic-ray physics (Direct)`
++ `CRI: Cosmic-ray physics (Indirect)`
++ `GA: Gamma-ray astronomy`
++ `NU: Neutrino astronomy & physics`
++ `SH: Solar & heliospheric physics`
++ `DM: Dark-matter physics`
++ `MM&GW: Multimessenger & gravitational wave`
++ `O&E: Outreach & education`
++ `Prefer not to answer`
 
-== Q7. 理論・実験・その他（Research Field）: What is your research type ?
+== Q7. 理論・実験・その他（Research Field）
+
+ What is your research type ?
 
 Are you a theorist, experimentalist ? If none of the options apply, please fill in "Others"
 
-+ Theorist
-+ Experimentarist
-+ Prefer not to answer
-+ Others（自由記述）
+- `Theorist` / `Experimentarist` / `Prefer not to answer` / `Others（自由記述）`
 
-== Q8. 研究分野の在籍期間（Research Years）: How long have you been in this field ?
+== Q8. 研究分野の在籍期間（Research Years）
 
-プルダウン
+How long have you been in this field ?
 
-+ < 1 year
-+ 1 - 3 years
-+ 3 - 5 years
-+ 5 - 10 years
-+ > 10years
-+ Prefer not to answer
+- `< 1 year` / `1 - 3 years` / `3 - 5 years` / `5 - 10 years` / `> 10years` / `Prefer not to answer`
 
 == Q9. これまでの自分のキャリアに満足していますか？: Are you satisfied with your career to date ?
 
