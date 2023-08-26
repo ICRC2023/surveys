@@ -1,10 +1,11 @@
-# Titanite documentation
+# ICRC2023 Diversity Pre-surveys
 
-```{toctree}
+:::{toctree}
 ---
 maxdepth: 2
 ---
-``````
+overview
+:::
 
 
 
