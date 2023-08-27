@@ -29,9 +29,9 @@ pytest = "^7.4.0"
 
 
 [tool.poetry.group.docs.dependencies]
-myst-nb = {git = "https://github.com/executablebooks/MyST-NB.git"}
 sphinx-book-theme = "^1.0.1"
 sphinx-copybutton = "^0.5.2"
+myst-nb = "^0.17.2"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
