@@ -5,6 +5,7 @@
 maxdepth: 2
 ---
 overview
+notebooks/icrc2023_diversity.ipynb
 :::
 
 
