@@ -7,6 +7,7 @@ maxdepth: 2
 overview
 notebooks/chi2_map.ipynb
 notebooks/icrc2023_diversity.ipynb
+notebooks/demographics.ipynb
 :::
 
 
