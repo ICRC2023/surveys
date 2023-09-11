@@ -1,7 +1,7 @@
-# Titanite
+# Pre-conference Surveys for ICRC2023
 
-Diversityセッションの事前アンケートを集計するためのスクリプト群です。
-PythonとJupyterノートブックを使って集計＆プロット作成します。
+This is a set of scripts to analyze the pre-session survey for the Diversity session.
+We will use Python and Jupyter notebooks to create the analysis & plots.
 
 ## TODO
 
@@ -9,7 +9,7 @@ PythonとJupyterノートブックを使って集計＆プロット作成しま�
 2. すべてのアンケート項目のヒストグラムを確認する
 3. アンケート項目2つをクロス集計する
 
-## 事前準備
+## Getting started
 
 ```console
 $ git clone git@github.com:ICRC2023/diversity.git
@@ -21,12 +21,31 @@ Installing the current project: titanite (0.1.0)
 $ ti --help
 ```
 
+- ソースコードはGitHubで管理しています。リポジトリをクローンしてください。
+- Poetryを使ってPythonの仮想環境を構築します。
 - 任意の作用用ディレクトリに移動して、リポジトリをクローンする（``git clone``）
 - Pythonの仮想環境をローカルに構築する（``poetry shell``）
 - 必要なパッケージをローカルな仮想環境（``.venv``）インストールする（``poetry install``）
   - メインは``pandas``と``altair``、 開発用に``jupyterlab``
   - 補助ツールに``commitizen``と``pysen``
 - ``ti``（``titanite``）コマンドが使えることを確認する（``ti --help``）
+
+## Sphinx + Jupyter Notebook
+
+```console
+$ poetry shell
+(.venv) $ cd docs
+(.venv) $ make html
+(.venv) $ open _build/html/index.html
+```
+
+- Sphinxを使ってドキュメントを生成します
+- 上記の手順でローカルで確認できます
+- ``MyST-NB``を使っているので、``docs/notebooks``以下のJupyter Notebookの結果も確認できます
+
+## GitHub Pages
+
+（準備中）
 
 ## データの前処理
 
