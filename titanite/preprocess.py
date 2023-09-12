@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 from loguru import logger
 
@@ -375,6 +377,80 @@ def binned_data(data: pd.DataFrame) -> pd.DataFrame:
         right=False,
     )
     return data
+
+
+def save_data(data: pd.DataFrame, write_dir: str):
+    logger.info("Save data")
+
+    # Write only categorical data
+    headers = [
+        "timestamp",
+        "q01",
+        "q02",
+        "q03",
+        "q03_regional",
+        "q03_subregional",
+        "q04",
+        "q04_regional",
+        "q04_subregional",
+        "q05",
+        "q06",
+        "q07",
+        "q08",
+        "q09",
+        "q10",
+        "q10_binned",
+        "q11",
+        "q12_genderbalance",
+        "q12_diversity",
+        "q12_equity",
+        "q12_inclusion",
+        "q13",
+        "q13_binned",
+        "q14",
+        "q17_genderbalance",
+        "q17_diversity",
+        "q17_equity",
+        "q17_inclusion",
+        "q19",
+    ]
+    fname = Path(write_dir) / "categorical_data.csv"
+    data[headers].to_csv(fname, index=False)
+    logger.info(f"Saved data to: {fname}")
+
+    # Write only categorical data
+    headers = [
+        "timestamp",
+        "q01",
+        "q02",
+        "q03",
+        "q03_regional",
+        "q03_subregional",
+        "q04",
+        "q04_regional",
+        "q04_subregional",
+        "q05",
+        "q06",
+        "q07",
+        "q08",
+        "q09",
+        "q11",
+        "q15_polarity",
+        "q15_subjectivity",
+        "q16_polarity",
+        "q16_subjectivity",
+        "q18_polarity",
+        "q18_subjectivity",
+        "q20_polarity",
+        "q20_subjectivity",
+        "q21_polarity",
+        "q21_subjectivity",
+        "q22_polarity",
+        "q22_subjectivity",
+    ]
+    fname = Path(write_dir) / "sentiment_data.csv"
+    data[headers].to_csv(fname, index=False)
+    logger.info(f"Saved data to: {fname}")
 
 
 if __name__ == "__main__":
