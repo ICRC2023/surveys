@@ -9,7 +9,7 @@ from .preprocess import categorical_data
 
 
 class Config(BaseModel):
-    fname: str | Path = "config.toml"
+    # fname: str | Path = "config.toml"
     load_from: str = "config.toml"
     categories: dict = {}
 
