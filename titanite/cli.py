@@ -7,7 +7,7 @@ from loguru import logger
 
 from . import core
 from .config import Config, Data
-from .preprocess import categorical_data, preprocess_data, sentiment_data
+from .preprocess import categorical_data, preprocess_data, save_data, sentiment_data
 
 app = typer.Typer()
 
@@ -58,16 +58,10 @@ def prepare(
     data = preprocess_data(data)
     data = categorical_data(data, categories)
     data = sentiment_data(data)
-
     fname = Path(write_dir) / "prepared_data.csv"
     data.to_csv(fname, index=False)
 
-    # Write only categorical data
-    d = Data(read_from="")
-    headers = ["timestamp", "response"] + d.categorical_headers
-    fname = Path(write_dir) / "categorical_data.csv"
-    data[headers].to_csv(fname, index=False)
-    logger.info(f"Saved data to: {fname}")
+    save_data(data, write_dir)
 
 
 @app.command()
