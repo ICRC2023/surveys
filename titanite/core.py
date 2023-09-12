@@ -89,7 +89,8 @@ def response(data: pd.DataFrame) -> alt.LayerChart:
     )
     return chart
 
-def group_data(data: pd.DataFrame, x:str, color:str) -> pd.DataFrame:
+
+def group_data(data: pd.DataFrame, x: str, color: str) -> pd.DataFrame:
     """
     データフレームをグループ化
 
@@ -113,7 +114,8 @@ def group_data(data: pd.DataFrame, x:str, color:str) -> pd.DataFrame:
     grouped = data.groupby(group)[c].sum().reset_index()
     return grouped
 
-def group_hbar(data: pd.DataFrame, x: str, color: str, title:str, y:str = "response"):
+
+def group_hbar(data: pd.DataFrame, x: str, color: str, title: str, y: str = "response"):
     """
     groupbyで集計したデータをヒストグラムにする
 
@@ -172,16 +174,17 @@ def group_hbar(data: pd.DataFrame, x: str, color: str, title:str, y:str = "respo
 
     return (mark, stack + text)
 
-def hbar(data:pd.DataFrame, x:str, color:str, title: str):
+
+def hbar(data: pd.DataFrame, x: str, color: str, title: str):
     grouped = group_data(data, x, color)
     h1, h2 = group_hbar(grouped, x, color, title)
-    histograms = (h1 | h2)
+    histograms = h1 | h2
     return grouped, histograms
 
 
-def hbar_loop(data:pd.DataFrame, headers: list):
-    grouped_data:dict = {}
-    hbars_data:dict = {}
+def hbar_loop(data: pd.DataFrame, headers: list):
+    grouped_data: dict = {}
+    hbars_data: dict = {}
     for h in headers:
         x, color = h
         name = f"{x}-{color}"
