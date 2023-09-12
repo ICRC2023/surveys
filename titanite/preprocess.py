@@ -24,20 +24,15 @@ def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
             - マイナス感情 = 関心が高い = 嫌悪的
     """
 
+    logger.info("Start preprocessing data ...")
     data["timestamp"] = pd.to_datetime(data["timestamp"])
     data["response"] = 1
 
-    logger.info("Replace")
     data = replace_data(data)
-
-    logger.info("Split")
     data = split_data(data)
-
-    logger.info("Cluster")
     data = cluster_data(data)
-
-    logger.info("Sentiment Analysis")
-    data = sentiment_data(data)
+    data = binned_data(data)
+    logger.info("... Finished !")
 
     return data
 
@@ -59,6 +54,7 @@ def replace_data(data: pd.DataFrame) -> pd.DataFrame:
     pd.DataFrame
         データフレーム
     """
+    logger.info("Replace")
     data["q03"] = data["q03"].replace(
         {
             "Prefer not to answer": "Prefer not to answer / Prefer not to answer",
@@ -92,6 +88,7 @@ def split_data(data: pd.DataFrame) -> pd.DataFrame:
     pd.DataFrame
         データフレーム
     """
+    logger.info("Split")
     _q3 = data["q03"].str.split("/", expand=True)
     _q3[0] = _q3[0].str.strip()
     _q3[1] = _q3[1].str.strip()
@@ -178,8 +175,6 @@ def categorical_data(data: pd.DataFrame, categories: dict) -> pd.DataFrame:
     data["q01q02_clustered"] = data["q01q02_clustered"].astype(cluster)
     data["q13q14_clustered"] = data["q13q14_clustered"].astype(cluster)
 
-    data = binned_data(data)
-
     return data
 
 
@@ -187,6 +182,8 @@ def sentiment_data(data):
     import numpy as np
     from textblob import TextBlob
     from tqdm import tqdm
+
+    logger.info("Sentiment")
 
     def polarity(text):
         try:
