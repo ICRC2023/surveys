@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 from loguru import logger
 
@@ -24,20 +26,15 @@ def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
             - マイナス感情 = 関心が高い = 嫌悪的
     """
 
+    logger.info("Start preprocessing data ...")
     data["timestamp"] = pd.to_datetime(data["timestamp"])
     data["response"] = 1
 
-    logger.info("Replace")
     data = replace_data(data)
-
-    logger.info("Split")
     data = split_data(data)
-
-    logger.info("Cluster")
     data = cluster_data(data)
-
-    logger.info("Sentiment Analysis")
-    data = sentiment_data(data)
+    data = binned_data(data)
+    logger.info("... Finished !")
 
     return data
 
@@ -59,6 +56,7 @@ def replace_data(data: pd.DataFrame) -> pd.DataFrame:
     pd.DataFrame
         データフレーム
     """
+    logger.info("Replace")
     data["q03"] = data["q03"].replace(
         {
             "Prefer not to answer": "Prefer not to answer / Prefer not to answer",
@@ -92,6 +90,7 @@ def split_data(data: pd.DataFrame) -> pd.DataFrame:
     pd.DataFrame
         データフレーム
     """
+    logger.info("Split")
     _q3 = data["q03"].str.split("/", expand=True)
     _q3[0] = _q3[0].str.strip()
     _q3[1] = _q3[1].str.strip()
@@ -178,8 +177,6 @@ def categorical_data(data: pd.DataFrame, categories: dict) -> pd.DataFrame:
     data["q01q02_clustered"] = data["q01q02_clustered"].astype(cluster)
     data["q13q14_clustered"] = data["q13q14_clustered"].astype(cluster)
 
-    data = binned_data(data)
-
     return data
 
 
@@ -187,6 +184,8 @@ def sentiment_data(data):
     import numpy as np
     from textblob import TextBlob
     from tqdm import tqdm
+
+    logger.info("Sentiment")
 
     def polarity(text):
         try:
@@ -378,6 +377,80 @@ def binned_data(data: pd.DataFrame) -> pd.DataFrame:
         right=False,
     )
     return data
+
+
+def save_data(data: pd.DataFrame, write_dir: str):
+    logger.info("Save data")
+
+    # Write only categorical data
+    headers = [
+        "timestamp",
+        "q01",
+        "q02",
+        "q03",
+        "q03_regional",
+        "q03_subregional",
+        "q04",
+        "q04_regional",
+        "q04_subregional",
+        "q05",
+        "q06",
+        "q07",
+        "q08",
+        "q09",
+        "q10",
+        "q10_binned",
+        "q11",
+        "q12_genderbalance",
+        "q12_diversity",
+        "q12_equity",
+        "q12_inclusion",
+        "q13",
+        "q13_binned",
+        "q14",
+        "q17_genderbalance",
+        "q17_diversity",
+        "q17_equity",
+        "q17_inclusion",
+        "q19",
+    ]
+    fname = Path(write_dir) / "categorical_data.csv"
+    data[headers].to_csv(fname, index=False)
+    logger.info(f"Saved data to: {fname}")
+
+    # Write only categorical data
+    headers = [
+        "timestamp",
+        "q01",
+        "q02",
+        "q03",
+        "q03_regional",
+        "q03_subregional",
+        "q04",
+        "q04_regional",
+        "q04_subregional",
+        "q05",
+        "q06",
+        "q07",
+        "q08",
+        "q09",
+        "q11",
+        "q15_polarity",
+        "q15_subjectivity",
+        "q16_polarity",
+        "q16_subjectivity",
+        "q18_polarity",
+        "q18_subjectivity",
+        "q20_polarity",
+        "q20_subjectivity",
+        "q21_polarity",
+        "q21_subjectivity",
+        "q22_polarity",
+        "q22_subjectivity",
+    ]
+    fname = Path(write_dir) / "sentiment_data.csv"
+    data[headers].to_csv(fname, index=False)
+    logger.info(f"Saved data to: {fname}")
 
 
 if __name__ == "__main__":
