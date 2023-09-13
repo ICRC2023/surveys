@@ -7,7 +7,7 @@ from loguru import logger
 
 from . import core
 from .config import Config, Data
-from .preprocess import categorical_data, preprocess_data
+from .preprocess import categorical_data, preprocess_data, save_data, sentiment_data
 
 app = typer.Typer()
 
@@ -57,9 +57,11 @@ def prepare(
     data = pd.read_csv(read_from, skiprows=1)
     data = preprocess_data(data)
     data = categorical_data(data, categories)
+    data = sentiment_data(data)
     fname = Path(write_dir) / "prepared_data.csv"
     data.to_csv(fname, index=False)
-    logger.info(f"Saved data to: {fname}")
+
+    save_data(data, write_dir)
 
 
 @app.command()
@@ -94,6 +96,7 @@ def comments(
         logger.info(f"Saved as {fname}")
 
     return
+
 
 @app.command()
 def hbar(
@@ -138,6 +141,7 @@ def hbar(
         fnames.update(info)
 
     return
+
 
 @app.command()
 def hbars(
@@ -184,12 +188,13 @@ def hbars(
     logger.info("Finished !")
     return
 
+
 @app.command()
 def crosstabs(
     read_from: str = "../data/test_data/prepared_data.csv",
     write_dir: str = "../data/test_data/crosstab/",
     load_from: str = "config.toml",
-    save: bool = False
+    save: bool = False,
 ) -> None:
     """
     Run crosstab for all headers.
@@ -349,6 +354,7 @@ def p005(
             hm.save(fname)
             logger.info(f"Saved chart to {fname}")
     return
+
 
 @app.command()
 def crosstab(
