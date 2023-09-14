@@ -23,5 +23,8 @@ jobs:
           python-version: "3.11"
       - name: Setup poetry
         uses: Gr1N/setup-poetry@v8
-      - run: poetry --version
+      - name: Install
+        run: |
+          poetry --version
+          poetry install
       - run: echo "🍏 This job's status is ${{ job.status }}."
