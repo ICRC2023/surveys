@@ -33,7 +33,7 @@ jobs:
           touch gh-pages/.nojekyll
           cd docs/
           poetry run make dirhtml
-          cp -r _build/* ../gh-pages/
+          cp -r _build/dirhtml/* ../gh-pages/
       - name: Deploy documentation
         if: ${{ github.event_name == 'push' }}
         uses: JamesIves/github-pages-deploy-action@4.1.4
