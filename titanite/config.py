@@ -137,7 +137,6 @@ class Data(BaseModel):
         categories = c.categorical()
         data = pd.read_csv(self.read_from, parse_dates=["timestamp"])
         data = categorical_data(data, categories)
-        data["count"] = 1
         return data
 
     def matches(self, columns: list):
