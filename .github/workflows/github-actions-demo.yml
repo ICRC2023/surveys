@@ -17,8 +17,10 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
-      - name: Setup Python
-        uses: actions/setup-python@4
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
         with:
-          python-version: 3.11
+          python-version: "3.11"
+      - uses: Gr1N/setup-poetry@v8
+      - run: poetry --version
       - run: echo "🍏 This job's status is ${{ job.status }}."
