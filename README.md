@@ -3,6 +3,11 @@
 This is a set of scripts to analyze the pre-session survey for the Diversity session.
 We will use Python and Jupyter notebooks to create the analysis & plots.
 
+## GitHub URLs
+
+- Repos : https://github.com/ICRC2023/diversity
+- Pages : https://www.icrc2023.org/diversity/
+
 ## TODO
 
 1. GoogleスプレッドシートをCSV形式でダウンロードする（手動）
@@ -42,10 +47,6 @@ $ poetry shell
 - Sphinxを使ってドキュメントを生成します
 - 上記の手順でローカルで確認できます
 - ``MyST-NB``を使っているので、``docs/notebooks``以下のJupyter Notebookの結果も確認できます
-
-## GitHub Pages
-
-（準備中）
 
 ## データの前処理
 
