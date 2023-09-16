@@ -2,6 +2,7 @@ import tomllib
 from pathlib import Path
 
 import pandas as pd
+from deprecated import deprecated
 from loguru import logger
 from pydantic import BaseModel
 
@@ -36,6 +37,7 @@ class Config(BaseModel):
         config = self.load_toml()
         return config
 
+    @deprecated(version="0.4.2", reason="Migrated to load_categories(). Loaded inside load(). Get with self.categories.")
     def categorical(self):
         from pandas.api.types import CategoricalDtype
 
