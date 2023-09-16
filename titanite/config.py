@@ -11,10 +11,14 @@ from .preprocess import categorical_data
 class Config(BaseModel):
     # fname: str | Path = "config.toml"
     load_from: str = "config.toml"
+    config: dict = {}
     categories: dict = {}
+    options: dict = {}
 
     def load(self):
-        config = self.load_config()
+        self.config = self.load_config()
+        self.categories = self.load_categories()
+        self.options = self.load_options()
 
     def load_toml(self) -> dict:
         import typer
@@ -45,6 +49,21 @@ class Config(BaseModel):
         self.categories = categories
 
         return categories
+
+    def load_categories(self):
+        from pandas.api.types import CategoricalDtype
+        config = self.config
+        categories = {}
+        for k, v in config.get("choices").items():
+            dtype = CategoricalDtype(categories=v, ordered=True)
+            categories.update({k: dtype})
+        return categories
+
+    def load_options(self):
+        config = self.config
+        _options = config.get("options", "Not defined")
+        options = pd.DataFrame(_options)
+        return options
 
     def show(self):
         """
