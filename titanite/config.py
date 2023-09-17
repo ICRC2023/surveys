@@ -6,7 +6,7 @@ from deprecated import deprecated
 from loguru import logger
 from pydantic import BaseModel
 
-#from .preprocess import categorical_data
+from .preprocess import categorical_data
 
 NUMERICAL_HEADERS: list[str] = [
     "q10",
@@ -217,7 +217,7 @@ class Data(BaseModel):
         # 総当たりしたいカラム名を整理
         # カラム名は基本的にデータフレームにあるものを与える
         # クロス集計しないことにしたカラムは除外する
-        headers = [h for h in sorted(columns) if h in self.categorical_headers]
+        headers = [h for h in sorted(columns) if h in CATEGORICAL_HEADERS]
         # 総当たりの組み合わせ
         matches = list(itertools.combinations(headers, 2))
         return matches
@@ -247,7 +247,7 @@ class Data(BaseModel):
         """
         import itertools
 
-        columns = [col for col in y if col in self.categorical_headers]
+        columns = [col for col in y if col in CATEGORICAL_HEADERS]
         return [[_x, _y] for _x, _y in itertools.product(x, columns) if _x != _y]
 
 
