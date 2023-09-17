@@ -1,3 +1,119 @@
+## 0.5.0 (2023-09-17)
+
+### Feat
+
+- **docs/notebooks/demographics/q01_age_group.ipynb**: demographicsを確認するノートブックを追加した
+- **data/main_data/**: 発表用の図を追加した
+- **titanite/core.py**: hbar: ヒストグラムを追加した
+- **titanite/preprocess.py**: クラスター分割を追加した
+- **titanite/cli.py**: hbarコマンドを追加した
+- **titanite/config.py**: Data.matches: 総当たりしたカラムを取得する機能を追加した
+
+### Fix
+
+- **notebooks**: ノートブックを整理した
+- **titanite/preprocess.py**: categorical_data: 変換マップを追加した
+- **renamed**: docs/notebooks -> docs/logbooks に変更した
+- **sandbox/config.toml**: アンケートに関係する全体の数値を追記した
+- **pyproject.toml**: update loguru
+- **titanite/config.py**: 廃止予定のメッセージ（のデコレータ）を追加した
+- **pyproject.toml**: add deprecated
+- **titanite/config.py**: Config: optionsのメンバー変数を追加した
+- **notebooks/00_config.ipynb**: 設定オプションをデータフレームにする
+- **sandbox/config.toml**: 新しい設定オプションを追加した
+- **docs/notebooks/responses.ipynb**: メールした日を追加した
+- **docs/notebooks/responses.ipynb**: 回答数の推移を追加した
+- **data/test_data/chi2_test/chi2_test.csv**: chi2したデータを追加した
+- **docs/notebooks/demographics.ipynb**: 微修正した
+- **docs/notebooks/demographics.ipynb**: 円グラフの周囲に値を表示した
+- **titanite/config.py**: countを削除；responseと重複
+- **.gitignore**: PDFを除外した（一時的）
+- **data/test_data/sentiment_data.csv**: 感情分析用のデータを追加した
+- **data/test_data/categorical_data.csv**: 相関を集計するためのデータを追加した
+- **titanite/preprocess.py**: save_data: 相関を確認する用と感情分析用のデータに分けて保存することにした
+- **titanite/cli.py**: prepare: 前処理で残すデータ形式を追加した
+- **titanite/preprocess.py**: 前処理の手順を修正した
+- **titanite/config.py**: 使わなくなった変数をコメントアウトした
+- **docs/notebooks/wip/q12q17_bubblechart.ipynb**: q12とq17のバブル図を作成した
+- **docs/notebooks/wip/q01_age_group.ipynb**: パスを変更した
+- **docs/notebooks/chi2_test_map.ipynb**: ヒートマップを作成するw関数をシンプルにした
+- **docs/notebooks/chi2_test_map.ipynb**: ファイル名を変更した
+- **docs/notebooks/demographics.ipynb**: 軸ラベルのフォントサイズを大きくした
+- **docs/notebooks/demographics.ipynb**: プロットのサイズを変更した
+- **docs/notebooks/demographics.ipynb**: 読み込むデータのパスを修正した
+- **titanite/config.py**: Data.read: カウント用のカラムを追加した
+- **docs/notebooks/demographics.ipynb**: パスを変更した
+- **docs/notebooks/demographics/demographics.ipynb**: 1次元の軸のデモグラフィックを追加した
+- **docs/notebooks/demographics/demographics.ipynb**: demographicsを1次元で確認するノートブックを追加した
+- **docs/notebooks/chi2_map.ipynb**: ファイル名を変更した
+- **docs/notebooks/10_chi2_map.ipynb**: ファイルを移動した
+- **docs/notebooks/icrc2023_diversity.ipynb**: ファイルを移動した
+- **notebooks/10_chi2_map.ipynb**: 保存する画像ファイルの名前を変更した
+- **renamed**: 画像のファイル名を変更した
+- **notebooks/10_chi2_map.ipynb**: 色の順番を反対にした
+- **typst/questions.typ**: 質問表を更新した
+- **notebooks/10_chi2_map.ipynb**: カイ二乗検定のp値マップを追加した
+- **notebooks/10_chi2_map.ipynb**: 相関関系の図を追加した
+- **typst/questions.typ**: 質問表を更新した
+- **typst/questions.typ**: 質問票を作成した
+- **notebooks/10_chi2_map.ipynb**: p値マップを追加した
+- **titanite/core.py**: crosstab_loop: chi2のデータフレームにx軸とy軸のカラム名を追加した
+- **notebooks/10_stats.ipynb**: 参加者の内訳を確認した
+- **notebooks/icrc2023_diversity.ipynb**: q04（出身地）もクラスタにしてみた
+- **notebooks/icrc2023_diversity.ipynb**: 画像のサイズを変更した
+- **notebooks/icrc2023_diversity.ipynb**: 発表用のノートブックを更新した
+- **titanite/cli.py**: 微修正
+- **data/test_data/prepared_data.csv**: 集約データを更新した
+- **typst/q15.typ**: 感情分析について追記した
+- **notebooks/03_hbar.ipynb**: ヒストグラムの確認
+- **notebooks/icrc2023_diversity.ipynb**: 発表で使う図を作るノートブックを作成した
+- **titanite/cli.py**: hbarコマンドを追加した
+- **titanite/config.py**: Data: ヘッダを扱う内部変数を整理した
+- **titanite/cli.py**: hbarコマンドを追加した
+- **titanite/core.py**: hbar, hbar_loop: 追加した
+- **titanite/core.py**: group_data, group_hbar: 全体的に書き換えた
+- **titanite/config.py**: matches: ignore -> valid に置き換えた
+- **notebooks/06_cluster.ipynb**: クラスタを確認するノートを追加した
+- **titanite/preprocess.py**: クラスタの条件を修正した
+- **titanite/preprocess.py**: クラスターを追加した
+- **titanite/preprocess.py**: categorical_data: クラスター分類をカテゴリ型に変換する処理を追加した
+- **titanite/preprocess.py**: categorical_data: リファクタリング
+- **data/test_data/prepared_data.csv**: クラスターを追加した
+- **titanite/cli.py**: prepare: Configクラス変更に伴う修正をした
+- **notebooks/06_cluster.ipynb**: クラスター分割
+- **titanite/config.py**: カテゴリに関する内部変数を変更した
+- **notebooks/00_config.ipynb**: ちょっと更新した
+- **titanite/config.py**: 設定を読み込む部分を見直した
+- **config.toml**: clusterのカテゴリを追加した
+- **titanite/cli.py**: validなリストを追加した
+- **typst/slide.typ**: 更新した
+- **typst/slide.typ**: 確認したことを追加した
+- **typst/slide.typ**: 微修正
+- **titanite/cli.py**: configコマンドを整理した
+- **titanite/config.py**: Config.load_toml: ファイルの存在確認を追加した
+- **notebooks/02_response.ipynb**: responseを分離した
+- **titanite/core.py**: hbar: ヒストグラム機能を追加した
+- **notebooks/10_quick_summary.ipynb**: 再実行した
+- **titanite/cli.py**: crosstabsからchi2を分離した
+- **typst/data**: symlinkを追加した
+- **notebooks/06_cluster.ipynb**: 新しいクラスタを見つけて確認中
+- **sandbox/config.toml**: 質問の番号キーを修正した
+- **titanite/cli.py**: 保存するパスを修正した
+- **typst/slide.typ**: 読み込むファイルのバスを修正した
+- **titanite/cli.py**: crosstabsコマンドの保存先を変更した
+- **titanite/core.py**: response: ヒートマップに戻した
+- **titanite/cli.py**: p005: 引数チェックを追加した
+- **titanite/cli.py**: p < 0.05 のデータをカラムごとに作成できるようにした
+- **notebooks/q01_age.ipynb**: 年齢との相関を確認した
+- **typst**: 極性に合わせて文字色を変更した
+- **titanite/core.py**: comment_data: q11でソートした
+- **notebooks/q02_gender.ipynb**: 再実行した
+- **titanite/core.py**: clusterのカラムを追加した
+- **titanite/config.py**: Dataクラスにconfigメソッドを追加した
+- **notebooks/02_insight.ipynb**: 箱ひげ図を追加した
+- **notebooks/q15_sentiment.ipynb**: 感情分析を追加した
+- **titanite/config.py**: カラム名を数値型とカテゴリ型にわけた
+
 ## 0.4.1 (2023-07-23)
 
 ### Fix

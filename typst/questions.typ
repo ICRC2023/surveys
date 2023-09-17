@@ -33,31 +33,25 @@
 - Q07. 理論・実験・その他（Research Field）
 - Q08. 研究分野の在籍期間（Research Years）
 - Q09. これまでの自分のキャリアに満足していますか？
-- Q10. 家事・育児・介護の時間（Time for housework / childcare / caregiving）【整数値】
+- Q10. 家事・育児・介護の時間【整数値】
 - Q01. diversityセッションに参加しますか？
 
-== 所属グループの実態に関する質問（Status of group you belong）
+== 所属グループの実態に関する質問
 
 Questions about the actual status of the group to which you belong.
 The term "group" will be used here to refer to laboratories at university, working groups within collaborations, etc.
 
 - Q12. DE&Iに関するグループの取り組み具合（`good_poor`）
-    - ``q12_gender_balance``
-    - ``q12_diversity``
-    - ``q12_equity``
-    - ``q12_inclusion``
+    - ``q12_gender_balance`` / ``q12_diversity`` / ``q12_equity`` / ``q12_inclusion``
 - Q13. 女性研究者の割合（Gender Fraction）【整数値】
 - Q14. 上記の割合に対してどう思いますか？
 - Q15. 所属するグループのDE&Iの取り組みに関するグッドプラクティスがあれば教えてください【記述式】
 - Q16. 所属するグループがDE&Iに関連して取り組む必要があると感じるがあれば教えてください【記述式】
 
-== 個人に関する質問（Individual awareness）
+== 個人に関する質問
 
 - Q17. DI&Iに関する個人の考え（`agree_disagree`）取り組み度　Group Status
-    - ``q17_gender_balance``
-    - ``q17_diversity``
-    - ``q17_equity``
-    - ``q17_inclusion``
+    - ``q17_gender_balance`` / ``q17_diversity`` / ``q17_equity`` / ``q17_inclusion``
 - Q18. 上記の考えについて詳しく教えてください【記述式】
 - Q19. 科学にはじめて興味を持ったのはいつですか？（Science Interests）
 - Q20. 科学分野におけるDE&Iの取り組みに関係して、いま困っていることがあれば教えてください【記述式】
@@ -79,7 +73,7 @@ The term "group" will be used here to refer to laboratories at university, worki
 == p < 0.05
 
 #figure(
-    image("../data/main_data/chi2_p005.png"),
+    image("../data/main_data/chi2_p0050.png"),
     caption: [p < 0.05]
 )
 
@@ -88,7 +82,7 @@ The term "group" will be used here to refer to laboratories at university, worki
 == p < 0.01
 
 #figure(
-    image("../data/main_data/chi2_p001.png"),
+    image("../data/main_data/chi2_p0010.png"),
     caption: [p < 0.01]
 )
 
