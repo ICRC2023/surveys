@@ -124,58 +124,52 @@ def categorical_data(data: pd.DataFrame, categories: dict) -> pd.DataFrame:
     """
     logger.info("Categorize")
 
-    age = categories.get("age", "category")
-    gender = categories.get("gender", "category")
-    geoscheme = categories.get("geoscheme", "category")
-    regional = categories.get("regional", "category")
-    subregional = categories.get("subregional", "category")
-    job_title = categories.get("job_title", "category")
-    research_group = categories.get("research_group", "category")
-    research_field = categories.get("research_field", "category")
-    research_years = categories.get("research_years", "category")
-    yes_no = categories.get("yes_no", "category")
-    good_poor = categories.get("good_poor", "category")
-    agree_disagree = categories.get("agree_disagree", "category")
-    school = categories.get("school", "category")
-    cluster = categories.get("cluster", "category")
+    # key: category_type
+    convert_map = {
+        "q01": "age",
+        "q02": "gender",
+        "q03": "geoscheme",
+        "q03_regional": "regional",
+        "q03_subregional": "subregional",
+        "q04": "geoscheme",
+        "q04_regional": "regional",
+        "q04_subregional": "subregional",
+        "q05": "job_title",
+        "q06": "research_group",
+        "q07": "research_field",
+        "q08": "research_years",
+        "q09": "yes_no",
+        "q11": "yes_no",
+        "q12_genderbalance": "good_poor",
+        "q12_diversity": "good_poor",
+        "q12_equity": "good_poor",
+        "q12_inclusion": "good_poor",
+        "q14": "good_poor",
+        "q17_genderbalance": "agree_disagree",
+        "q17_diversity": "agree_disagree",
+        "q17_equity": "agree_disagree",
+        "q17_inclusion": "agree_disagree",
+        "q19": "school",
+    }
 
-    data["q01"] = data["q01"].astype(age)
-    data["q02"] = data["q02"].astype(gender)
-    data["q03"] = data["q03"].astype(geoscheme)
-    data["q03_regional"] = data["q03_regional"].astype(regional)
-    data["q03_subregional"] = data["q03_subregional"].astype(subregional)
-    data["q04"] = data["q04"].astype(geoscheme)
-    data["q04_regional"] = data["q04_regional"].astype(regional)
-    data["q04_subregional"] = data["q04_subregional"].astype(subregional)
-    data["q05"] = data["q05"].astype(job_title)
-    data["q06"] = data["q06"].astype(research_group)
-    data["q07"] = data["q07"].astype(research_field).fillna("Others")
-    data["q08"] = data["q08"].astype(research_years)
-    data["q09"] = data["q09"].astype(yes_no)
+    for k, v in convert_map.items():
+        c = categories.get(v, "category")
+        data[k] = data[k].astype(c)
+
+    data["q07"] = data["q07"].fillna("Others")
     data["q10"] = data["q10"].astype(int)
-    data["q11"] = data["q11"].astype(yes_no)
-    data["q12_genderbalance"] = data["q12_genderbalance"].astype(good_poor)
-    data["q12_diversity"] = data["q12_diversity"].astype(good_poor)
-    data["q12_equity"] = data["q12_equity"].astype(good_poor)
-    data["q12_inclusion"] = data["q12_inclusion"].astype(good_poor)
     data["q13"] = data["q13"].astype(int)
-    data["q14"] = data["q14"].astype(good_poor)
-    # data["q15"]
-    # data["q16"]
-    data["q17_genderbalance"] = data["q17_genderbalance"].astype(agree_disagree)
-    data["q17_diversity"] = data["q17_diversity"].astype(agree_disagree)
-    data["q17_equity"] = data["q17_equity"].astype(agree_disagree)
-    data["q17_inclusion"] = data["q17_inclusion"].astype(agree_disagree)
-    # data["q18"]
-    data["q19"] = data["q19"].astype(school)
-    # data["q20"]
-    # data["q21"]
-    # data["q22"]
+    # # data["q15"]
+    # # data["q16"]
+    # # data["q18"]
+    # # data["q20"]
+    # # data["q21"]
+    # # data["q22"]
 
     # cluster
-    data["q01_clustered"] = data["q01_clustered"].astype(cluster)
-    data["q01q02_clustered"] = data["q01q02_clustered"].astype(cluster)
-    data["q13q14_clustered"] = data["q13q14_clustered"].astype(cluster)
+    # data["q01_clustered"] = data["q01_clustered"].astype(cluster)
+    # data["q01q02_clustered"] = data["q01q02_clustered"].astype(cluster)
+    # data["q13q14_clustered"] = data["q13q14_clustered"].astype(cluster)
 
     return data
 

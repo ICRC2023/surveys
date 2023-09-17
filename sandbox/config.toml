@@ -190,8 +190,32 @@ description = "【Q3】Which geographical region are you currently working or at
 type = "categorical"
 
 [[options]]
+name = "q03_regional"
+title = "Workplace (Region)"
+description = "【Q3】Which geographical region are you currently working or attending school/university in?"
+type = "categorical"
+
+[[options]]
+name = "q03_subregional"
+title = "Workplace (Sub Region)"
+description = "【Q3】Which geographical region are you currently working or attending school/university in?"
+type = "categorical"
+
+[[options]]
 name = "q04"
 title = "Birthplace/Hometown"
+description = "【Q4】Which geographical region do you most strongly associate with?"
+type = "categorical"
+
+[[options]]
+name = "q04_regional"
+title = "Birthplace/Hometown (Region)"
+description = "【Q4】Which geographical region do you most strongly associate with?"
+type = "categorical"
+
+[[options]]
+name = "q04_subregional"
+title = "Birthplace/Hometown (Sub Region)"
 description = "【Q4】Which geographical region do you most strongly associate with?"
 type = "categorical"
 
@@ -338,3 +362,25 @@ name = "q22"
 title = "Comments"
 description = "【Q22】Comments"
 type = "comment"
+
+
+[[overview]]
+name = "in-person"
+total = 1102
+male = 852
+female = 241
+others = 9
+
+[[overview]]
+name = "online"
+total = 304
+male = 220
+female = 84
+others = 0
+
+[[overview]]
+name = "pre-survey"
+total = 295
+male =  195
+female = 90
+others = 10
