@@ -124,6 +124,34 @@ def categorical_data(data: pd.DataFrame, categories: dict) -> pd.DataFrame:
     """
     logger.info("Categorize")
 
+    # key: category_type
+    convert_map = {
+        "q01": "age",
+        "q02": "gender",
+        "q03": "geoscheme",
+        "q03_regional": "regional",
+        "q03_subregional": "subregional",
+        "q04": "geoscheme",
+        "q04_regional": "regional",
+        "q04_subregional": "subregional",
+        "q05": "job_title",
+        "q06": "research_group",
+        "q07": "research_field",
+        "q08": "research_years",
+        "q09": "yes_no",
+        "q11": "yes_no",
+        "q12_genderbalance": "good_poor",
+        "q12_diversity": "good_poor",
+        "q12_equity": "good_poor",
+        "q12_inclusion": "good_poor",
+        "q14": "good_poor",
+        "q17_genderbalance": "agree_disagree",
+        "q17_diversity": "agree_disagree",
+        "q17_equity": "agree_disagree",
+        "q17_inclusion": "agree_disagree",
+        "q19": "school",
+    }
+
     age = categories.get("age", "category")
     gender = categories.get("gender", "category")
     geoscheme = categories.get("geoscheme", "category")
