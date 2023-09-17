@@ -338,3 +338,25 @@ name = "q22"
 title = "Comments"
 description = "【Q22】Comments"
 type = "comment"
+
+
+[[overview]]
+name = "in-person"
+total = 1102
+male = 852
+female = 241
+others = 9
+
+[[overview]]
+name = "online"
+total = 304
+male = 220
+female = 84
+others = 0
+
+[[overview]]
+name = "pre-survey"
+total = 295
+male =  195
+female = 90
+others = 10
