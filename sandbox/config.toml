@@ -190,8 +190,32 @@ description = "【Q3】Which geographical region are you currently working or at
 type = "categorical"
 
 [[options]]
+name = "q03_regional"
+title = "Workplace (Region)"
+description = "【Q3】Which geographical region are you currently working or attending school/university in?"
+type = "categorical"
+
+[[options]]
+name = "q03_subregional"
+title = "Workplace (Sub Region)"
+description = "【Q3】Which geographical region are you currently working or attending school/university in?"
+type = "categorical"
+
+[[options]]
 name = "q04"
 title = "Birthplace/Hometown"
+description = "【Q4】Which geographical region do you most strongly associate with?"
+type = "categorical"
+
+[[options]]
+name = "q04_regional"
+title = "Birthplace/Hometown (Region)"
+description = "【Q4】Which geographical region do you most strongly associate with?"
+type = "categorical"
+
+[[options]]
+name = "q04_subregional"
+title = "Birthplace/Hometown (Sub Region)"
 description = "【Q4】Which geographical region do you most strongly associate with?"
 type = "categorical"
 
