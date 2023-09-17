@@ -12,10 +12,10 @@ This page has some results which I am working on.
 maxdepth: 2
 ---
 overview
-notebooks/responses.ipynb
-notebooks/demographics.ipynb
-notebooks/chi2_test_map.ipynb
-notebooks/icrc2023_diversity.ipynb
+logbooks/responses.ipynb
+logbooks/demographics.ipynb
+logbooks/chi2_test_map.ipynb
+logbooks/icrc2023_diversity.ipynb
 :::
 
 
