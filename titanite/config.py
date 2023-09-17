@@ -6,7 +6,7 @@ from deprecated import deprecated
 from loguru import logger
 from pydantic import BaseModel
 
-from .preprocess import categorical_data
+#from .preprocess import categorical_data
 
 NUMERICAL_HEADERS: list[str] = [
     "q10",
@@ -252,10 +252,12 @@ class Data(BaseModel):
 
 
 if __name__ == "__main__":
-    settings = {"confd": "../sandbox/", "fname": "config.toml"}
+    logger.debug("Test config.py")
 
+    settings = {"load_from": "../sandbox/config.toml"}
     c = Config(**settings)
     c.load()
-    logger.debug(c.fname)
-    logger.debug(c.get("questions").keys())
-    logger.debug(c.get("choices").keys())
+    #logger.debug(c.load_from)
+    logger.debug(c.categories.keys())
+    logger.debug(c.options.columns)
+    logger.debug(c.config.keys())
