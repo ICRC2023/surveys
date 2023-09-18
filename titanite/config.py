@@ -257,7 +257,7 @@ if __name__ == "__main__":
     settings = {"load_from": "../sandbox/config.toml"}
     c = Config(**settings)
     c.load()
-    #logger.debug(c.load_from)
+    # logger.debug(c.load_from)
     logger.debug(c.categories.keys())
     logger.debug(c.options.columns)
     logger.debug(c.config.keys())

@@ -150,6 +150,9 @@ def categorical_data(data: pd.DataFrame, categories: dict) -> pd.DataFrame:
         "q17_equity": "agree_disagree",
         "q17_inclusion": "agree_disagree",
         "q19": "school",
+        "q01_clustered": "cluster",
+        "q01q02_clustered": "cluster",
+        "q13q14_clustered": "cluster",
     }
 
     for k, v in convert_map.items():
@@ -165,11 +168,6 @@ def categorical_data(data: pd.DataFrame, categories: dict) -> pd.DataFrame:
     # # data["q20"]
     # # data["q21"]
     # # data["q22"]
-
-    # cluster
-    # data["q01_clustered"] = data["q01_clustered"].astype(cluster)
-    # data["q01q02_clustered"] = data["q01q02_clustered"].astype(cluster)
-    # data["q13q14_clustered"] = data["q13q14_clustered"].astype(cluster)
 
     return data
 
