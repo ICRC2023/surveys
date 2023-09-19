@@ -153,48 +153,6 @@ class Config(BaseModel):
 class Data(BaseModel):
     read_from: str | Path
     load_from: str = "config.toml"
-    # numerical_headers: list[str] = [
-    #     "q10",
-    #     "q13",
-    #     "q15_polarity",
-    #     "q15_subjectivity",
-    #     "q16_polarity",
-    #     "q16_subjectivity",
-    #     "q18_polarity",
-    #     "q18_subjectivity",
-    #     "q20_polarity",
-    #     "q20_subjectivity",
-    #     "q21_polarity",
-    #     "q21_subjectivity",
-    #     "q22_polarity",
-    #     "q22_subjectivity",
-    # ]
-    # categorical_headers: list[str] = [
-    #     "q01",
-    #     "q02",
-    #     "q03_regional",
-    #     "q03_subregional",
-    #     "q04_regional",
-    #     "q04_subregional",
-    #     "q05",
-    #     "q06",
-    #     "q07",
-    #     "q08",
-    #     "q09",
-    #     "q10_binned",
-    #     "q11",
-    #     "q12_genderbalance",
-    #     "q12_diversity",
-    #     "q12_equity",
-    #     "q12_inclusion",
-    #     "q13_binned",
-    #     "q14",
-    #     "q17_genderbalance",
-    #     "q17_diversity",
-    #     "q17_equity",
-    #     "q17_inclusion",
-    #     "q19",
-    # ]
 
     def config(self):
         c = Config(load_from=self.load_from)
@@ -257,7 +215,7 @@ if __name__ == "__main__":
     settings = {"load_from": "../sandbox/config.toml"}
     c = Config(**settings)
     c.load()
-    #logger.debug(c.load_from)
+    # logger.debug(c.load_from)
     logger.debug(c.categories.keys())
     logger.debug(c.options.columns)
     logger.debug(c.config.keys())
