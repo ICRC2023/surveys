@@ -160,8 +160,9 @@ class Data(BaseModel):
 
     def read(self):
         c = Config(load_from=self.load_from)
-        # config = self.config()
-        categories = c.categorical()
+        #categories = c.categorical()
+        c.load()
+        categories = c.categories
         data = pd.read_csv(self.read_from, parse_dates=["timestamp"])
         data = categorical_data(data, categories)
         return data
