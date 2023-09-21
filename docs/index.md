@@ -12,10 +12,8 @@ This page has some results which I am working on.
 maxdepth: 2
 ---
 overview
-diversity/responses.ipynb
-diversity/demographics.ipynb
-diversity/chi2_test_map.ipynb
-diversity/icrc2023_diversity.ipynb
+diversity/index
+report/index
 :::
 
 
