@@ -6,8 +6,9 @@ import typer
 from loguru import logger
 
 from . import core
-from .config import Config, Data
-from .preprocess import categorical_data, preprocess_data, save_data, sentiment_data
+from .config import CATEGORICAL_HEADERS, Config, Data
+from .preprocess import (categorical_data, preprocess_data, save_data,
+                         sentiment_data)
 
 app = typer.Typer()
 
@@ -266,7 +267,7 @@ def chi2(
     data = d.read()
 
     # 総当たりしたいカラム名を整理
-    headers = [h for h in sorted(data.columns) if h in d.categorical_headers]
+    headers = [h for h in sorted(data.columns) if h in CATEGORICAL_HEADERS]
 
     # 総当たりの組み合わせ
     matches = list(itertools.combinations(headers, 2))
