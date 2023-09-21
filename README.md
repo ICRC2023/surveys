@@ -10,8 +10,8 @@ We will use Python and Jupyter notebooks to create the analysis & plots.
 
 ## GitHub URLs
 
-- Repos : https://github.com/ICRC2023/diversity
-- Pages : https://www.icrc2023.org/diversity/
+- Repos : https://github.com/ICRC2023/surveys/
+- Pages : https://www.icrc2023.org/surveys/
 
 ## TODO
 
