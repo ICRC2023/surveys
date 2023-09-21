@@ -2,6 +2,9 @@
 main = "../data/main_data"
 test = "../data/test_data"
 
+# アンケート内容
+## id = 質問内容
+# Config.options で置き換える予定
 [questions]
 q01 = "【Q1】What is your age ?"
 q02 = "【Q2】What gender do you identify as ?"
@@ -26,7 +29,8 @@ q20 = "【Q20】Do you have any concerns / problems related to DE&I initiatives 
 q21 = "【Q21】What reasons do you think are hindering DE&I initiatives in science ?"
 q22 = "【Q22】Comments"
 
-
+# 選択肢の一覧
+## pd.DataFrameのカラムをカテゴリー型に変換するために必要な設定
 [choices]
 age = [
     "10s",
@@ -171,83 +175,106 @@ cluster = [
     "Others",
 ]
 
+# アンケート内容を辞書型で定義した
+# Config.optionsにpd.DataFrameで読み込むことにした
+# Config.questionsを置き換えるつもりで追加した
+## name : ID
+## title : グラフに使う短いタイトル
+## description : 質問内容
+## type : 回答の種類（categorical / numerical / comment)
+## category : 回答のカテゴリー型（CategoricalDtype）
+
+
 [[options]]
 name = "q01"
 title = "Age Group"
 description = "【Q1】What is your age?"
 type = "categorical"
+category = "age"
 
 [[options]]
 name = "q02"
 title = "Gender Identity"
 description = "【Q2】What gender do you identify as?"
 type = "categorical"
+category = "gender"
 
 [[options]]
 name = "q03"
 title = "Workplace"
 description = "【Q3】Which geographical region are you currently working or attending school/university in?"
 type = "categorical"
+category = "geoscheme"
 
 [[options]]
 name = "q03_regional"
 title = "Workplace (Region)"
 description = "【Q3】Which geographical region are you currently working or attending school/university in?"
 type = "categorical"
+category = "regional"
 
 [[options]]
 name = "q03_subregional"
 title = "Workplace (Sub Region)"
 description = "【Q3】Which geographical region are you currently working or attending school/university in?"
 type = "categorical"
+category = "subregional"
 
 [[options]]
 name = "q04"
 title = "Birthplace/Hometown"
 description = "【Q4】Which geographical region do you most strongly associate with?"
 type = "categorical"
+category = "geoscheme"
 
 [[options]]
 name = "q04_regional"
 title = "Birthplace/Hometown (Region)"
 description = "【Q4】Which geographical region do you most strongly associate with?"
 type = "categorical"
+category = "regional"
 
 [[options]]
 name = "q04_subregional"
 title = "Birthplace/Hometown (Sub Region)"
 description = "【Q4】Which geographical region do you most strongly associate with?"
 type = "categorical"
+category = "subregional"
 
 [[options]]
 name = "q05"
 title = "Job Title"
 description = "【Q5】What is your job title?"
 type = "categorical"
+category = "job_title"
 
 [[options]]
 name = "q06"
 title = "Research Group"
 description = "【Q6】Which group do you belong to?"
 type = "categorical"
+category = "research_group"
 
 [[options]]
 name = "q07"
 title = "Research Field"
 description = "【Q7】What is your research type?"
 type = "categorical"
+category = "research_field"
 
 [[options]]
 name = "q08"
 title = "Research Years"
 description = "【Q8】How long have you been in this field?"
 type = "categorical"
+category = "research_years"
 
 [[options]]
 name = "q09"
 title = "Career Satisfaction"
 description = "【Q9】Are you satisfied with your career to date?"
 type = "categorical"
+category = "yes_no"
 
 [[options]]
 name = "q10"
@@ -255,35 +282,41 @@ title = "Hours on housework, childcare, caregiving per day"
 description = "【Q10】How many hours, on average, do you spend on housework, childcare, and caregiving per day?"
 type = "numerical"
 
+
 [[options]]
 name = "q11"
 title = "Diversity Session Signup"
 description = "【Q11】Did you already sign up for the diversity session in ICRC2023?"
 type = "categorical"
+category = "yes_no"
 
 [[options]]
 name = "q12_genderbalance"
 title = "Group Initiatives on Gender Balance"
 description = "【Q12】What do you think about the initiatives on DE&I of your group?"
 type = "categorical"
+category = "good_poor"
 
 [[options]]
 name = "q12_diversity"
 title = "Group Initiatives on Diversity"
 description = "【Q12】What do you think about the initiatives on DE&I of your group?"
 type = "categorical"
+category = "good_poor"
 
 [[options]]
 name = "q12_equity"
 title = "Group Initiatives on Equity"
 description = "【Q12】What do you think about the initiatives on DE&I of your group?"
 type = "categorical"
+category = "good_poor"
 
 [[options]]
 name = "q12_inclusion"
 title = "Group Initiatives on Inclusion"
 description = "【Q12】What do you think about the initiatives on DE&I of your group?"
 type = "categorical"
+category = "good_poor"
 
 [[options]]
 name = "q13"
@@ -296,6 +329,7 @@ name = "q14"
 title = "Percentage"
 description = "【Q14】What do you think about the percentage above?"
 type = "categorical"
+category = "good_poor"
 
 [[options]]
 name = "q15"
@@ -314,24 +348,28 @@ name = "q17_genderbalance"
 title = "Personal Attitude on Gender Balance Initiatives"
 description = "【Q17】What are your thoughts on diversity, equity & inclusion initiatives?"
 type = "categorical"
+category = "agree_disagree"
 
 [[options]]
 name = "q17_diversity"
 title = "Personal Attitude on Diversity Initiatives"
 description = "【Q17】What are your thoughts on diversity, equity & inclusion initiatives?"
 type = "categorical"
+category = "agree_disagree"
 
 [[options]]
 name = "q17_equity"
 title = "Personal Attitude on Equity Initiatives"
 description = "【Q17】What are your thoughts on diversity, equity & inclusion initiatives?"
 type = "categorical"
+category = "agree_disagree"
 
 [[options]]
 name = "q17_inclusion"
 title = "Personal Attitude on Inclusion Initiatives"
 description = "【Q17】What are your thoughts on diversity, equity & inclusion initiatives?"
 type = "categorical"
+category = "agree_disagree"
 
 [[options]]
 name = "q18"
@@ -344,6 +382,7 @@ name = "q19"
 title = "Science Interest"
 description = "【Q19】When did you first become interested in science?"
 type = "categorical"
+category = "school"
 
 [[options]]
 name = "q20"
@@ -363,6 +402,8 @@ title = "Comments"
 description = "【Q22】Comments"
 type = "comment"
 
+# 会議の参加者の概要
+## まだConfigクラスで呼べるようにしてない
 
 [[overview]]
 name = "in-person"
