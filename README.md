@@ -22,12 +22,12 @@ We will use Python and Jupyter notebooks to create the analysis & plots.
 ## Getting started
 
 ```console
-$ git clone git@github.com:ICRC2023/diversity.git
-$ cd diversity
+$ git clone git@github.com:ICRC2023/surveys.git
+$ cd surveys
 $ poetry shell
 (venv) $ poetry install
 ...（省略）...
-Installing the current project: titanite (0.1.0)
+Installing the current project: titanite (0.5.0)
 $ ti --help
 ```
 
