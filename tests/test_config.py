@@ -456,17 +456,17 @@ def test_config_names():
         "q09",
         "q10",
         "q11",
-        "q12_genderbalance",
         "q12_diversity",
         "q12_equity",
+        "q12_genderbalance",
         "q12_inclusion",
         "q13",
         "q14",
         "q15",
         "q16",
-        "q17_genderbalance",
         "q17_diversity",
         "q17_equity",
+        "q17_genderbalance",
         "q17_inclusion",
         "q18",
         "q19",
@@ -474,3 +474,5 @@ def test_config_names():
         "q21",
         "q22",
     ]
+
+    assert t == expected
