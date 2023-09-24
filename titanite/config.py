@@ -147,6 +147,24 @@ class Config(BaseModel):
         category_maps = self.get_option("category")
         return category_maps
 
+    def get_headers(self, type: str) -> list[str]:
+        options = self.options
+        q = f"type == '{type}'"
+        headers = sorted(options.query(q)["name"].to_list())
+        return headers
+
+    def get_categorical_headers(self) -> list[str]:
+        headers = self.get_headers("categorical")
+        return headers
+
+    def get_numerical_headers(self) -> list[str]:
+        headers = self.get_headers("numerical")
+        return headers
+
+    def get_comment_headers(self) -> list[str]:
+        headers = self.get_headers("comment")
+        return headers
+
     def show(self):
         """
         Print configuration
