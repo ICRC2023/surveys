@@ -115,6 +115,11 @@ class Config(BaseModel):
         options = pd.DataFrame(_options)
         return options
 
+    def get_names(self) -> list[str]:
+        _options = self.options
+        names = sorted(_options["name"])
+        return names
+
     def show(self):
         """
         Print configuration

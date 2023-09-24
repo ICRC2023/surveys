@@ -1,6 +1,9 @@
 """Test config.Config class"""
 from titanite import config
 
+CONFIG_DIVERSITY = "../sandbox/config.toml"
+CONFIG_REPORT = "../sandbox/config_report.toml"
+
 
 def test_config_keys():
     c = config.Config(load_from="../sandbox/config.toml")
@@ -430,3 +433,44 @@ def test_config_overview():
     ]
 
     assert t == expected
+
+
+def test_config_names():
+    c = config.Config(load_from=CONFIG_DIVERSITY)
+    c.load()
+    t = c.get_names()
+
+    expected = [
+        "q01",
+        "q02",
+        "q03",
+        "q03_regional",
+        "q03_subregional",
+        "q04",
+        "q04_regional",
+        "q04_subregional",
+        "q05",
+        "q06",
+        "q07",
+        "q08",
+        "q09",
+        "q10",
+        "q11",
+        "q12_genderbalance",
+        "q12_diversity",
+        "q12_equity",
+        "q12_inclusion",
+        "q13",
+        "q14",
+        "q15",
+        "q16",
+        "q17_genderbalance",
+        "q17_diversity",
+        "q17_equity",
+        "q17_inclusion",
+        "q18",
+        "q19",
+        "q20",
+        "q21",
+        "q22",
+    ]
