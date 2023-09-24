@@ -126,6 +126,12 @@ class Config(BaseModel):
         titles = _options.to_dict().get("title")
         return titles
 
+    def get_descriptions(self) -> dict[str, str]:
+        _options = self.options
+        _options.index = _options["name"]
+        descriptions = _options.to_dict().get("description")
+        return descriptions
+
     def show(self):
         """
         Print configuration

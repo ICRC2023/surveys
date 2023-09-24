@@ -519,3 +519,46 @@ def test_config_titles():
     }
 
     assert t == expected
+
+
+def test_config_descriptions():
+    c = config.Config(load_from=CONFIG_DIVERSITY)
+    c.load()
+    t = c.get_descriptions()
+
+    expected = {
+        "q01": "【Q1】What is your age?",
+        "q02": "【Q2】What gender do you identify as?",
+        "q03": "【Q3】Which geographical region are you currently working or attending school/university in?",
+        "q03_regional": "【Q3】Which geographical region are you currently working or attending school/university in?",
+        "q03_subregional": "【Q3】Which geographical region are you currently working or attending school/university in?",
+        "q04": "【Q4】Which geographical region do you most strongly associate with?",
+        "q04_regional": "【Q4】Which geographical region do you most strongly associate with?",
+        "q04_subregional": "【Q4】Which geographical region do you most strongly associate with?",
+        "q05": "【Q5】What is your job title?",
+        "q06": "【Q6】Which group do you belong to?",
+        "q07": "【Q7】What is your research type?",
+        "q08": "【Q8】How long have you been in this field?",
+        "q09": "【Q9】Are you satisfied with your career to date?",
+        "q10": "【Q10】How many hours, on average, do you spend on housework, childcare, and caregiving per day?",
+        "q11": "【Q11】Did you already sign up for the diversity session in ICRC2023?",
+        "q12_genderbalance": "【Q12】What do you think about the initiatives on DE&I of your group?",
+        "q12_diversity": "【Q12】What do you think about the initiatives on DE&I of your group?",
+        "q12_equity": "【Q12】What do you think about the initiatives on DE&I of your group?",
+        "q12_inclusion": "【Q12】What do you think about the initiatives on DE&I of your group?",
+        "q13": "【Q13】What is the percentage of female researcher in your group?",
+        "q14": "【Q14】What do you think about the percentage above?",
+        "q15": "【Q15】Please let us know If your group has any good practice examples related to DE&I?",
+        "q16": "【Q16】Please let us know if there is anything your group needs to work on or if your group has any problems related to DE&I.",
+        "q17_genderbalance": "【Q17】What are your thoughts on diversity, equity & inclusion initiatives?",
+        "q17_diversity": "【Q17】What are your thoughts on diversity, equity & inclusion initiatives?",
+        "q17_equity": "【Q17】What are your thoughts on diversity, equity & inclusion initiatives?",
+        "q17_inclusion": "【Q17】What are your thoughts on diversity, equity & inclusion initiatives?",
+        "q18": "【Q18】Could you tell us more about your thoughts?",
+        "q19": "【Q19】When did you first become interested in science?",
+        "q20": "【Q20】Do you have any concerns / problems related to DE&I initiatives in science?",
+        "q21": "【Q21】What reasons do you think are hindering DE&I initiatives in science?",
+        "q22": "【Q22】Comments",
+    }
+
+    assert t == expected
