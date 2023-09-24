@@ -476,3 +476,46 @@ def test_config_names():
     ]
 
     assert t == expected
+
+
+def test_config_titles():
+    c = config.Config(load_from=CONFIG_DIVERSITY)
+    c.load()
+    t = c.get_titles()
+
+    expected = {
+        "q01": "Age Group",
+        "q02": "Gender Identity",
+        "q03": "Workplace",
+        "q03_regional": "Workplace (Region)",
+        "q03_subregional": "Workplace (Sub Region)",
+        "q04": "Birthplace/Hometown",
+        "q04_regional": "Birthplace/Hometown (Region)",
+        "q04_subregional": "Birthplace/Hometown (Sub Region)",
+        "q05": "Job Title",
+        "q06": "Research Group",
+        "q07": "Research Field",
+        "q08": "Research Years",
+        "q09": "Career Satisfaction",
+        "q10": "Hours on housework, childcare, caregiving per day",
+        "q11": "Diversity Session Signup",
+        "q12_genderbalance": "Group Initiatives on Gender Balance",
+        "q12_diversity": "Group Initiatives on Diversity",
+        "q12_equity": "Group Initiatives on Equity",
+        "q12_inclusion": "Group Initiatives on Inclusion",
+        "q13": "Percentage of Female Researchers in Group",
+        "q14": "Percentage",
+        "q15": "Good Practices",
+        "q16": "Problems",
+        "q17_genderbalance": "Personal Attitude on Gender Balance Initiatives",
+        "q17_diversity": "Personal Attitude on Diversity Initiatives",
+        "q17_equity": "Personal Attitude on Equity Initiatives",
+        "q17_inclusion": "Personal Attitude on Inclusion Initiatives",
+        "q18": "Reasons",
+        "q19": "Science Interest",
+        "q20": "Concerns/Problems Related to DE&I Initiatives in Science",
+        "q21": "Hindering",
+        "q22": "Comments",
+    }
+
+    assert t == expected
