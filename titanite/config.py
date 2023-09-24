@@ -269,6 +269,10 @@ class Data(BaseModel):
         data = categorical_data(data, categories)
         return data
 
+    @deprecated(version="0.5.0", reason="Use Config.get_crosstab_headers.")
+    def crosstab_headers(self, x: list[str], y: list[str]):
+        pass
+
     @deprecated(version="0.5.0", reason="Moved to Config.get_roundrobin_headers.")
     def matches(self, columns: list):
         """
