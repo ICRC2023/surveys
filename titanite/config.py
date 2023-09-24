@@ -59,11 +59,18 @@ class Config(BaseModel):
     config: dict = {}
     categories: dict = {}
     options: dict = {}
+    names: list = []
+    titles: dict = {}
+    descriptions: dict = {}
+    types: dict = {}
 
     def load(self):
         self.config = self.load_config()
         self.categories = self.load_categories()
         self.options = self.load_options()
+        self.names = self.get_names()
+        self.titles = self.get_titles()
+        self.descriptions = self.get_descriptions()
 
     def load_toml(self) -> dict:
         import typer
@@ -181,7 +188,7 @@ class Data(BaseModel):
 
     def read(self):
         c = Config(load_from=self.load_from)
-        #categories = c.categorical()
+        # categories = c.categorical()
         c.load()
         categories = c.categories
         data = pd.read_csv(self.read_from, parse_dates=["timestamp"])
