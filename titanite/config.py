@@ -143,6 +143,10 @@ class Config(BaseModel):
         descriptions = self.get_option("description")
         return descriptions
 
+    def get_category_maps(self) -> dict[str, str]:
+        category_maps = self.get_option("category")
+        return category_maps
+
     def show(self):
         """
         Print configuration
