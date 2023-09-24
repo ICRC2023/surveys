@@ -131,8 +131,8 @@ class Config(BaseModel):
         return option
 
     def get_names(self) -> list[str]:
-        _options = self.options
-        names = sorted(_options["name"])
+        names = self.get_option("name")
+        names = sorted(names.keys())
         return names
 
     def get_titles(self) -> dict[str, str]:
