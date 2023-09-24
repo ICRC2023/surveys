@@ -172,6 +172,51 @@ class Config(BaseModel):
         headers = self.get_headers("comment")
         return headers
 
+    def get_roundrobin_headers(self, columns: list):
+        """
+        総当たりしたいカラム名
+        """
+        import itertools
+
+        # 総当たりしたいカラム名を整理
+        # カラム名は基本的にデータフレームにあるものを与える
+        # クロス集計しないことにしたカラムは除外する
+        categorical_headers = self.categorical_headers
+        headers = [h for h in sorted(columns) if h in categorical_headers]
+        # 総当たりの組み合わせ
+        matches = list(itertools.combinations(headers, 2))
+        return matches
+
+    def get_crosstab_headers(self, x: list[str], y: list[str]) -> list:
+        """
+        クロス集計のカラム名
+
+        x と y の二つの文字列リストを引数として受け取り、
+        x の各要素と y の各要素のすべての組み合わせを生成します。
+
+        ただし、y のリストからは以下の要素を除外しています。
+        - クロス集計から除外したいカラム名
+        - x の値（自分自身とクロス集計できないため）
+
+        Parameters
+        ----------
+        x : list[str]
+            とくにフォーカスしたい集計カラム名
+        y : list[str]
+            クロス集計結果に含まれるすべてのカラム名
+
+        Returns
+        -------
+        _type_
+            集計するカラム名のリスト
+        """
+        import itertools
+
+        categorical_headers = self.categorical_headers
+        columns = [col for col in y if col in categorical_headers]
+        headers = [[_x, _y] for _x, _y in itertools.product(x, columns) if _x != _y]
+        return headers
+
     def show(self):
         """
         Print configuration
@@ -224,6 +269,7 @@ class Data(BaseModel):
         data = categorical_data(data, categories)
         return data
 
+    @deprecated(version="0.5.0", reason="Moved to Config.get_roundrobin_headers.")
     def matches(self, columns: list):
         """
         総当たりしたいカラム名
@@ -238,6 +284,7 @@ class Data(BaseModel):
         matches = list(itertools.combinations(headers, 2))
         return matches
 
+    @deprecated(version="0.5.0", reason="Moved to Config.get_crosstab_headers.")
     def headers(self, x: list[str], y: list[str]) -> list:
         """
         クロス集計のカラム名
