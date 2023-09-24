@@ -597,3 +597,58 @@ def test_config_category_maps():
     }
 
     assert t == expected
+
+
+def test_config_categorical_headers():
+    c = config.Config(load_from=CONFIG_DIVERSITY)
+    c.load()
+    t = c.get_categorical_headers()
+
+    expected = [
+        "q01",
+        "q02",
+        "q03",
+        "q03_regional",
+        "q03_subregional",
+        "q04",
+        "q04_regional",
+        "q04_subregional",
+        "q05",
+        "q06",
+        "q07",
+        "q08",
+        "q09",
+        "q11",
+        "q12_diversity",
+        "q12_equity",
+        "q12_genderbalance",
+        "q12_inclusion",
+        "q14",
+        "q17_diversity",
+        "q17_equity",
+        "q17_genderbalance",
+        "q17_inclusion",
+        "q19",
+    ]
+
+    assert t == expected
+
+
+def test_config_numerical_headers():
+    c = config.Config(load_from=CONFIG_DIVERSITY)
+    c.load()
+    t = c.get_numerical_headers()
+
+    expected = ["q10", "q13"]
+
+    assert t == expected
+
+
+def test_config_comment_headers():
+    c = config.Config(load_from=CONFIG_DIVERSITY)
+    c.load()
+    t = c.get_comment_headers()
+
+    expected = ["q15", "q16", "q18", "q20", "q21", "q22"]
+
+    assert t == expected
