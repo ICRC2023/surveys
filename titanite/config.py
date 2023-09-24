@@ -115,21 +115,25 @@ class Config(BaseModel):
         options = pd.DataFrame(_options)
         return options
 
+    def get_option(self, name: str):
+        """Get values of options as dict"""
+        options = self.options
+        options.index = options["name"]
+        option = options[[name]].dropna()
+        option = option.to_dict().get(name)
+        return option
+
     def get_names(self) -> list[str]:
         _options = self.options
         names = sorted(_options["name"])
         return names
 
     def get_titles(self) -> dict[str, str]:
-        _options = self.options
-        _options.index = _options["name"]
-        titles = _options.to_dict().get("title")
+        titles = self.get_option("title")
         return titles
 
     def get_descriptions(self) -> dict[str, str]:
-        _options = self.options
-        _options.index = _options["name"]
-        descriptions = _options.to_dict().get("description")
+        descriptions = self.get_option("description")
         return descriptions
 
     def show(self):
