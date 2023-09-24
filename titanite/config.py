@@ -62,7 +62,10 @@ class Config(BaseModel):
     names: list = []
     titles: dict = {}
     descriptions: dict = {}
-    types: dict = {}
+    category_maps: dict = {}
+    categorical_headers: list = []
+    numerical_headers: list = []
+    comment_headers: list = []
 
     def load(self):
         self.config = self.load_config()
@@ -71,6 +74,10 @@ class Config(BaseModel):
         self.names = self.get_names()
         self.titles = self.get_titles()
         self.descriptions = self.get_descriptions()
+        self.category_maps = self.get_category_maps()
+        self.categorical_headers = self.get_categorical_headers()
+        self.numerical_headers = self.get_numerical_headers()
+        self.comment_headers = self.get_comment_headers()
 
     def load_toml(self) -> dict:
         import typer
