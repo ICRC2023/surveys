@@ -120,6 +120,12 @@ class Config(BaseModel):
         names = sorted(_options["name"])
         return names
 
+    def get_titles(self) -> dict[str, str]:
+        _options = self.options
+        _options.index = _options["name"]
+        titles = _options.to_dict().get("title")
+        return titles
+
     def show(self):
         """
         Print configuration
