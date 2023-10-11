@@ -46,7 +46,7 @@ html_theme_options = {
     "repository_url": "https://github.com/ICRC2023/surveys",
     "use_repository_button": True,
     "use_issues_button": True,
-    "analytics":{"google_analytics_id": "G-N66L3ZPC5N"},
+    "analytics": {"google_analytics_id": "G-N66L3ZPC5N"},
 }
 
 html_title = "ICRC2023 Diversity"
