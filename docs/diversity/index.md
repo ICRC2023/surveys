@@ -10,6 +10,7 @@ Approximately 20% responded.
 maxdepth: 2
 ---
 overview
+questionnaire
 responses.ipynb
 demographics.ipynb
 chi2_test_map.ipynb
