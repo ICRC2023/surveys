@@ -1,5 +1,3 @@
 # Post-Conference Survey
 
-:::{toctree}
-questionnaire
-:::
+Questionnaire after the conference
