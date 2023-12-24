@@ -19,7 +19,9 @@ project:
       name: ICRC2023 LOC
   github: https://github.com/ICRC2023/surveys
   # bibliography: []
-  license: MIT
+  license:
+    content: CC-BY-ND-4.0
+    code: MIT
 site:
   template: book-theme
   title: ICRC2023 Surveys
