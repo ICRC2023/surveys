@@ -1,8 +1,8 @@
 # See docs at: https://mystmd.org/guide/frontmatter
 version: 1
 project:
-  title: ICRC2023 Diversity Surveys
-  subject: ICRC2023 Diversity Surveys
+  title: ICRC2023 Surveys
+  subject: ICRC2023 Surveys
   # description:
   keywords: ["ICRC2023", "diversity"]
   authors: []
@@ -11,7 +11,7 @@ project:
   license: MIT
 site:
   template: book-theme
-  # title:
+  title: ICRC2023 Surveys
   # options:
   #   logo: site_logo.png
   nav: []
