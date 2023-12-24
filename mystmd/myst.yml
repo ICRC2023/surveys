@@ -4,6 +4,8 @@ project:
   title: ICRC2023 Surveys
   subject: ICRC2023 Surveys
   # description:
+  # short_title
+  # name
   keywords: ["ICRC2023", "diversity"]
   authors: 
     - name: Shota Takahashi
@@ -17,8 +19,10 @@ project:
       institution: Nagoya University
     - id: loc
       name: ICRC2023 LOC
-  github: https://github.com/ICRC2023/surveys
+  github: ICRC2023/surveys
+  venue: ICRC2023
   # bibliography: []
+  # abbreviations: []
   license:
     content: CC-BY-ND-4.0
     code: MIT
