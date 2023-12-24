@@ -1,9 +1,9 @@
 # See docs at: https://mystmd.org/guide/frontmatter
 version: 1
 project:
-  # title:
+  title: ICRC2023 Diversity Surveys
   # description:
-  keywords: []
+  keywords: ["ICRC2023", "diversity"]
   authors: []
   github: ssh://git@github.com/ICRC2023/surveys
   # bibliography: []
@@ -14,6 +14,6 @@ site:
   #   logo: site_logo.png
   nav: []
   actions:
-    - title: Learn More
-      url: https://mystmd.org/guide
+    - title: ICRC2023
+      url: https://icrc2023.org
   domains: []
