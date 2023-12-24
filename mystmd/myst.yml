@@ -2,6 +2,7 @@
 version: 1
 project:
   title: ICRC2023 Diversity Surveys
+  subject: ICRC2023 Diversity Surveys
   # description:
   keywords: ["ICRC2023", "diversity"]
   authors: []
