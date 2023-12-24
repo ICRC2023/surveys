@@ -5,7 +5,18 @@ project:
   subject: ICRC2023 Surveys
   # description:
   keywords: ["ICRC2023", "diversity"]
-  authors: []
+  authors: 
+    - name: Shota Takahashi
+      affiliation: ["kmi", "nu", "loc"]
+      orcid: 0000-0002-2796-8682
+  affiliations:
+    - id: kmi
+      institution: KMI
+      url: https://www.kmi.nagoya-u.ac.jp/
+    - id: nu
+      institution: Nagoya University
+    - id: loc
+      name: ICRC2023 LOC
   github: https://github.com/ICRC2023/surveys
   # bibliography: []
   license: MIT
