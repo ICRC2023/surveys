@@ -33,6 +33,7 @@ pytest = "^7.4.0"
 sphinx-book-theme = "^1.0.1"
 sphinx-copybutton = "^0.5.2"
 myst-nb = "^0.17.2"
+mystmd = "^1.1.37"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
