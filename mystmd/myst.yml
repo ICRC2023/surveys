@@ -5,8 +5,9 @@ project:
   # description:
   keywords: ["ICRC2023", "diversity"]
   authors: []
-  github: ssh://git@github.com/ICRC2023/surveys
+  github: https://github.com/ICRC2023/surveys
   # bibliography: []
+  license: MIT
 site:
   template: book-theme
   # title:
@@ -17,3 +18,4 @@ site:
     - title: ICRC2023
       url: https://icrc2023.org
   domains: []
+
