@@ -4,7 +4,7 @@ The terms and conditions are subject to change.
 
 ## Use of Survey Data
 
-Copyright (c) 2013 Shota Takahashi and ICRC2023 Diversity Group
+Copyright (c) 2023 Shota Takahashi and ICRC2023 Diversity Group
 
 The survey results are a valuable resource obtained through the cooperation of ICRC2023 participants.
 Therefore, the reproduction, distribution, and any secondary use of the response data are, in principle, prohibited.
@@ -16,7 +16,7 @@ Should you require any assistance, we would be happy to offer our cooperation.
 
 MIT License
 
-Copyright (c) 2013 Shota Takahashi and ICRC2023 Diversity Group
+Copyright (c) 2023 Shota Takahashi and ICRC2023 Diversity Group
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
