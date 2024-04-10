@@ -25,7 +25,6 @@ deprecated = "^1.2.14"
 
 [tool.poetry.group.dev.dependencies]
 commitizen = "^3.5.2"
-jupyterlab = "^4.0.2"
 pytest = "^7.4.0"
 
 
