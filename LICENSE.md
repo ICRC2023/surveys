@@ -6,12 +6,11 @@ The terms and conditions are subject to change.
 
 Copyright (c) 2013 Shota Takahashi and ICRC2023 Diversity Group
 
-All rights to the survey data contained in this repository are reserved
-by the author. The survey data is copyrighted and may not be reproduced,
-distributed, transmitted, displayed, published, or broadcast without
-the prior written permission of the copyright holder. Unauthorized use
-and/or duplication of this material without express and written permission
-from the author and/or owner is strictly prohibited.
+アンケート結果は、ICRC2023の会議参加者の協力によって得られた貴重なリソースです。
+そのため、回答データの配布と二次利用は原則禁止とします。
+ただし、多様性のある、よりよい科学コミュニティを目指すために協力したいと思います。
+もし、同じようなアンケート収集を考えているならば、ぜひご連絡ください。
+役に立てることがあれば、ぜひ協力したいと思います。
 
 ## Analysis tools
 
