@@ -2,15 +2,15 @@
 
 The terms and conditions are subject to change.
 
-## Survey Data
+## Use of Survey Data
 
 Copyright (c) 2013 Shota Takahashi and ICRC2023 Diversity Group
 
-アンケート結果は、ICRC2023の会議参加者の協力によって得られた貴重なリソースです。
-そのため、回答データの配布と二次利用は原則禁止とします。
-ただし、多様性のある、よりよい科学コミュニティを目指すために協力したいと思います。
-もし、同じようなアンケート収集を考えているならば、ぜひご連絡ください。
-役に立てることがあれば、ぜひ協力したいと思います。
+The survey results are a valuable resource obtained through the cooperation of ICRC2023 participants.
+Therefore, the reproduction, distribution, and any secondary use of the response data are, in principle, prohibited.
+However, we are eager to collaborate with you to foster a more diverse and improved scientific community.
+If you are considering collecting a similar survey, please feel free to contact us.
+Should you require any assistance, we would be happy to offer our cooperation.
 
 ## Analysis tools
 
