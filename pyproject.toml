@@ -33,6 +33,7 @@ ipykernel = "^6.29.4"
 sphinx-book-theme = "^1.1.2"
 sphinx-copybutton = "^0.5.2"
 myst-nb = "^1.0.0"
+sphinx-autobuild = "^2024.2.4"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
