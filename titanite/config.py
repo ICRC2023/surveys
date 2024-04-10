@@ -59,11 +59,25 @@ class Config(BaseModel):
     config: dict = {}
     categories: dict = {}
     options: dict = {}
+    names: list = []
+    titles: dict = {}
+    descriptions: dict = {}
+    category_maps: dict = {}
+    categorical_headers: list = []
+    numerical_headers: list = []
+    comment_headers: list = []
 
     def load(self):
         self.config = self.load_config()
         self.categories = self.load_categories()
         self.options = self.load_options()
+        self.names = self.get_names()
+        self.titles = self.get_titles()
+        self.descriptions = self.get_descriptions()
+        self.category_maps = self.get_category_maps()
+        self.categorical_headers = self.get_categorical_headers()
+        self.numerical_headers = self.get_numerical_headers()
+        self.comment_headers = self.get_comment_headers()
 
     def load_toml(self) -> dict:
         import typer
@@ -115,6 +129,94 @@ class Config(BaseModel):
         options = pd.DataFrame(_options)
         return options
 
+    def get_option(self, name: str):
+        """Get values of options as dict"""
+        options = self.options
+        options.index = options["name"]
+        option = options[[name]].dropna()
+        option = option.to_dict().get(name)
+        return option
+
+    def get_names(self) -> list[str]:
+        names = self.get_option("name")
+        names = sorted(names.keys())
+        return names
+
+    def get_titles(self) -> dict[str, str]:
+        titles = self.get_option("title")
+        return titles
+
+    def get_descriptions(self) -> dict[str, str]:
+        descriptions = self.get_option("description")
+        return descriptions
+
+    def get_category_maps(self) -> dict[str, str]:
+        category_maps = self.get_option("category")
+        return category_maps
+
+    def get_headers(self, type: str) -> list[str]:
+        options = self.options
+        q = f"type == '{type}'"
+        headers = sorted(options.query(q)["name"].to_list())
+        return headers
+
+    def get_categorical_headers(self) -> list[str]:
+        headers = self.get_headers("categorical")
+        return headers
+
+    def get_numerical_headers(self) -> list[str]:
+        headers = self.get_headers("numerical")
+        return headers
+
+    def get_comment_headers(self) -> list[str]:
+        headers = self.get_headers("comment")
+        return headers
+
+    def get_roundrobin_headers(self, columns: list):
+        """
+        総当たりしたいカラム名
+        """
+        import itertools
+
+        # 総当たりしたいカラム名を整理
+        # カラム名は基本的にデータフレームにあるものを与える
+        # クロス集計しないことにしたカラムは除外する
+        categorical_headers = self.categorical_headers
+        headers = [h for h in sorted(columns) if h in categorical_headers]
+        # 総当たりの組み合わせ
+        matches = list(itertools.combinations(headers, 2))
+        return matches
+
+    def get_crosstab_headers(self, x: list[str], y: list[str]) -> list:
+        """
+        クロス集計のカラム名
+
+        x と y の二つの文字列リストを引数として受け取り、
+        x の各要素と y の各要素のすべての組み合わせを生成します。
+
+        ただし、y のリストからは以下の要素を除外しています。
+        - クロス集計から除外したいカラム名
+        - x の値（自分自身とクロス集計できないため）
+
+        Parameters
+        ----------
+        x : list[str]
+            とくにフォーカスしたい集計カラム名
+        y : list[str]
+            クロス集計結果に含まれるすべてのカラム名
+
+        Returns
+        -------
+        _type_
+            集計するカラム名のリスト
+        """
+        import itertools
+
+        categorical_headers = self.categorical_headers
+        columns = [col for col in y if col in categorical_headers]
+        headers = [[_x, _y] for _x, _y in itertools.product(x, columns) if _x != _y]
+        return headers
+
     def show(self):
         """
         Print configuration
@@ -160,13 +262,18 @@ class Data(BaseModel):
 
     def read(self):
         c = Config(load_from=self.load_from)
-        #categories = c.categorical()
+        # categories = c.categorical()
         c.load()
         categories = c.categories
         data = pd.read_csv(self.read_from, parse_dates=["timestamp"])
         data = categorical_data(data, categories)
         return data
 
+    @deprecated(version="0.5.0", reason="Use Config.get_crosstab_headers.")
+    def crosstab_headers(self, x: list[str], y: list[str]):
+        pass
+
+    @deprecated(version="0.5.0", reason="Moved to Config.get_roundrobin_headers.")
     def matches(self, columns: list):
         """
         総当たりしたいカラム名
@@ -181,6 +288,7 @@ class Data(BaseModel):
         matches = list(itertools.combinations(headers, 2))
         return matches
 
+    @deprecated(version="0.5.0", reason="Moved to Config.get_crosstab_headers.")
     def headers(self, x: list[str], y: list[str]) -> list:
         """
         クロス集計のカラム名
