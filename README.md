@@ -1,12 +1,17 @@
-# Pre-conference Surveys for ICRC2023
+# Surveys at ICRC2023
 
-This is a set of scripts to analyze the pre-session survey for the Diversity session.
+A set of scripts to analyze survey for the Diversity session.
 We will use Python and Jupyter notebooks to create the analysis & plots.
+
+## Surveys
+
+- 2023-07-08 to 2023-07-22 : Pre-Conference survey for the diversity session
+- 2023-09-15 to 2023-09-22 : Post-Conference survey
 
 ## GitHub URLs
 
-- Repos : https://github.com/ICRC2023/diversity
-- Pages : https://www.icrc2023.org/diversity/
+- Repos : https://github.com/ICRC2023/surveys/
+- Pages : https://www.icrc2023.org/surveys/
 
 ## TODO
 
@@ -17,12 +22,12 @@ We will use Python and Jupyter notebooks to create the analysis & plots.
 ## Getting started
 
 ```console
-$ git clone git@github.com:ICRC2023/diversity.git
-$ cd diversity
+$ git clone git@github.com:ICRC2023/surveys.git
+$ cd surveys
 $ poetry shell
 (venv) $ poetry install
 ...（省略）...
-Installing the current project: titanite (0.1.0)
+Installing the current project: titanite (0.5.0)
 $ ti --help
 ```
 
