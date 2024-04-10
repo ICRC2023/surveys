@@ -9,11 +9,10 @@ maxdepth: 2
 overview
 diversity/index
 report/index
+modules/index
 :::
 
-
-
-# Indices and tables
+## Indices and tables
 
 * {ref}`genindex`
 * {ref}`modindex`
