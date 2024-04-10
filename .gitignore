@@ -6,6 +6,7 @@ raw_data
 test_data
 tmp_*
 *.pdf
+jupyter_execute/
 
 ##################################################
 # macOS
