@@ -204,3 +204,36 @@ Altairのギャラリーからサンプルを見繕っておきました
 
 リポジトリ名の``Titanite``は[チタン石](https://ja.wikipedia.org/wiki/%E3%83%81%E3%82%BF%E3%83%B3%E7%9F%B3)という鉱物の名前です。「スフェーン」という宝石としても知られているそうです。
 光の当たり具合によってさまざまな色に見えるそうで「多様性」の意味をこめられるかなと思って採用しました。
+
+
+## Update packages
+
+パッケージを更新するときは``update-packages``ブランチを作成してください。
+GitHub Actionsが実行されるブランチを制限してあり、``main``以外のブランチ名は``update-packages``だけ許可してあります。
+
+```console
+$ git branch update-packages
+$ git checkout update-packages
+$ poetry show --outdated
+$ poetry add パッケージ名@latest
+$ git add pyproject.toml poetry.lock
+$ git commit
+# コミットメッセージは次のように入力してください
+# build(pyproject.toml): updated パッケージ名: x.y.z -> X.Y.Z
+
+# 同様に --group docs / --group dev のパッケージも更新してください
+$ poetry add パッケージ名@latest --group docs
+$ git add pyproject.toml poetry.lock
+$ git commit
+
+$ poetry add パッケージ名@latest --group dev
+$ git add pyproject.toml
+$ git add pyproject.toml poetry.lock
+$ git commit
+
+# GitHub Actionsで実行されるパッケージが以前のバージョンのままだった場合
+$ poetry lock
+$ git add poetry.lock
+$ git commit
+# build(poetry.lock): updated poetry.lock
+```
