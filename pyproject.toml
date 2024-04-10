@@ -26,6 +26,7 @@ deprecated = "^1.2.14"
 [tool.poetry.group.dev.dependencies]
 commitizen = "^3.5.2"
 pytest = "^7.4.0"
+ipykernel = "^6.29.4"
 
 
 [tool.poetry.group.docs.dependencies]
