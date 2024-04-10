@@ -48,3 +48,5 @@ html_theme_options = {
 }
 
 html_title = "ICRC2023 Diversity"
+# html_logo = "_static/titanite_150x150.png"
+html_logo = "_static/icrc2023_150x150.png"
