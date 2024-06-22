@@ -7,6 +7,7 @@ test_data
 tmp_*
 *.pdf
 jupyter_execute/
+mystmd/_build/
 
 ##################################################
 # macOS
