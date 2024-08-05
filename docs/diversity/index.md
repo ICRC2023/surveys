@@ -5,7 +5,7 @@ The pre-conference survey was opened July. 8th - 21st, using Google Form.
 We sent a request to all the participants of the conference.
 Approximately 20% responded.
 
-:::{toctree}
+```{toctree}
 ---
 maxdepth: 2
 ---
@@ -15,12 +15,11 @@ responses.ipynb
 demographics.ipynb
 chi2_test_map.ipynb
 icrc2023_diversity.ipynb
-
-:::
+```
 
 ## WIP (Work In Progress)
 
-:::{toctree}
+```{toctree}
 wip/q01_age
 wip/q02_gender_identity
 wip/q03_workplace
@@ -32,4 +31,4 @@ wip/q08_research_years
 wip/q09_career_satisfaction
 wip/q10_hours
 wip/q11_signup
-:::
+```
