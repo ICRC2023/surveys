@@ -46,6 +46,8 @@ jobs:
         run: |
           poetry --version
           poetry config --list
+      - name: Show outdated packages
+        run: poetry show --outdated
       - name: Install dependencies
         run: poetry install
       - name: Build Sphinx
