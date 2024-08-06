@@ -16,23 +16,3 @@ demographics.ipynb
 chi2_test_map.ipynb
 icrc2023_diversity.ipynb
 ```
-
-## WIP (Work In Progress)
-
-```{toctree}
-wip/q01_age
-wip/q02_gender_identity
-wip/q03_workplace
-wip/q04_hometown
-wip/q05_job_title
-wip/q06_research_domain
-wip/q07_research_type
-wip/q08_research_years
-wip/q09_career_satisfaction
-wip/q10_hours
-wip/q11_signup
-wip/q12_dei_group
-wip/q13_female_ratio
-wip/q17_dei_individual
-wip/q19_science_interest
-```
