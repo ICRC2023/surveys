@@ -34,6 +34,7 @@ responses/q12_dei_group
 responses/q13_female_ratio
 responses/q14_female_ratio_thoughts
 responses/q15_good_practice_examples
+responses/q16_group_concerns
 ```
 
 ### 【Q15】Please let us know If your group has any good practice examples related to DE&I?
