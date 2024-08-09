@@ -37,10 +37,6 @@ responses/q15_good_practice_examples
 responses/q16_group_concerns
 ```
 
-2remarks### 【Q16】Please let us know if there is anything your group needs to work on or if your group has any problems related to DE&I
-
-We would like to find commonalities in issues and share them with other groups to find clues for a better community.
-
 ## Awareness of individuals
 
 (Q17 - Q21)
