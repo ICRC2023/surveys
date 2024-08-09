@@ -54,14 +54,12 @@ Asked how individuals feel about DE&I initiatives.
 responses/q17_dei_individual
 responses/q19_science_interest
 responses/q20_individual_concerns
+responses/q21_dei_hindering
 ```
 
 ### 【Q18】Could you tell us more about your thoughts?
 
 Please tell us why you agree or disagree, and feel free to express opinions with which you partially agree or disagree.
-
-
-### 【Q21】What reasons do you think are hindering DE&I initiatives in science?
 
 ### 【Q22】Comments
 
