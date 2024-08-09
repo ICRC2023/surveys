@@ -33,6 +33,7 @@ The term "group" refers to laboratories at universities, working groups within c
 responses/q12_dei_group
 responses/q13_female_ratio
 responses/q14_female_ratio_thoughts
+responses/q15_good_practice_examples
 ```
 
 ### 【Q15】Please let us know If your group has any good practice examples related to DE&I?
