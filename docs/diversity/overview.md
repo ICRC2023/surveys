@@ -19,8 +19,9 @@ Response
 | --- | --- | --- | --- | --- | --- |
 | Pre-Survey | 295 | 195 (66.1%) | 90 (30.5%) | 10 (3.4%) |
 
-## References
+## Related Links
 
 - [ICRC2023](https://www.icrc2023.org/) : 2023/07/26 - 08/03
 - [Diversity Session](https://www.icrc2023.org/program/#diversity-session) : 2023/07/28 11:50 - 12:50 (Lunchtime session)
 - [Rapporteur Talk: Diversity](https://confit.atlas.jp/guide/event/icrc2023/subject/Rapporteur4-02/category?cryptoId=) : 2023/08/03 17:35 - 17:50
+- [The rapporteur report on the diversity session at the ICRC2023 - Proceedings of Science](https://pos.sissa.it/444/038/)
