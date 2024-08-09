@@ -2,9 +2,12 @@
 
 The list of questions asked and the choices shown.
 
-## Basic Information
+## Basic Demographic Information
 
-Please give us some basic information about yourself.
+(Q01 - Q11)
+Asked about basic demographic information of the respondents.
+Workplace and Birthplace/Hometown were asked separately.
+All questions were set as mandatory, but leaved an option to select "Prefer not to answer".
 
 ```{toctree}
 responses/q01_age
@@ -22,8 +25,9 @@ responses/q11_signup
 
 ## Status of group you belong
 
-Questions about the actual status of the group to which you belong.
-The term "group" will be used here to refer to laboratories at university, working groups within collaborations, etc.
+(Q12 - Q16)
+Asked questions about the actual status of the group to which the respondent belongs.
+The term "group" refers to laboratories at universities, working groups within collaborations, etc. 
 
 ```{toctree}
 responses/q12_dei_group
@@ -53,8 +57,8 @@ We would like to find commonalities in issues and share them with other groups t
 
 ## Awareness of individuals
 
-Questions about your personal awareness.
-Please feel free to answer these questions as you wish, as they are subjective to you.
+(Q17 - Q21)
+Asked how individuals feel about DE&I initiatives.
 
 ```{toctree}
 responses/q17_dei_individual
