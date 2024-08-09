@@ -32,20 +32,8 @@ The term "group" refers to laboratories at universities, working groups within c
 ```{toctree}
 responses/q12_dei_group
 responses/q13_female_ratio
+responses/q14_female_ratio_thoughts
 ```
-
-
-
-### 【Q14】What do you think about the percentage above ?
-
-> (Required)
-
-1. Very Good
-2. Good
-3. Poor
-4. Very Poor
-5. No interest
-6. Prefer not to answer
 
 ### 【Q15】Please let us know If your group has any good practice examples related to DE&I?
 
