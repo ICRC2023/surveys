@@ -37,11 +37,7 @@ responses/q15_good_practice_examples
 responses/q16_group_concerns
 ```
 
-### 【Q15】Please let us know If your group has any good practice examples related to DE&I?
-
-We would like to introduce good initiatives to other groups, too.
-
-### 【Q16】Please let us know if there is anything your group needs to work on or if your group has any problems related to DE&I
+2remarks### 【Q16】Please let us know if there is anything your group needs to work on or if your group has any problems related to DE&I
 
 We would like to find commonalities in issues and share them with other groups to find clues for a better community.
 
