@@ -33,6 +33,9 @@ Asked questions about the actual status of the group to which the respondent bel
 The term "group" refers to laboratories at universities, working groups within collaborations, etc. 
 
 ```{toctree}
+---
+maxdepth: 1
+---
 responses/q12_dei_group
 responses/q13_female_ratio
 responses/q14_female_ratio_thoughts
