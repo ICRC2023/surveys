@@ -49,13 +49,14 @@ responses/q16_group_concerns
 Asked how individuals feel about DE&I initiatives.
 
 ```{toctree}
+---
+maxdepth: 1
+---
 responses/q17_dei_individual
+responses/q18_agree_disagree
 responses/q19_science_interest
 responses/q20_individual_concerns
 responses/q21_dei_hindering
 responses/q22_remarks
 ```
 
-### 【Q18】Could you tell us more about your thoughts?
-
-Please tell us why you agree or disagree, and feel free to express opinions with which you partially agree or disagree.
