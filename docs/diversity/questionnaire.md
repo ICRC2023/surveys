@@ -10,6 +10,9 @@ Workplace and Birthplace/Hometown were asked separately.
 All questions were set as mandatory, but leaved an option to select "Prefer not to answer".
 
 ```{toctree}
+---
+maxdepth: 1
+---
 responses/q01_age
 responses/q02_gender_identity
 responses/q03_workplace
