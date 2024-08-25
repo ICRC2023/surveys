@@ -8,6 +8,7 @@ tmp_*
 *.pdf
 jupyter_execute/
 mystmd/_build/
+docs/apidocs
 
 ##################################################
 # macOS
