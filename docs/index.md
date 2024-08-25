@@ -9,8 +9,16 @@ maxdepth: 2
 overview
 diversity/index
 report/index
-modules/index
 :::
+
+## APIs
+
+```{toctree}
+---
+maxdepth: 2
+---
+apidocs/index
+```
 
 ## Indices and tables
 

@@ -13,7 +13,7 @@ author = "Shota Takahashi / ICRC2023 Diversity Group"
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["myst_nb", "sphinx.ext.autodoc", "sphinx.ext.napoleon"]
+extensions = ["myst_nb", "autodoc2", "sphinx.ext.napoleon"]
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
@@ -33,6 +33,10 @@ myst_enable_extensions = [
     "substitution",
     "tasklist",
 ]
+
+# -- Options for autodoc2 -------------------------------------------------
+autodoc2_packages = ["../titanite"]
+autodoc2_render_plugin = "myst"
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
