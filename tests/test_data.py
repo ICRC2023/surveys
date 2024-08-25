@@ -1,4 +1,5 @@
 """Test config.Data class"""
+
 from titanite import config
 
 CONFIG_DIVERSITY = "../sandbox/config.toml"
