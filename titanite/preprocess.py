@@ -24,6 +24,16 @@ def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
         - これも2と同じような仮定をしている
             - プラス感情 = 関心が高い = 好意的
             - マイナス感情 = 関心が高い = 嫌悪的
+
+    Paramaters
+    ----------
+    ``data: pd.DataFrame)``
+        未処理のデータフレーム
+
+    Returns
+    -------
+    ``pd.DataFrame``
+        前処理したデータフレーム
     """
 
     logger.info("Start preprocessing data ...")
@@ -48,12 +58,12 @@ def replace_data(data: pd.DataFrame) -> pd.DataFrame:
 
     Parameters
     ----------
-    data : pd.DataFrame
+    ``data : pd.DataFrame``
         入力データフレーム
 
     Returns
     -------
-    pd.DataFrame
+    ``pd.DataFrame``
         データフレーム
     """
     logger.info("Replace")
@@ -82,12 +92,12 @@ def split_data(data: pd.DataFrame) -> pd.DataFrame:
 
     Parameters
     ----------
-    data : pd.DataFrame
+    `data : pd.DataFrame`
         データフレーム
 
     Returns
     -------
-    pd.DataFrame
+    `pd.DataFrame`
         データフレーム
     """
     logger.info("Split")
@@ -112,14 +122,14 @@ def categorical_data(data: pd.DataFrame, categories: dict) -> pd.DataFrame:
 
     Parameters
     ----------
-    data : pd.DataFrame
+    `data : pd.DataFrame`
         データフレーム
-    categories : dict
+    `categories : dict`
         カテゴリー型
 
     Returns
     -------
-    pd.DataFrame
+    `pd.DataFrame`
         データフレーム
     """
     logger.info("Categorize")
@@ -173,6 +183,11 @@ def categorical_data(data: pd.DataFrame, categories: dict) -> pd.DataFrame:
 
 
 def sentiment_data(data):
+    """感情分析
+
+    `TextBlob``パッケージを使って、自由記述の内容を感情分析する。
+
+    """
     import numpy as np
     from textblob import TextBlob
     from tqdm import tqdm
@@ -230,12 +245,12 @@ def cluster_data(data: pd.DataFrame) -> pd.DataFrame:
 
     Parameters
     ----------
-    data : pd.DataFrame
+    `data : pd.DataFrame`
         入力データ
 
     Returns
     -------
-    pd.DataFrame
+    `pd.DataFrame`
         クラスター分類を追加したデータ
     """
     logger.info("Clustered")
@@ -289,12 +304,12 @@ def binned_data(data: pd.DataFrame) -> pd.DataFrame:
 
     Parameters
     ----------
-    data : pd.DataFrame
+    `data : pd.DataFrame`
         入力データ
 
     Returns
     -------
-    pd.DataFrame
+    `pd.DataFrame`
         ビン分割したカラムを追加したデータ
     """
     logger.info("Binned")
@@ -371,7 +386,24 @@ def binned_data(data: pd.DataFrame) -> pd.DataFrame:
     return data
 
 
-def save_data(data: pd.DataFrame, write_dir: str):
+def save_data(data: pd.DataFrame, write_dir: str) -> None:
+    """データフレームを保存
+
+    - `{write_dir}` / `categorical_data.csv`
+    - `{write_dir}` / `sentiment_data.csv`
+
+    Parameters
+    ----------
+    `data: pd.DataFrame`
+        データフレーム
+    `write_dir: str`
+        ディレクトリ名
+
+    Returns
+    -------
+    `None`
+
+    """
     logger.info("Save data")
 
     # Write only categorical data
