@@ -91,27 +91,26 @@ def response(data: pd.DataFrame) -> alt.LayerChart:
 
 
 def group_data(data: pd.DataFrame, x: str, color: str) -> pd.DataFrame:
-    """
-    データフレームをグループ化
+    """データフレームをグループ化
 
     Parameters
     ----------
-    data : pd.DataFrame
+    - `data : pd.DataFrame`
         前処理済みのデータフレーム
-    x: str
+    - `x: str`
         X軸に設定するカラム名
-    color: str
+    - `color: str`
         色のグループ化に設定するカラム名
 
     Returns
     -------
-    pd.DataFrame
+    - `pd.DataFrame`
         グループ化したデータフレーム
     """
 
-    group = [x, color]
+    g = [x, color]
     c = "response"
-    grouped = data.groupby(group)[c].sum().reset_index()
+    grouped = data.groupby(g)[c].sum().reset_index()
     return grouped
 
 
