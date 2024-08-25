@@ -92,11 +92,21 @@ def breakdowns(
     counted = data[names].value_counts(sort=sort).reset_index()
 
     x = names[0]
-    by = names[1] if len(names) >= 2 else None
+    xlabel = TITLES.get(x)
+    ylabel = "Entries"
+    title = xlabel
+    by = None
+
+    if len(names) >= 2:
+        by = names[1]
+        title = TITLES.get(by)
 
     left = counted.hvplot.bar(
         x=x,
         by=by,
+        title=title,
+        xlabel=xlabel,
+        ylabel=ylabel,
         rot=90,
         grid=True,
         width=1000,
