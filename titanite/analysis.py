@@ -76,7 +76,11 @@ class ResultManager:
 
 
 def breakdowns(
-    data: pd.DataFrame, names: list[str], sort: bool = False
+    data: pd.DataFrame,
+    names: list[str],
+    sort: bool = False,
+    width: int = 1000,
+    height: int = 600,
 ) -> ResultManager:
     """内訳を集計
 
@@ -109,8 +113,8 @@ def breakdowns(
         ylabel=ylabel,
         rot=90,
         grid=True,
-        width=1000,
-        height=600,
+        width=width,
+        height=height,
     )
 
     right = counted.hvplot.table()
