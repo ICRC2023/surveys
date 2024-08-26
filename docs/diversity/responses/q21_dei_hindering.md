@@ -58,4 +58,4 @@ What reasons do you think are hindering DE&I initiatives in science?
 
 ### 13. Cautious Optimism for Change"
 
-: Keywords: change is slow, progress happening, gradual improvement, generational shift, awareness increasing, positive role models, advocacy, education efforts, acknowledgment of challenges, incremental change
+:Keywords: change is slow, progress happening, gradual improvement, generational shift, awareness increasing, positive role models, advocacy, education efforts, acknowledgment of challenges, incremental change
