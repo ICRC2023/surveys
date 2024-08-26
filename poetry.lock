@@ -3615,17 +3615,17 @@ standard = ["colorama (>=0.4)", "httptools (>=0.5.0)", "python-dotenv (>=0.13)",
 
 [[package]]
 name = "vl-convert-python"
-version = "1.6.0"
+version = "1.6.1"
 description = "Convert Vega-Lite chart specifications to SVG, PNG, or Vega"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "vl_convert_python-1.6.0-cp37-abi3-macosx_10_12_x86_64.whl", hash = "sha256:8c69676fa0dfb7b1af67364fd02304e5452ee6b873048d65fe4214f7cf726754"},
-    {file = "vl_convert_python-1.6.0-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:1c2ca0c2800925a1c6cf0cca4c79291205ceebabf1e9a40f90dd8bcead1af6eb"},
-    {file = "vl_convert_python-1.6.0-cp37-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:1d016d8d0be7a4ebb9dea447e0fe4373fb2998828ca05ae1b50c01d896edcece"},
-    {file = "vl_convert_python-1.6.0-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:92d51f8c2e6c4f4c18f0a0e3a79912fc4bb77dee542d9b62bcb05cd076007f44"},
-    {file = "vl_convert_python-1.6.0-cp37-abi3-win_amd64.whl", hash = "sha256:2167d762f77991a36ce11d47d03d399219e80a1f19340ed1f6125713f8b31e87"},
-    {file = "vl_convert_python-1.6.0.tar.gz", hash = "sha256:f7539c5558026d41d870df3ea92546ef87956c7b62ca99426906e941115bfd41"},
+    {file = "vl_convert_python-1.6.1-cp37-abi3-macosx_10_12_x86_64.whl", hash = "sha256:b531ef9b674530e8aac91682d4db1ae66b616fddfd68f482ea9ceae03dec9e78"},
+    {file = "vl_convert_python-1.6.1-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:cf0ede6afa4cdfc39d0649beeedad9b93790d8bbcceab125c0d45b5a6b6e77f3"},
+    {file = "vl_convert_python-1.6.1-cp37-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:28532e54d76a99eedcaec39b98b0b87f09ad24b23a2e129438cfbd27fd0ec001"},
+    {file = "vl_convert_python-1.6.1-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:12d8adb1e243f1f73424506c05adb80b7e99a507c54ca1b8c52122c599d7baaa"},
+    {file = "vl_convert_python-1.6.1-cp37-abi3-win_amd64.whl", hash = "sha256:cafcafc03b2c85925f969f917727b213fb1b6bfb3809b05a673f26f85b0510d0"},
+    {file = "vl_convert_python-1.6.1.tar.gz", hash = "sha256:b70935dbf792118a42aae27b7465359cbc014e30e63ef6ba7a0f8974707d9c1c"},
 ]
 
 [[package]]
