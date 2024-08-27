@@ -11,8 +11,9 @@ maxdepth: 2
 ---
 overview
 questionnaire
-responses.ipynb
-demographics.ipynb
-chi2_test_map.ipynb
 icrc2023_diversity.ipynb
 ```
+
+% responses.ipynb
+% demographics.ipynb
+% chi2_test_map.ipynb
