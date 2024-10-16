@@ -1,3 +1,9 @@
+## Unreleased
+
+### Fix
+
+- **poetry.lock**: updated packages
+
 ## 0.6.0 (2024-09-21)
 
 ### Feat
