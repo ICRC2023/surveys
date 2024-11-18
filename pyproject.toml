@@ -21,7 +21,7 @@ streamlit = "^1.40.1"
 textblob = "^0.17.1"
 tqdm = "^4.67.0"
 scipy = "^1.11.1"
-deprecated = "^1.2.14"
+deprecated = "^1.2.15"
 hvplot = "^0.11.1"
 
 [tool.poetry.group.dev.dependencies]
