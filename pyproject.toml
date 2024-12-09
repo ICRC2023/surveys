@@ -15,7 +15,7 @@ altair = "^5.5.0"
 vl-convert-python = "^1.7.0"
 typer = {version = "^0.14.0", extras = ["all"]}
 loguru = "^0.7.3"
-pydantic = "^2.10.2"
+pydantic = "^2.10.3"
 geopandas = "^1.0.1"
 streamlit = "^1.40.2"
 textblob = "^0.17.1"
