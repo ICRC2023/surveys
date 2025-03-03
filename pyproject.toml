@@ -13,7 +13,7 @@ python = "~3.11"
 pandas = "^2.0.3"
 altair = "^5.5.0"
 vl-convert-python = "^1.7.0"
-typer = {version = "^0.15.1", extras = ["all"]}
+typer = {version = "^0.15.2", extras = ["all"]}
 loguru = "^0.7.3"
 pydantic = "^2.10.6"
 geopandas = "^1.0.1"
