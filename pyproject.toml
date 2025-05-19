@@ -17,7 +17,7 @@ typer = {version = "^0.15.4", extras = ["all"]}
 loguru = "^0.7.3"
 pydantic = "^2.11.4"
 geopandas = "^1.0.1"
-streamlit = "^1.45.0"
+streamlit = "^1.45.1"
 textblob = "^0.19.0"
 tqdm = "^4.67.1"
 scipy = "^1.15.3"
