@@ -25,7 +25,7 @@ deprecated = "^1.2.18"
 hvplot = "^0.11.2"
 
 [tool.poetry.group.dev.dependencies]
-commitizen = "^4.8.2"
+commitizen = "^4.8.3"
 pytest = "^8.4.0"
 ipykernel = "^6.29.4"
 
