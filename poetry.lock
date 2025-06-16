@@ -935,14 +935,14 @@ tests = ["pytest", "pytest-asyncio", "pytest-rerunfailures"]
 
 [[package]]
 name = "hvplot"
-version = "0.11.2"
+version = "0.11.3"
 description = "A high-level plotting API for the PyData ecosystem built on HoloViews."
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "hvplot-0.11.2-py3-none-any.whl", hash = "sha256:9d576a0c2df0f1cf5041545f2a2eddcf962510162876991cae4d1779fad74556"},
-    {file = "hvplot-0.11.2.tar.gz", hash = "sha256:b7ad1f2f1c705e47e26b22c89c11711a84f7774faaabab756b45e8d1e00a6010"},
+    {file = "hvplot-0.11.3-py3-none-any.whl", hash = "sha256:5fa236a737ef3ca83870bf1b481218855834f4fad56ed0cb041ce5f2792cc7a3"},
+    {file = "hvplot-0.11.3.tar.gz", hash = "sha256:ce82dea296af6146b9a51aa5ed1f772e5415a07c6c33a4eae0f00bbe7ec880ca"},
 ]
 
 [package.dependencies]
@@ -957,8 +957,8 @@ param = ">=1.12.0,<3.0"
 
 [package.extras]
 dev-extras = ["setuptools_scm (>=6)"]
-doc = ["hvplot[examples]", "nbsite (>=0.8.6)", "sphinxext-rediraffe"]
-examples = ["bokeh_sampledata ; python_version >= \"3.10\"", "dask[dataframe] (>=2021.3.0)", "datashader (>=0.6.5)", "duckdb", "fugue[sql]", "geodatasets (>=2023.12.0)", "hvplot[fugue-sql]", "ibis-framework[duckdb]", "intake (>=0.6.5,<2.0.0)", "intake-parquet (>=0.2.3)", "intake-xarray (>=0.5.0,<2)", "ipywidgets", "matplotlib", "networkx (>=2.6.3)", "notebook (>=5.4)", "numba (>=0.51.0)", "pillow (>=8.2.0)", "plotly", "polars", "pooch (>=1.6.0)", "s3fs (>=2022.1.0)", "scikit-image (>=0.17.2)", "scipy (>=1.5.3)", "selenium (>=3.141.0)", "streamz (>=0.3.0)", "xarray (>=0.18.2)", "xyzservices (>=2022.9.0)"]
+doc = ["hvplot[examples]", "nbsite (>=0.9.0a2)", "numpydoc", "sphinxcontrib-mermaid", "sphinxext-rediraffe"]
+examples = ["bokeh_sampledata ; python_version >= \"3.10\"", "dask[dataframe] (>=2021.3.0,<2025.1.0)", "datashader (>=0.6.5)", "duckdb", "fugue[sql]", "geodatasets (>=2023.12.0)", "hvplot[fugue-sql]", "hvsampledata (>=0.1.1)", "ibis-framework[duckdb]", "intake (>=0.6.5,<2.0.0)", "intake-parquet (>=0.2.3)", "intake-xarray (>=0.5.0,<2)", "ipywidgets", "matplotlib", "networkx (>=2.6.3)", "notebook (>=5.4)", "numba (>=0.51.0)", "pillow (>=8.2.0)", "plotly", "polars", "pooch (>=1.6.0)", "s3fs (>=2022.1.0)", "scikit-image (>=0.17.2)", "scipy (>=1.5.3)", "selenium (>=3.141.0)", "streamz (>=0.3.0)", "xarray (>=0.18.2)", "xyzservices (>=2022.9.0)"]
 examples-tests = ["hvplot[examples]", "hvplot[tests-nb]"]
 fugue-sql = ["fugue-sql-antlr (>=0.2.0)", "jinja2", "qpd (>=0.4.4)", "sqlglot"]
 geo = ["cartopy", "fiona", "geopandas", "geoviews (>=1.9.0)", "pyproj", "rasterio", "rioxarray", "spatialpandas (>=0.4.3)"]
@@ -966,7 +966,7 @@ graphviz = ["pygraphviz"]
 hvdev = ["colorcet (>=0.0.1a1)", "datashader (>=0.0.1a1)", "holoviews (>=0.0.1a1)", "panel (>=0.0.1a1)", "param (>=0.0.1a1)", "pyviz_comms (>=0.0.1a1)"]
 hvdev-geo = ["geoviews (>=0.0.1a1)"]
 tests = ["dask", "duckdb", "fugue[sql]", "hvplot[fugue-sql]", "hvplot[tests-core]", "ibis-framework[duckdb]", "polars", "spatialpandas"]
-tests-core = ["bokeh_sampledata ; python_version >= \"3.10\"", "dask[dataframe]", "ipywidgets", "matplotlib", "parameterized", "plotly", "pooch", "pre-commit", "psutil", "pytest", "pytest-cov", "ruff", "scipy", "xarray"]
+tests-core = ["bokeh_sampledata ; python_version >= \"3.10\"", "cftime", "dask[dataframe] (<2025.1.0)", "ipywidgets", "matplotlib", "numpydoc", "parameterized", "plotly", "pooch", "pre-commit", "psutil", "pytest", "pytest-cov", "ruff", "scipy", "xarray"]
 tests-nb = ["nbval", "pytest-xdist"]
 
 [[package]]
@@ -4268,4 +4268,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.11"
-content-hash = "928e4f2854021a25ba017eedc02c64a5dbc2440968cf84c723f54b68911ed9b6"
+content-hash = "272cd3df3f5ab65ca23db4f95fee7cfbbd70406cedcb169b6f2eb014c5aff086"

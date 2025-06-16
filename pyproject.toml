@@ -22,7 +22,7 @@ textblob = "^0.19.0"
 tqdm = "^4.67.1"
 scipy = "^1.15.3"
 deprecated = "^1.2.18"
-hvplot = "^0.11.2"
+hvplot = "^0.11.3"
 
 [tool.poetry.group.dev.dependencies]
 commitizen = "^4.8.3"
