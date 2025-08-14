@@ -10,14 +10,13 @@ This is an ICRC2023 Diversity Session survey analysis project called "Titanite" 
 
 ### Setup Commands
 ```bash
-poetry shell
 poetry install
-ti --help  # Verify installation
+poetry run ti --help  # Verify installation
 ```
 
 ### Testing
 ```bash
-pytest
+poetry run pytest
 ```
 
 ### Documentation Generation
@@ -118,3 +117,140 @@ Streamlit dashboard available in `sandbox/app.py` for interactive exploration.
 - **Processed data**: `data/test_data/`
 - **Documentation**: `docs/` (Sphinx + MyST-NB for Jupyter integration)
 - **Analysis notebooks**: `notebooks/`
+
+## Development Workflow
+
+### Branch Development with Git Worktree
+
+This project uses `git worktree` for isolated branch development to avoid conflicts and enable parallel development:
+
+```bash
+# Check available branches
+git branch -a
+
+# Create worktree for feature branch
+git worktree add ../worktrees/<directory_name> <branch-name>
+git worktree list
+
+# Setup and develop in feature branch
+cd ../worktrees/<directory_name>
+poetry install
+# ... develop features ...
+
+# TODO: add Taskfile.yml
+# Run tests and format code
+task pytest
+task format
+task pre-commit
+
+# Finish development
+git add <files>
+git commit
+git merge origin/main
+git push
+
+# Clean up after merge
+cd ../../surveys
+git fetch --prune
+git pull
+git branch -d <branch_name>
+git worktree remove ../worktrees/<directory_name>
+```
+
+### GitHub Issue and PR Integration
+
+This project follows GitHub's issue-driven development workflow:
+
+```bash
+# List open issues
+gh issue list
+
+# View specific issue details
+gh issue view <issue-number>
+
+# Create branch for issue (use descriptive name based on issue)
+git worktree add ../worktrees/<issue-branch-name> -b <issue-branch-name>
+
+# Work on the issue in isolated environment
+cd ../worktrees/<issue-branch-name>
+poetry install
+# ... implement features/fixes ...
+
+# TODO: add Taskfile.yml
+# Run development workflow
+task pytest
+task format
+task pre-commit
+
+# Create pull request when ready
+gh pr create --title "fix: <issue-description>" --body "Closes #<issue-number>"
+
+# After PR review and approval
+# Clean up worktree (see worktree workflow above)
+```
+
+**Development Guidelines:**
+- Always reference issue numbers in commit messages and PR descriptions
+- Use `Closes #<issue-number>` in PR descriptions to auto-close issues
+- Follow the existing issue labels and prioritization
+- Create PRs for all changes, even small fixes
+- Run all tests and pre-commit hooks before creating PR
+
+### Version Management
+
+The project uses semantic versioning with commitizen:
+```bash
+# Bump version and update changelog
+cz bump --changelog --check-consistency
+
+# Push version tags
+git push origin --tags
+
+# Version files are automatically updated:
+# - pyproject.toml:version
+# - titanite/__init__.py:__version__
+```
+
+## Directory Structure Notes
+
+- `titanite/`: Main Python package source code
+- `tests/`: Test suite with pytest configuration
+- `data/`: Survey data
+- `docs/`: Sphinx documentation site
+- `notebooks/`: Jupyter Notebooks
+- `sandbox/`: Example configuration files
+- `typst/`: Create PDF document with Typst
+- `poetry.lock`: Lock file for reproducible dependency installation
+
+## Common Gotchas
+
+- Always use `poetry run` for command execution to ensure correct Python environment
+- Avoid using `poetry shell` (deprecated) - use `poetry run` instead
+- Future migration to `uv` planned - maintain compatibility during transition
+
+## DO
+
+- Always respond in **Japanese**, except for code and docstrings.
+- Use **English** for all code, comments, and docstrings.
+- Output **one function / class at a time**, with explanation.
+- Follow **Python (PEP8)** naming conventions (`snake_case` for variables/functions, `PascalCase` for classes)
+- Use only predefined modules/functions unless approved.
+- Insert `TODO` markers in docstrings when leaving suggestions for improvement.
+- Ask when unsure -- never assume functionality or structure.
+
+## DONT
+
+- Do not invent new functions, classes, arguments, or file structures.
+- Do not use Japanese in code, comments, docstrings.
+- Do not output multiple features or components in one response.
+- Do not omit or remove `TODO` or existing discussion points.
+- Do not write pseudocode unless explicitly asked.
+- Do not change user-established naming, file organization, or conventions.
+
+## Commit Rules
+
+- Use **Conventional Commits** for all Git commit messages.
+- Valid types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`.
+- Use scope where helpful (e.g., `fix(config): handle missing TOML sections`)
+- For breaking changes, add `!` after type/scope
+- **Do not** include links or email addresses in commit messages (attribution text without links is acceptable)
