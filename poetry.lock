@@ -935,14 +935,14 @@ tests = ["pytest", "pytest-asyncio", "pytest-rerunfailures"]
 
 [[package]]
 name = "hvplot"
-version = "0.12.0"
+version = "0.12.1"
 description = "A high-level plotting API for the PyData ecosystem built on HoloViews."
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "hvplot-0.12.0-py3-none-any.whl", hash = "sha256:479b16d8cce87921d83ef5df747d4ae87c180519f5615fbffc50cdaf2d2cdd2b"},
-    {file = "hvplot-0.12.0.tar.gz", hash = "sha256:85c9d324d27fd227de54fdde5a25faa2aada92b8956b56c4f241b12f46bfe7f7"},
+    {file = "hvplot-0.12.1-py3-none-any.whl", hash = "sha256:034b5061cba597877f85dd427523364f11677d9d04c5e845c17e6d733a7bfaed"},
+    {file = "hvplot-0.12.1.tar.gz", hash = "sha256:66f4c9dbb7e5580c09ade55b14864ff6fcc96ed9ce11f7b67e9eb7072e2ed875"},
 ]
 
 [package.dependencies]
@@ -957,7 +957,7 @@ param = ">=1.12.0,<3.0"
 
 [package.extras]
 dev-extras = ["setuptools-scm (>=6)"]
-doc = ["bokeh-sampledata ; python_version >= \"3.10\"", "dask[dataframe] (>=2021.3.0,<2025.1.0)", "datashader (>=0.6.5)", "duckdb", "fugue-sql-antlr (>=0.2.0)", "fugue[sql]", "geodatasets (>=2023.12.0)", "hvsampledata (>=0.1.4a2)", "ibis-framework[duckdb]", "intake (>=0.6.5,<2.0.0)", "intake-parquet (>=0.2.3)", "intake-xarray (>=0.5.0,<2)", "ipywidgets", "jinja2", "matplotlib", "nbsite (>=0.9.0a10)", "networkx (>=2.6.3)", "notebook (>=5.4)", "numba (>=0.51.0)", "numpydoc", "pillow (>=8.2.0)", "plotly", "polars", "pooch (>=1.6.0)", "qpd (>=0.4.4)", "s3fs (>=2022.1.0)", "scikit-image (>=0.17.2)", "scikit-learn (>=1.4.0)", "scipy (>=1.5.3)", "selenium (>=3.141.0)", "sphinxcontrib-mermaid", "sphinxext-rediraffe", "sqlglot", "streamz (>=0.3.0)", "xarray (>=0.18.2)", "xyzservices (>=2022.9.0)"]
+doc = ["bokeh-sampledata ; python_version >= \"3.10\"", "dask[dataframe] (>=2021.3.0,<2025.1.0)", "datashader (>=0.6.5)", "duckdb", "fugue-sql-antlr (>=0.2.0)", "fugue[sql]", "geodatasets (>=2023.12.0)", "hvsampledata (>=0.1.4a2)", "ibis-framework[duckdb]", "intake (>=0.6.5,<2.0.0)", "intake-parquet (>=0.2.3)", "intake-xarray (>=0.5.0,<2)", "ipywidgets", "jinja2", "matplotlib", "nbsite (>=0.9.0a12)", "networkx (>=2.6.3)", "notebook (>=5.4)", "numba (>=0.51.0)", "numpydoc", "pillow (>=8.2.0)", "plotly", "polars", "pooch (>=1.6.0)", "qpd (>=0.4.4)", "s3fs (>=2022.1.0)", "scikit-image (>=0.17.2)", "scikit-learn (>=1.4.0)", "scipy (>=1.5.3)", "selenium (>=3.141.0)", "sphinxcontrib-mermaid", "sphinxext-rediraffe", "sqlglot", "streamz (>=0.3.0)", "xarray (>=0.18.2)", "xyzservices (>=2022.9.0)"]
 examples = ["bokeh-sampledata ; python_version >= \"3.10\"", "dask[dataframe] (>=2021.3.0,<2025.1.0)", "datashader (>=0.6.5)", "duckdb", "fugue-sql-antlr (>=0.2.0)", "fugue[sql]", "geodatasets (>=2023.12.0)", "hvsampledata (>=0.1.4a2)", "ibis-framework[duckdb]", "intake (>=0.6.5,<2.0.0)", "intake-parquet (>=0.2.3)", "intake-xarray (>=0.5.0,<2)", "ipywidgets", "jinja2", "matplotlib", "networkx (>=2.6.3)", "notebook (>=5.4)", "numba (>=0.51.0)", "pillow (>=8.2.0)", "plotly", "polars", "pooch (>=1.6.0)", "qpd (>=0.4.4)", "s3fs (>=2022.1.0)", "scikit-image (>=0.17.2)", "scikit-learn (>=1.4.0)", "scipy (>=1.5.3)", "selenium (>=3.141.0)", "sqlglot", "streamz (>=0.3.0)", "xarray (>=0.18.2)", "xyzservices (>=2022.9.0)"]
 examples-tests = ["bokeh-sampledata ; python_version >= \"3.10\"", "dask[dataframe] (>=2021.3.0,<2025.1.0)", "datashader (>=0.6.5)", "duckdb", "fugue-sql-antlr (>=0.2.0)", "fugue[sql]", "geodatasets (>=2023.12.0)", "hvsampledata (>=0.1.4a2)", "ibis-framework[duckdb]", "intake (>=0.6.5,<2.0.0)", "intake-parquet (>=0.2.3)", "intake-xarray (>=0.5.0,<2)", "ipywidgets", "jinja2", "matplotlib", "nbval", "networkx (>=2.6.3)", "notebook (>=5.4)", "numba (>=0.51.0)", "pillow (>=8.2.0)", "plotly", "polars", "pooch (>=1.6.0)", "pytest-xdist", "qpd (>=0.4.4)", "s3fs (>=2022.1.0)", "scikit-image (>=0.17.2)", "scikit-learn (>=1.4.0)", "scipy (>=1.5.3)", "selenium (>=3.141.0)", "sqlglot", "streamz (>=0.3.0)", "xarray (>=0.18.2)", "xyzservices (>=2022.9.0)"]
 fugue-sql = ["fugue-sql-antlr (>=0.2.0)", "jinja2", "qpd (>=0.4.4)", "sqlglot"]
@@ -4282,4 +4282,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.11"
-content-hash = "50e0977308dafa52d96ae031f9e855950a4cb225c9f313c7224c250f50dd10ee"
+content-hash = "b7128981d2d4adc14bfaa0b3679c17e8853f60edf150587d2ec322444b2ab9c4"
