@@ -532,14 +532,14 @@ test = ["pytest"]
 
 [[package]]
 name = "commitizen"
-version = "4.8.4"
+version = "4.9.1"
 description = "Python commitizen client tool"
 optional = false
 python-versions = "<4.0,>=3.9"
 groups = ["dev"]
 files = [
-    {file = "commitizen-4.8.4-py3-none-any.whl", hash = "sha256:8b9fe86a9ec4575765c1637882e8523a91a80bc58d3c1a6b5a62378053b2a8cf"},
-    {file = "commitizen-4.8.4.tar.gz", hash = "sha256:082dd895697ed548a8388e9e9ec69378089860402fbb02b464acd0a306130fca"},
+    {file = "commitizen-4.9.1-py3-none-any.whl", hash = "sha256:4241b2ecae97b8109af8e587c36bc3b805a09b9a311084d159098e12d6ead497"},
+    {file = "commitizen-4.9.1.tar.gz", hash = "sha256:b076b24657718f7a35b1068f2083bd39b4065d250164a1398d1dac235c51753b"},
 ]
 
 [package.dependencies]
@@ -547,6 +547,7 @@ argcomplete = ">=1.12.1,<3.7"
 charset-normalizer = ">=2.1.0,<4"
 colorama = ">=0.4.1,<1.0"
 decli = ">=0.6.0,<1.0"
+deprecated = ">=1.2.13,<2"
 jinja2 = ">=2.10.3"
 packaging = ">=19"
 prompt_toolkit = "!=3.0.52"
@@ -695,7 +696,7 @@ version = "1.2.18"
 description = "Python @deprecated decorator to deprecate old python classes, functions or methods."
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.7"
-groups = ["main"]
+groups = ["main", "dev"]
 files = [
     {file = "Deprecated-1.2.18-py2.py3-none-any.whl", hash = "sha256:bd5011788200372a32418f888e326a09ff80d0214bd961147cfed01b5c018eec"},
     {file = "deprecated-1.2.18.tar.gz", hash = "sha256:422b6f6d859da6f2ef57857761bfb392480502a64c3028ca9bbe86085d72115d"},
@@ -4171,7 +4172,7 @@ version = "1.17.2"
 description = "Module for decorators, wrappers and monkey patching."
 optional = false
 python-versions = ">=3.8"
-groups = ["main"]
+groups = ["main", "dev"]
 files = [
     {file = "wrapt-1.17.2-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:3d57c572081fed831ad2d26fd430d565b76aa277ed1d30ff4d40670b1c0dd984"},
     {file = "wrapt-1.17.2-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:b5e251054542ae57ac7f3fba5d10bfff615b6c2fb09abeb37d2f1463f841ae22"},
@@ -4289,4 +4290,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.11"
-content-hash = "2a476aedcbc3d6d4a8ff430aa768a09ec789124d7bf53cd161bb107c5efa72d9"
+content-hash = "7df4e1ab2c0a52bd7d03b7eac940b08c8b083b2646a110fc2558d5fcb2f72150"
