@@ -3941,18 +3941,18 @@ standard = ["colorama (>=0.4) ; sys_platform == \"win32\"", "httptools (>=0.6.3)
 
 [[package]]
 name = "vl-convert-python"
-version = "1.8.0"
+version = "1.9.0"
 description = "Convert Vega-Lite chart specifications to SVG, PNG, or Vega"
 optional = false
 python-versions = ">=3.7"
 groups = ["main"]
 files = [
-    {file = "vl_convert_python-1.8.0-cp37-abi3-macosx_10_12_x86_64.whl", hash = "sha256:f663317fc280b07553534195c1e31c4ca882d9c8601430211b078196db5ed227"},
-    {file = "vl_convert_python-1.8.0-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:81f6380019ceadf070a79f85aa624475a6568093f70de0e151a32e91ecbcaacf"},
-    {file = "vl_convert_python-1.8.0-cp37-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:3388e3913287867b3553c10f81ca2d85268216a5a75e7c71b9c1b59887c1977e"},
-    {file = "vl_convert_python-1.8.0-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:b51264998e8fcc43dbce801484a950cfe6513cdc4c46b20604ef50989855a617"},
-    {file = "vl_convert_python-1.8.0-cp37-abi3-win_amd64.whl", hash = "sha256:9f1146b791ed27916f54c45e1d66af53a40eb26e5aaea1892f33eb9a935039ab"},
-    {file = "vl_convert_python-1.8.0.tar.gz", hash = "sha256:ceca613ca5551c55270a15ca48d0f3a7de1e949e0f127310e9b0f6570ea3fbbb"},
+    {file = "vl_convert_python-1.9.0-cp37-abi3-macosx_10_12_x86_64.whl", hash = "sha256:49c145a6ffb4adced147f91369327f9cd9d0357d11f00dd8882bb2524eab2b3c"},
+    {file = "vl_convert_python-1.9.0-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:9a5ca7c88e89ff6338de43cd039b9f0f809b18c661a7e8134ba03a48c04e1c03"},
+    {file = "vl_convert_python-1.9.0-cp37-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:f35bbdc26c4495447c547d10018d967d1eeb20772d5e285a92502277da92e0ac"},
+    {file = "vl_convert_python-1.9.0-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:849e6773a7e05d58ab215386b1065e7713f4846b9ac6b0d743bb3e1b20337231"},
+    {file = "vl_convert_python-1.9.0-cp37-abi3-win_amd64.whl", hash = "sha256:42ece4c224ac5331f7e65041b1470688117022f48643976fe1988545792c70c6"},
+    {file = "vl_convert_python-1.9.0.tar.gz", hash = "sha256:bbf4eb9ac9aa9f32f6fdb689391c914dff311846365658ac70bc5b30f30d57cd"},
 ]
 
 [[package]]
@@ -4326,4 +4326,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.11"
-content-hash = "d6aa5b55ed852e9c298ce36d5e15156a99997871e342b982b4708c0c29fd5c42"
+content-hash = "b530fc11aa642763f8342f8a94ec5d47aad0108e78cb3c38f2271cf1bd31e8cb"
