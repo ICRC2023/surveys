@@ -236,25 +236,26 @@ files = [
 
 [[package]]
 name = "bokeh"
-version = "3.6.3"
+version = "3.8.2"
 description = "Interactive plots and applications in the browser from Python"
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "bokeh-3.6.3-py3-none-any.whl", hash = "sha256:1c219e2afe1405e6ada212071ac3bee91c95acfd1aa6d620eb6f61a751407747"},
-    {file = "bokeh-3.6.3.tar.gz", hash = "sha256:9b81d6a9ea62e75a04a1a9d9f931942016890beec9ab5d129a2a4432cf595c0a"},
+    {file = "bokeh-3.8.2-py3-none-any.whl", hash = "sha256:5e2c0d84f75acb25d60efb9e4d2f434a791c4639b47d685534194c4e07bd0111"},
+    {file = "bokeh-3.8.2.tar.gz", hash = "sha256:8e7dcacc21d53905581b54328ad2705954f72f2997f99fc332c1de8da53aa3cc"},
 ]
 
 [package.dependencies]
 contourpy = ">=1.2"
 Jinja2 = ">=2.9"
+narwhals = ">=1.13"
 numpy = ">=1.16"
 packaging = ">=16.8"
 pandas = ">=1.2"
 pillow = ">=7.1.0"
 PyYAML = ">=3.10"
-tornado = ">=6.2"
+tornado = {version = ">=6.2", markers = "sys_platform != \"emscripten\""}
 xyzservices = ">=2021.09.1"
 
 [[package]]
@@ -1811,19 +1812,19 @@ xml = ["lxml (>=4.9.2)"]
 
 [[package]]
 name = "panel"
-version = "1.6.1"
+version = "1.8.2"
 description = "The powerful data exploration & web app framework for Python."
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "panel-1.6.1-py3-none-any.whl", hash = "sha256:3ddbfed586c72ccdd83ab6bdf8af56e464b9f50f72afadddbe4eeaec409dc61d"},
-    {file = "panel-1.6.1.tar.gz", hash = "sha256:75f95701f03f6b64d00d69a5369c3f521126e697fb855e717816c4a02ddbfd57"},
+    {file = "panel-1.8.2-py3-none-any.whl", hash = "sha256:e9cb26baca4263bf32432328fa6a37b2b09922af99a1a009abe1f12287f39836"},
+    {file = "panel-1.8.2.tar.gz", hash = "sha256:30a522739b8f93512b1d2a739c26f8bd9674b70b73850ad39b942685703f6a62"},
 ]
 
 [package.dependencies]
 bleach = "*"
-bokeh = ">=3.5.0,<3.7.0"
+bokeh = ">=3.7.0,<3.9.0"
 linkify-it-py = "*"
 markdown = "*"
 markdown-it-py = "*"
@@ -1838,10 +1839,10 @@ typing-extensions = "*"
 
 [package.extras]
 dev = ["watchfiles"]
-fastapi = ["bokeh-fastapi (>=0.1.1)", "fastapi[standard]"]
+fastapi = ["bokeh-fastapi (>=0.1.2,<0.2.0)", "fastapi[standard]"]
 mypy = ["mypy", "pandas-stubs", "types-bleach", "types-croniter", "types-markdown", "types-psutil", "types-requests", "types-tqdm", "typing-extensions"]
 recommended = ["holoviews (>=1.18.0)", "jupyterlab", "matplotlib", "pillow", "plotly"]
-tests = ["psutil", "pytest", "pytest-asyncio", "pytest-rerunfailures", "pytest-xdist"]
+tests = ["psutil", "pytest", "pytest-asyncio", "pytest-rerunfailures (<16.0)", "pytest-xdist"]
 
 [[package]]
 name = "param"
