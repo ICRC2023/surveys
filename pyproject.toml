@@ -27,7 +27,7 @@ hvplot = "^0.12.2"
 [tool.poetry.group.dev.dependencies]
 commitizen = "^4.13.6"
 pytest = "^9.0.2"
-ipykernel = "^7.1.0"
+ipykernel = "^7.2.0"
 
 
 [tool.poetry.group.docs.dependencies]
