@@ -9,8 +9,8 @@ Main exports:
 - SecureDataHandler: Privacy-safe data operations
 """
 
-from .schema import SurveySchema
 from .processor import SurveyProcessor
+from .schema import SurveySchema
 from .security import SecureDataHandler
 
 __all__ = ["SurveySchema", "SurveyProcessor", "SecureDataHandler"]
