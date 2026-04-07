@@ -14,26 +14,37 @@ poetry install
 poetry run ti --help  # Verify installation
 ```
 
-### Testing
+### Common Tasks (Taskfile.yml)
+
+The project uses Taskfile for task automation. Key tasks:
 ```bash
-poetry run pytest
+task env:setup          # Set up development environment
+task test              # Run pytest
+task format            # Format code with ruff
+task lint              # Lint code with ruff
+task pre-commit        # Run pre-commit hooks
+task docs:build        # Build documentation
+task docs:serve        # Serve docs locally with auto-reload
+task deps:check        # Check for outdated packages
+task deps:update       # Update all dependencies
+task cli:help          # Show CLI help
 ```
 
 ### Documentation Generation
 ```bash
-cd docs
-make html
-open _build/html/index.html
+task docs:build        # Build Sphinx docs
+task docs:serve        # Serve at http://localhost:8000 with auto-reload
 ```
 
 ### Package Updates
 Use `update-packages` branch only (GitHub Actions restriction):
 ```bash
-git branch update-packages
-git checkout update-packages
-poetry show --outdated
-poetry add package@latest
-# Use conventional commit format: build(pyproject.toml): updated package: x.y.z -> X.Y.Z
+git checkout -b update-packages
+task deps:check        # Check outdated packages
+task deps:update       # Update all dependencies
+task test              # Verify tests pass
+git add poetry.lock
+git commit -m "build(poetry.lock): update dependencies"
 ```
 
 ## Architecture
@@ -41,9 +52,22 @@ poetry add package@latest
 ### Core Components
 
 **CLI Interface (`titanite.cli`)**
-- Main entry point via `ti` command
+- Main entry point via `ti` command (use `poetry run ti`)
 - Commands operate from `sandbox/` directory with `config.toml`
-- All commands support `--read_from`, `--write-dir`, `--load_from` parameters
+- Most commands support `--read_from`, `--write-dir`, `--load_from` parameters
+
+**Available Commands:**
+
+- `ti config` - Show configuration (supports `--questions`, `--choices` flags)
+- `ti prepare` - Preprocess raw CSV data and generate prepared_data.csv
+- `ti comments` - Extract and analyze free-text responses (q15-q22)
+- `ti response` - Create response timeline heatmap
+- `ti hbar` - Create histogram for a single variable (WIP)
+- `ti hbars` - Create histograms for all variables
+- `ti crosstab` - Create single crosstab (WIP)
+- `ti crosstabs` - Create crosstabs for all variable pairs
+- `ti chi2` - Run chi-square tests for all variable pairs
+- `ti p005` - Extract significant correlations (p < 0.05) for specific column with `--save` flag
 
 **Data Pipeline**
 1. **Raw Data**: CSV files from Google Forms in `data/raw_data/`
@@ -134,22 +158,20 @@ git worktree list
 
 # Setup and develop in feature branch
 cd ../worktrees/<directory_name>
-poetry install
+task env:setup         # Set up environment
 # ... develop features ...
 
-# TODO: add Taskfile.yml
 # Run tests and format code
-task pytest
-task format
-task pre-commit
+task test              # Run tests
+task format            # Format with ruff
+task pre-commit        # Run pre-commit hooks
 
 # Finish development
 git add <files>
-git commit
-git merge origin/main
-git push
+git commit -m "type(scope): message"
+git push origin <branch-name>
 
-# Clean up after merge
+# Create PR and after merge, clean up:
 cd ../../surveys
 git fetch --prune
 git pull
@@ -173,20 +195,19 @@ git worktree add ../worktrees/<issue-branch-name> -b <issue-branch-name>
 
 # Work on the issue in isolated environment
 cd ../worktrees/<issue-branch-name>
-poetry install
+task env:setup         # Set up environment
 # ... implement features/fixes ...
 
-# TODO: add Taskfile.yml
 # Run development workflow
-task pytest
-task format
-task pre-commit
+task test              # Run tests
+task format            # Format with ruff
+task pre-commit        # Run pre-commit hooks
+task lint              # Lint with ruff
 
 # Create pull request when ready
 gh pr create --title "fix: <issue-description>" --body "Closes #<issue-number>"
 
-# After PR review and approval
-# Clean up worktree (see worktree workflow above)
+# After PR review and approval, clean up worktree (see worktree workflow above)
 ```
 
 **Development Guidelines:**
