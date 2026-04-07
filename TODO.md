@@ -2,114 +2,65 @@
 
 このドキュメントは、プロジェクトの品質向上と保守性改善のための課題をまとめています。
 
-## 🚨 重要度：高（即座に対応が必要）
+## ✅ 完了項目
 
-### 1. テストの修正
-- [x] **テストパスの修正** - 全15個のテストが相対パス問題で失敗
-  - ファイル: `tests/test_config.py`, `tests/test_data.py`
-  - 問題: `../sandbox/config.toml` パスが見つからない
-  - 対応: `Path(__file__).parent.parent` を使った絶対パスに修正
-  - 影響: CI/CDパイプラインでのテスト実行が不可能
+以下の項目はすでに実装されているため、参考までに記載します。
 
-### 2. 依存関係の大幅更新
-- [ ] **セキュリティパッケージの更新**
-  - `certifi`: 2025.1.31 → 2025.8.3
-  - `pillow`: 11.1.0 → 11.3.0
-  - `numpy`: 2.2.4 → 2.3.2
-  - その他50個以上のパッケージで更新が利用可能
-- [ ] **更新手順の実行**
-  ```bash
-  git branch update-packages
-  git checkout update-packages
-  poetry show --outdated
-  poetry add package@latest
-  ```
+- ✅ **テストパスの修正** - `Path(__file__).parent.parent`を使った絶対パスに修正済み
+- ✅ **テスト自動実行の修正** - PRテストCIが正常に動作
+- ✅ **コードフォーマッターの設定** - ruff（0.15.9）が導入済み
+- ✅ **依存関係の大幅更新** - poetry.lockが最新版に更新済み（2026-04-07）
+- ✅ **Taskfile.ymlの追加** - タスク自動化が実装済み
+- ✅ **CLAUDE.mdの整理** - 開発ガイドが最新化済み
 
-## 📈 重要度：中（品質向上のため推奨）
+## 📈 重要度：高（推奨）
 
-### 3. 開発ツールの追加
-- [ ] **コードカバレッジツールの導入**
-  ```toml
-  [tool.poetry.group.dev.dependencies]
-  pytest-cov = "^5.0.0"
-  ```
-- [ ] **セキュリティチェックツールの追加**
-  ```toml
-  safety = "^3.0.0"
-  ```
-- [x] **コードフォーマッターの設定**
-  ```toml
-  ruff = "^0.12.4"
-  ```
-  - `pyproject.toml` に `ruff` をdev依存関係に追加済み
-  - `[tool.ruff]` と `[tool.ruff.lint]` セクションを追加済み
-- [ ] **型チェックツールの導入**
-  ```toml
-  mypy = "^1.11.0"
-  ```
-
-### 4. コード品質の改善
-- [ ] **メイン実行部の修正**
-  - ファイル: `titanite/cli.py:435`
-  - 問題: `if __name__ == "__main__":` セクションのベストプラクティス違反
-  - 対応: 適切な関数分離とエントリーポイントの設定
-
-- [ ] **非推奨デコレータの整理**
-  - ファイル: `titanite/config.py`
-  - 問題: 6箇所で `@deprecated` デコレータ使用
-  - 対応: 非推奨機能の完全削除または移行パスの明確化
-
-- [ ] **長い関数の分割**
-  - ファイル: `titanite/cli.py`
-  - 対象: 200行を超える関数（`crosstabs`, `chi2`, `p005`など）
-  - 対応: 単一責任原則に基づく関数分割
-
-### 5. 型ヒントの追加
-- [ ] **全モジュールでの型ヒント追加**
+### 1. 型ヒントの追加
+- **優先度**: 高
+- **対象**: 全モジュール
+- **詳細**:
   - `titanite/cli.py`: 関数の引数・戻り値の型ヒント
   - `titanite/config.py`: クラスメソッドの型ヒント
   - `titanite/core.py`: データ処理関数の型ヒント
   - `titanite/preprocess.py`: 前処理関数の型ヒント
+  - `titanite/analysis.py`: 統計分析関数の型ヒント
+- **メリット**: IDE support向上、バグ検出、ドキュメント自動生成
 
-## 🔧 重要度：低（長期的な改善）
+### 2. 開発ツールの追加
 
-### 6. ドキュメントの改善
-- [ ] **重複ドキュメントの統合**
-  - 問題: `README.md` と `CLAUDE.md` の内容重複
-  - 対応: 役割分担の明確化（README: プロジェクト概要、CLAUDE: 開発ガイド）
+- **pytest-cov**：テストカバレッジレポート
+  ```bash
+  poetry add --group dev pytest-cov
+  task test:coverage
+  ```
+- **mypy**：静的型チェック
+  ```bash
+  poetry add --group dev mypy
+  poetry run mypy titanite/
+  ```
+- **safety**：セキュリティ脆弱性チェック
+  ```bash
+  poetry add --group dev safety
+  poetry run safety check
+  ```
 
-- [ ] **開発環境セットアップ手順の統一**
-  - 現状: 複数箇所に散在する手順
-  - 対応: 一元化された開発ガイドの作成
+### 3. コード品質の改善
 
-- [ ] **API ドキュメントの自動生成**
-  - ツール: Sphinx + autodoc2（既に設定済み）
-  - 対応: 型ヒント追加後のドキュメント品質向上
+- [ ] **非推奨デコレータの整理**
+  - ファイル：`titanite/config.py`
+  - 現状：6箇所で`@deprecated`デコレータ使用
+  - 対応：非推奨機能の完全削除または移行パスの明確化
 
-### 7. プロジェクト構造の最適化
-- [ ] **設定ファイル管理の改善**
-  - 現状: `sandbox/` ディレクトリに設定ファイル
-  - 提案: プロジェクトルートまたは `config/` ディレクトリへの移動
+- [ ] **長い関数の分割**
+  - ファイル：`titanite/cli.py`
+  - 対象：複雑な処理を持つ関数（`crosstabs`、`chi2`、`p005`など）
+  - 対応：単一責任原則に基づく関数分割とヘルパー関数の作成
 
-- [ ] **テストデータの整理**
-  - 現状: `data/test_data/` に大量のテストファイル
-  - 対応: 不要ファイルの削除とテストデータの最小化
+### 4. GitHub Actions / CI/CD改善
 
-- [ ] **未使用ファイルの整理**
-  - 対象: 古いJupyterノートブック、一時ファイル
-  - 方法: Git履歴を確認して安全に削除
-
-## 🔄 GitHub Actions / CI/CD改善
-
-### 8. 自動化の強化
-- [x] **テスト自動実行の修正**
-  - 現状: テストが失敗するためCIが機能しない
-  - 対応: テストパス修正後、`pr_test.yml` に `poetry run pytest` ステップを追加済み
-  - `poetry install --no-root` → `poetry install` に修正済み（パッケージ本体もインストール）
-
-- [ ] **品質チェックの追加**
+- [ ] **品質チェック自動化**
   ```yaml
-  # .github/workflows/quality.yml
+  # .github/workflows/quality.yml（新規作成）
   - name: Run Ruff
     run: poetry run ruff check .
   - name: Run MyPy
@@ -118,60 +69,90 @@
     run: poetry run safety check
   ```
 
-- [ ] **依存関係更新の自動化**
-  - Dependabot設定の見直し
-  - 自動テスト通過時の自動マージ設定
+## 📚 重要度：中（長期改善）
 
-## 📦 推奨パッケージ追加（優先度順）
+### 5. ドキュメントの改善
 
-```toml
-[tool.poetry.group.dev.dependencies]
-# 最優先
-pytest-cov = "^5.0.0"          # テストカバレッジ
-safety = "^3.0.0"              # セキュリティチェック
+- [ ] **APIドキュメントの充実**
+  - ツール：Sphinx + autodoc2（すでに設定済み）
+  - 対応：型ヒント追加後のドキュメント品質向上
+  - ターゲット：docs/apidocs/
 
-# 高優先度
-ruff = "^0.6.0"                # 高速リンター・フォーマッター
-mypy = "^1.11.0"               # 型チェック
+- [ ] **開発ガイドの統一**
+  - README.mdとCLAUDE.mdの役割分担が明確化済み
+  - 今後：CLAUDE.mdを拡充
 
-# 中優先度
-pre-commit = "^4.0.0"          # コミット前フック
-black = "^24.0.0"              # コードフォーマッター（ruffで代替可能）
+### 6. プロジェクト構造の最適化
 
-# 低優先度
-bandit = "^1.7.0"              # セキュリティ静的解析
-coverage = "^7.0.0"            # カバレッジレポート
-```
+- [ ] **テストデータの整理**
+  - 現状：`data/test_data/`に大量のテストファイル
+  - 対応：不要ファイルの削除とテストデータの最小化
 
-## 🎯 アクションプラン（推奨実装順序）
+- [ ] **未使用ファイルの整理**
+  - 対象：古いJupyterノートブック、一時ファイル
+  - 方法：Git履歴を確認して安全に削除
 
-### フェーズ1: 緊急対応（1-2日）
-1. テストパスの修正
-2. 最重要パッケージのセキュリティ更新
+### 7. 依存関係管理の改善
 
-### フェーズ2: 開発環境整備（1週間）
-1. 開発ツールの追加とセットアップ
-2. GitHub Actions の修正
-3. コード品質ツールの導入
+- [ ] **Pythonバージョンのアップグレード検討**
+  - 現状：Python 3.11（`pyproject.toml`：`python = "~3.11"`）
+  - 検討：3.12/3.13への段階的移行
 
-### フェーズ3: コード改善（2-3週間）
-1. 型ヒントの段階的追加
-2. 長い関数の分割
-3. 非推奨機能の整理
+- [ ] **uvへの移行検討**
+  - CLAUDE.mdに言及：「Future migration to `uv` planned」
+  - 状態：計画段階
+  - 時期：Poetryの十分な成熟後
 
-### フェーズ4: 長期改善（1-2ヶ月）
-1. ドキュメント統合
-2. プロジェクト構造最適化
-3. 自動化の強化
+## 🔍 参考：最新パッケージ状況
+
+以下は最後のパッケージ更新時点（2026-04-07）での情報です。
+
+### 主要ライブラリ
+- pandas：2.3.3（最新）
+- altair：6.0.0（最新）
+- scipy：1.17.1（最新）
+- pytest：9.0.2（最新）
+- ruff：0.15.9（最新）
+
+### セキュリティアップデート
+最後の更新で以下を含む100+パッケージが更新されました：
+- certifi：最新版
+- pillow：最新版
+- numpy：2.4.4
 
 ---
 
-## 注意事項
+## 実装順序の推奨
 
-- **ブランチ戦略**: 大きな変更は必ず `update-packages` ブランチで実施
-- **テスト**: 各改善後は必ずテスト実行を確認
-- **コミットメッセージ**: Conventional Commits形式を維持
-- **レビュー**: 重要な変更はPull Requestでレビューを実施
+### Phase 1：型ヒント追加（推奨）
+```bash
+git worktree add ../worktrees/add-types -b feat/add-type-hints
+cd ../worktrees/add-types
+# 各モジュールに型ヒントを追加
+task test
+task lint
+```
+
+### Phase 2：開発ツール追加
+```bash
+git worktree add ../worktrees/add-tools -b feat/add-dev-tools
+cd ../worktrees/add-tools
+poetry add --group dev pytest-cov mypy safety
+task test
+```
+
+### Phase 3：CI/CD改善
+
+- `.github/workflows/quality.yml`作成
+- 自動品質チェック実装
+
+### Phase 4：コード最適化
+
+- 非推奨機能の整理
+- 長い関数の分割
+- テストデータの整理
+
+---
 
 ## 参考リンク
 
