@@ -56,6 +56,205 @@ titanite/
 
 ---
 
+## セキュリティ・プライバシー要件
+
+**アンケート回答のセンシティブ性が高いため、以下を厳格に実装する。**
+
+### 1. オリジナルデータの隔離
+
+**原則**: オリジナルの回答データはリポジトリに保存しない
+
+- ✅ **許可**: `data/raw_data/` は `.gitignore` で除外
+- ✅ **許可**: ローカルマシンでのみ処理
+- ❌ **禁止**: CSVファイルをコミット
+- ❌ **禁止**: GitHub/GitLabにアップロード
+
+**.gitignore設定**（確認・更新が必要）
+
+```gitignore
+# 生のアンケートデータ（絶対に漏洩させない）
+data/raw_data/*.csv
+data/raw_data/*.xlsx
+data/raw_data/*.json
+
+# 処理途中の機密データ
+data/test_data/prepared_data.csv
+data/test_data/categorical_data.csv
+data/test_data/sentiment_data.csv
+data/test_data/*_data.csv
+
+# 自動生成されたキャッシュ
+.cache/
+*.tmp
+__pycache__/
+.pytest_cache/
+```
+
+### 2. 処理済み・公開可能なデータ
+
+**許可範囲**: 以下のみリポジトリに保存
+- ✅ クロス集計結果（n < 5 は抑制）
+- ✅ 統計検定結果（p値、カイ二乗統計量）
+- ✅ 分析結果・グラフ（個人識別できない集約データ）
+- ✅ ドキュメント・報告書
+
+**テストデータ**:
+- ✅ ダミー・合成データ（実際の回答ではない）のみ使用
+- `data/test_data/` に最小限のテストCSV を保持可能
+
+### 3. セキュアなワークフロー
+
+**段階1: ローカル処理**
+
+```bash
+# 生データはローカルのみ
+cd sandbox
+poetry run ti prepare ../data/raw_data/SENSITIVE_SURVEY.csv
+# ↓ 出力: prepared_data.csv（ローカルのみ）
+```
+
+**段階2: 分析・要約**
+
+```bash
+# 集約・統計データのみを抽出
+poetry run ti chi2
+poetry run ti crosstabs
+# ↓ 出力: chi2_test.csv, crosstab/*.png（中間結果）
+```
+
+**段階3: 公開用データ準備**
+
+```python
+# 統計結果だけを抽出してJSON化
+# n < 5のセルは削除
+# 個人識別可能な列は削除
+# プライバシーレビュー実施
+```
+
+### 4. リスク軽減策
+
+#### A. ファイルアクセス制御
+
+```python
+# titanite/core/security.py
+class SecureDataHandler:
+    """
+    機密データの処理を厳格に管理
+    """
+    
+    @staticmethod
+    def load_sensitive_data(filepath: Path) -> pd.DataFrame:
+        """
+        生データをメモリにロード（ファイルは上書きしない）
+        """
+        if not filepath.exists():
+            raise FileNotFoundError(f"Data file not found: {filepath}")
+        
+        # メモリ内でのみ処理
+        data = pd.read_csv(filepath)
+        return data
+    
+    @staticmethod
+    def suppress_small_cells(data: pd.DataFrame, threshold: int = 5) -> pd.DataFrame:
+        """
+        セル抑制: n < threshold のセルを削除
+        プライバシー保護のためクロス集計結果に適用
+        """
+        # 実装例
+        return data[data["count"] >= threshold]
+    
+    @staticmethod
+    def anonymize_for_publication(data: pd.DataFrame) -> pd.DataFrame:
+        """
+        公開用データの匿名化
+        - 個人識別可能な列を削除
+        - タイムスタンプを集約
+        - 自由記述テキストを削除
+        """
+        safe_columns = [col for col in data.columns 
+                       if col not in ["timestamp", "q15", "q16", "q18", "q20", "q21", "q22"]]
+        return data[safe_columns]
+```
+
+#### B. ログ・出力管理
+
+```python
+# titanite/core/processor.py
+class SurveyProcessor:
+    def process(self, df: pd.DataFrame, config: Config, 
+                secure_mode: bool = True) -> pd.DataFrame:
+        """
+        secure_mode=True: 個人情報をログに出力しない
+        """
+        if secure_mode:
+            logger.info(f"Processing {len(df)} responses")
+            # ❌ 個人データをログに出力しない
+            # logger.debug(df.head())  # 危険
+        
+        # 処理...
+        return df
+```
+
+#### C. メモリクリーンアップ
+
+```python
+# 処理完了後、機密データをメモリから削除
+import gc
+
+def cleanup_sensitive_data(data: pd.DataFrame):
+    """
+    機密データをメモリから確実に削除
+    """
+    del data
+    gc.collect()
+```
+
+### 5. CI/CD セキュリティ
+
+**GitHub Actions設定** (`.github/workflows/`)
+
+```yaml
+name: Secure Processing
+
+on: [push, pull_request]
+
+jobs:
+  check-sensitive-files:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check for sensitive files
+        run: |
+          # raw_data/ にCSVが含まれていないか確認
+          if find data/raw_data -name "*.csv" -o -name "*.xlsx" 2>/dev/null | grep -q .; then
+            echo "❌ ERROR: Sensitive data files detected in raw_data/"
+            exit 1
+          fi
+          echo "✅ No sensitive data files found"
+      
+      - name: Run tests (no real data)
+        run: |
+          poetry run pytest
+```
+
+### 6. ドキュメント・チェックリスト
+
+**開発者向け安全宣言**
+
+```markdown
+## セキュリティ承認事項
+
+このプロジェクトに関わる全開発者は以下を確認：
+
+- [ ] `data/raw_data/` はGitに含まれない（.gitignore確認）
+- [ ] ローカルマシンでのみ処理（リモートサーバー不使用）
+- [ ] コミット前に `git status` で機密ファイルがないか確認
+- [ ] 分析結果公開前に プライバシーレビュー実施
+- [ ] 作業完了後、ローカルCSVを削除（`rm data/raw_data/*.csv`）
+```
+
+---
+
 ## 詳細設計
 
 ### 1. `titanite/core/schema.py` - スキーマベースクラス
