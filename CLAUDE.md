@@ -37,14 +37,27 @@ task docs:serve        # Serve at http://localhost:8000 with auto-reload
 ```
 
 ### Package Updates
-Use `update-packages` branch only (GitHub Actions restriction):
+Use `update-packages` branch only (GitHub Actions restriction).
+**Always use `git worktree` for isolated development:**
+
 ```bash
-git checkout -b update-packages
+# Create isolated worktree for updates
+git worktree add ../worktrees/update-packages -b update-packages
+cd ../worktrees/update-packages
+
+# Update dependencies
 task deps:check        # Check outdated packages
 task deps:update       # Update all dependencies
 task test              # Verify tests pass
 git add poetry.lock
 git commit -m "build(poetry.lock): update dependencies"
+git push origin update-packages
+
+# Create PR, then clean up
+cd ../../surveys
+git fetch --prune
+git pull
+git worktree remove ../worktrees/update-packages
 ```
 
 ## Architecture
