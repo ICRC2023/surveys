@@ -207,7 +207,7 @@ class Config(BaseModel):
 
         Returns
         -------
-        _type_
+        list[tuple[str, str]]
             集計するカラム名のリスト
         """
         import itertools
@@ -309,7 +309,7 @@ class Data(BaseModel):
 
         Returns
         -------
-        _type_
+        list[tuple[str, str]]
             集計するカラム名のリスト
         """
         import itertools

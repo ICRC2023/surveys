@@ -10,11 +10,22 @@ from .config import Config
 
 def comment_data(data: pd.DataFrame) -> dict[str, pd.DataFrame]:
     """
-    Parse comment data
+    Parse comment data.
 
-    1. 自由記述の回答を抽出する（無回答を削除）
-    2. 自動で翻訳する
-    3. 質問番号ごとにJSONファイルに出力する
+    Extracts free-text responses from q15, q16, q18, q20, q21, and q22,
+    dropping rows with no answer. Each question's comments are returned as a
+    separate DataFrame that includes demographic cluster columns and the
+    corresponding sentiment and translation columns.
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        preprocessed survey DataFrame containing free-text and sentiment columns
+
+    Returns
+    -------
+    dict[str, pd.DataFrame]
+        mapping from question name (e.g. "q15") to DataFrame of non-null responses
     """
 
     clusters = [
@@ -126,7 +137,7 @@ def group_hbar(data: pd.DataFrame, x: str, color: str, title: str, y: str = "res
     Parameters
     ----------
     data : pd.DataFrame
-        _description_
+        grouped DataFrame produced by group_data(), with columns for x, color, and y
     x : str
         X軸に設定するカラム名
     color : str
@@ -138,8 +149,9 @@ def group_hbar(data: pd.DataFrame, x: str, color: str, title: str, y: str = "res
 
     Returns
     -------
-    _type_
-        _description_
+    tuple[alt.Chart, alt.LayerChart]
+        a tuple of (mark, stack + text) where mark is a stacked bar chart and
+        stack + text is a normalized bar chart with count annotations overlaid
     """
     color = f"{color}:N"
     base = (
@@ -175,6 +187,26 @@ def group_hbar(data: pd.DataFrame, x: str, color: str, title: str, y: str = "res
 
 
 def hbar(data: pd.DataFrame, x: str, color: str, title: str):
+    """
+    Create grouped histogram for a single (x, color) pair.
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        preprocessed survey DataFrame
+    x : str
+        column name to use as the x-axis
+    color : str
+        column name to use for color grouping
+    title : str
+        chart title
+
+    Returns
+    -------
+    tuple[pd.DataFrame, alt.LayerChart]
+        a tuple of (grouped, histograms) where grouped is the aggregated DataFrame
+        and histograms is a side-by-side Altair chart (stacked | normalized)
+    """
     grouped = group_data(data, x, color)
     h1, h2 = group_hbar(grouped, x, color, title)
     histograms = h1 | h2
@@ -182,6 +214,22 @@ def hbar(data: pd.DataFrame, x: str, color: str, title: str):
 
 
 def hbar_loop(data: pd.DataFrame, headers: list):
+    """
+    Create grouped histograms for all (x, color) pairs in headers.
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        preprocessed survey DataFrame
+    headers : list
+        list of (x, color) tuples specifying column pairs to plot
+
+    Returns
+    -------
+    tuple[dict[str, pd.DataFrame], dict[str, alt.LayerChart]]
+        a tuple of (grouped_data, hbars_data) where each dict maps
+        "x-color" pair names to the corresponding grouped DataFrame or chart
+    """
     grouped_data: dict = {}
     hbars_data: dict = {}
     for h in headers:
@@ -194,6 +242,25 @@ def hbar_loop(data: pd.DataFrame, headers: list):
 
 
 def crosstab(data: pd.DataFrame, x: str, y: str):
+    """
+    Compute cross-tabulation and chi-square test, then build a heatmap.
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        preprocessed survey DataFrame
+    x : str
+        column name for the x-axis (rows in cross-tabulation)
+    y : str
+        column name for the y-axis (columns in cross-tabulation)
+
+    Returns
+    -------
+    tuple[pd.DataFrame, scipy.stats.Chi2ContingencyResult, alt.LayerChart]
+        a tuple of (cross_tab, chi2_test, chart) where cross_tab is the
+        contingency table, chi2_test is the scipy result object, and chart
+        is an Altair heatmap with count annotations
+    """
     # クロス集計とカイ二乗検定
     cross_tab, chi2_test = crosstab_data(data, x, y)
 
@@ -237,8 +304,10 @@ def crosstab_data(data: pd.DataFrame, x: str, y: str):
 
     Returns
     -------
-    _type_
-        _description_
+    tuple[pd.DataFrame, scipy.stats.Chi2ContingencyResult]
+        a tuple of (cross_tab, chi2_test) where cross_tab is the contingency
+        table DataFrame and chi2_test contains statistic, pvalue, dof, and
+        expected_freq attributes
     """
 
     # クロス集計とカイ二乗検定
@@ -266,7 +335,7 @@ def crosstab_heatmap(data: pd.DataFrame, x: str, y: str, z: str) -> alt.LayerCha
         集計結果のカラム名（X軸）
     y : str
         集計結果のカラム名（Y軸）
-    color : str
+    z : str
         集計結果のカラム名（Z軸・カラー）
 
     Returns
@@ -313,8 +382,11 @@ def crosstab_loop(data: pd.DataFrame, headers: list):
 
     Returns
     -------
-    _type_
-        いろいろ
+    tuple[dict[str, pd.DataFrame], dict[str, alt.LayerChart], pd.DataFrame]
+        a tuple of (cross_tabs, heatmaps, chi2_data) where cross_tabs maps pair
+        names to contingency tables, heatmaps maps pair names to Altair heatmap
+        charts, and chi2_data is a DataFrame of chi-square test statistics for
+        all pairs
     """
 
     cross_tabs = {}
