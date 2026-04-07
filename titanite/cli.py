@@ -16,7 +16,18 @@ app = typer.Typer()
 def config(
     load_from: str = "config.toml", questions: bool = False, choices: bool = False
 ):
-    """Show configuration"""
+    """
+    Show configuration.
+
+    Parameters
+    ----------
+    load_from : str, optional
+        path to configuration file, by default "config.toml"
+    questions : bool, optional
+        if True, print all survey questions, by default False
+    choices : bool, optional
+        if True, print all answer choices, by default False
+    """
     _fname = Path(load_from)
     logger.info(f"Loaded config from: {_fname}")
     cfg = Config(fname=_fname)
@@ -45,10 +56,19 @@ def prepare(
     load_from: str = "config.toml",
 ) -> None:
     """
-    Prepare data
+    Prepare data.
 
     CSV形式で出力したGoogleスプレッドシートの回答を読み込み、
     前処理したデータを生成します。
+
+    Parameters
+    ----------
+    read_from : str
+        path to raw CSV file exported from Google Forms
+    write_dir : str, optional
+        path to directory for saving processed files, by default "../data/test_data/"
+    load_from : str, optional
+        path to configuration file, by default "config.toml"
     """
     c = Config(load_from=load_from)
     categories = c.categorical()
@@ -76,11 +96,11 @@ def comments(
     Parameters
     ----------
     read_from : str, optional
-        _description_, by default "../data/test_data/prepared_data.csv"
+        path to preprocessed data file, by default "../data/test_data/prepared_data.csv"
     write_dir : str, optional
-        _description_, by default "../data/test_data/comment/"
+        path to directory for saving comment CSV and JSON files, by default "../data/test_data/comment/"
     load_from : str, optional
-        _description_, by default "config.toml"
+        path to configuration file, by default "config.toml"
     """
     logger.info(f"Read data from: {read_from}")
     d = Data(read_from=read_from, load_from=load_from)
@@ -112,6 +132,17 @@ def hbar(
         - "../data/test/data/hbar/カラム名/カラム名-色カラム名.csv"
         - "../data/test/data/hbar/カラム名/カラム名-色カラム名.json"
         - "../data/test/data/hbar/カラム名/カラム名-色カラム名.png"
+
+    Parameters
+    ----------
+    header : str
+        name of the column to use as the x-axis of the histogram
+    read_from : str, optional
+        path to preprocessed data file, by default "../data/test_data/prepared_data.csv"
+    write_dir : str, optional
+        path to directory for saving histogram files, by default "../data/test_data/hbar/"
+    load_from : str, optional
+        path to configuration file, by default "config.toml"
     """
     d = Data(read_from=read_from, load_from=load_from)
     config = d.config()
@@ -156,13 +187,13 @@ def hbars(
     Parameters
     ----------
     read_from : str, optional
-        _description_, by default "../data/test_data/prepared_data.csv"
+        path to preprocessed data file, by default "../data/test_data/prepared_data.csv"
     write_dir : str, optional
-        _description_, by default "../data/test_data/hbar/"
+        path to directory for saving histogram files, by default "../data/test_data/hbar/"
     load_from : str, optional
-        _description_, by default "config.toml"
+        path to configuration file, by default "config.toml"
     save : bool, optional
-        _description_, by default False
+        if True, save grouped data as CSV and charts as PNG files, by default False
     """
 
     logger.info(f"Read data from: {read_from}")
@@ -211,6 +242,8 @@ def crosstabs(
         path to save processed files, by default "../data/test_data/crosstab/"
     load_from : str, optional
         path to configuration file, by default "config.toml"
+    save : bool, optional
+        if True, save cross-tabulation data as CSV and heatmaps as PNG files, by default False
     """
 
     # 総当たりでクロス集計
@@ -247,16 +280,17 @@ def chi2(
     Parameters
     ----------
     read_from : str, optional
-        _description_, by default "../data/test_data/prepared_data.csv"
+        path to preprocessed data file, by default "../data/test_data/prepared_data.csv"
     write_dir : str, optional
-        _description_, by default "../data/test_data/chi2_test/"
+        path to directory for saving chi-square test results, by default "../data/test_data/chi2_test/"
     load_from : str, optional
-        _description_, by default "config.toml"
+        path to configuration file, by default "config.toml"
 
     Returns
     -------
-    tuple
-        _description_
+    tuple[dict[str, pd.DataFrame], dict[str, alt.LayerChart]]
+        a tuple of (cross_tabs, heatmaps) where cross_tabs maps pair names to
+        cross-tabulation DataFrames, and heatmaps maps pair names to Altair heatmap charts
     """
 
     import itertools
@@ -310,11 +344,15 @@ def p005(
     Parameters
     ----------
     header : str
-        name of column
+        name of column to use as the focus variable for cross-tabulation
     read_from : str, optional
         path to preprocessed data file, by default "../data/test_data/prepared_data.csv"
     write_dir : str, optional
         path to save processed files, by default "../data/test_data/p005/"
+    load_from : str, optional
+        path to configuration file, by default "config.toml"
+    save : bool, optional
+        if True, save heatmap charts for significant pairs as PNG files, by default False
     """
 
     d = Data(read_from=read_from, load_from=load_from)
@@ -379,19 +417,19 @@ def crosstab(
 
 def is_valid_header(test_header: str, valid_headers: list) -> None:
     """
-    header が処理してよい値か確認する
+    Validate that the given header is in the list of allowed headers.
 
     Parameters
     ----------
-    data : pd.DataFrame
-        description_
-    header : str
-        _description_
+    test_header : str
+        column name to validate
+    valid_headers : list
+        list of allowed column names
 
     Raises
     ------
     typer.Exit
-        _description_
+        exits with code 1 if test_header is not found in valid_headers
     """
 
     if not test_header in valid_headers:
@@ -401,6 +439,19 @@ def is_valid_header(test_header: str, valid_headers: list) -> None:
 
 
 def is_valid_path(path: Path) -> None:
+    """
+    Validate that the given path exists on the filesystem.
+
+    Parameters
+    ----------
+    path : Path
+        file or directory path to validate
+
+    Raises
+    ------
+    typer.Exit
+        exits with code 1 if path does not exist
+    """
     if not path.exists():
         logger.error(f"No file/directory found: {path}")
         logger.error(f"Make sure if the path is correct or please create it first.")

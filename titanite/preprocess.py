@@ -11,28 +11,16 @@ def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
     1. タイムスタンプをdatetimeオブジェクトに変換する
     2. 回答数の集計に使うカラムを追加する
 
+    その後、replace_data、split_data、cluster_data、binned_data の順に処理します。
 
-
-    1. 各カラムを順番ありのカテゴリ変数に変換する
-        - プロットを作成するときに、軸の値がアルファベット順で自動ソートされる
-        - 順番ありにすることで、任意の並びにできる
-    2. 自由記述あり／なしのカラムを追加する
-        - 自由記述できるカラム名を指定し、入力がある／なしのフラグをたてる
-        - 自由記述を埋める＝関心が高い、という傾向があると仮定し、その相関を調べたい
-    3. 自由記述の内容を数値化したカラムを追加する
-        - 自由記述の内容から、プラス／マイナスの感情を判断する
-        - これも2と同じような仮定をしている
-            - プラス感情 = 関心が高い = 好意的
-            - マイナス感情 = 関心が高い = 嫌悪的
-
-    Paramaters
+    Parameters
     ----------
-    ``data: pd.DataFrame)``
+    data : pd.DataFrame
         未処理のデータフレーム
 
     Returns
     -------
-    ``pd.DataFrame``
+    pd.DataFrame
         前処理したデータフレーム
     """
 
@@ -243,14 +231,23 @@ def cluster_data(data: pd.DataFrame) -> pd.DataFrame:
     """
     クラスター分割
 
+    Adds four derived cluster columns to the DataFrame:
+
+    - ``q01_clustered``: age cluster — Cluster1 (under 40s) vs Cluster2 (40s and over)
+    - ``q13_clustered``: female ratio cluster — Cluster1 (<=20%) vs Cluster2 (>=40%)
+    - ``q01q02_clustered``: young female/male cluster — Cluster1 (under 40s, Female)
+      vs Cluster2 (under 40s, Male)
+    - ``q13q14_clustered``: ratio-satisfaction cluster — Cluster1 (ratio <25% and
+      Very Poor/Poor) vs Cluster2 (ratio >25% and Very Good/Good)
+
     Parameters
     ----------
-    `data : pd.DataFrame`
+    data : pd.DataFrame
         入力データ
 
     Returns
     -------
-    `pd.DataFrame`
+    pd.DataFrame
         クラスター分類を追加したデータ
     """
     logger.info("Clustered")
@@ -301,15 +298,22 @@ def binned_data(data: pd.DataFrame) -> pd.DataFrame:
     """
     ビン分割
 
+    Adds two binned columns to the DataFrame:
+
+    - ``q10_binned``: number of invited speakers binned into
+      "Prefer not to answer", "0"–"9", "10+" (boundaries: -1, 0, 1, ..., 10, 25)
+    - ``q13_binned``: female ratio (0–100%) binned in 5% increments from 0% to 100%,
+      plus "Prefer not to answer" for values below 0
+      (boundaries: -1, 0, 10, 15, 20, ..., 100, 105)
 
     Parameters
     ----------
-    `data : pd.DataFrame`
+    data : pd.DataFrame
         入力データ
 
     Returns
     -------
-    `pd.DataFrame`
+    pd.DataFrame
         ビン分割したカラムを追加したデータ
     """
     logger.info("Binned")
@@ -442,7 +446,7 @@ def save_data(data: pd.DataFrame, write_dir: str) -> None:
     data[headers].to_csv(fname, index=False)
     logger.info(f"Saved data to: {fname}")
 
-    # Write only categorical data
+    # Write only sentiment data
     headers = [
         "timestamp",
         "q01",
