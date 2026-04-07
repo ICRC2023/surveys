@@ -1,13 +1,16 @@
 """Test config.Config class"""
 
+from pathlib import Path
+
 from titanite import config
 
-CONFIG_DIVERSITY = "../sandbox/config.toml"
-CONFIG_REPORT = "../sandbox/config_report.toml"
+_ROOT = Path(__file__).parent.parent
+CONFIG_DIVERSITY = str(_ROOT / "sandbox" / "config.toml")
+CONFIG_REPORT = str(_ROOT / "sandbox" / "config_report.toml")
 
 
 def test_config_keys():
-    c = config.Config(load_from="../sandbox/config.toml")
+    c = config.Config(load_from=CONFIG_DIVERSITY)
     c.load()
     t = sorted(c.config.keys())
 
@@ -16,7 +19,7 @@ def test_config_keys():
 
 
 def test_config_volumes():
-    c = config.Config(load_from="../sandbox/config.toml")
+    c = config.Config(load_from=CONFIG_DIVERSITY)
     c.load()
     t = c.config.get("volumes", "Not defined")
 
@@ -28,7 +31,7 @@ def test_config_volumes():
 
 
 def test_config_questions():
-    c = config.Config(load_from="../sandbox/config.toml")
+    c = config.Config(load_from=CONFIG_DIVERSITY)
     c.load()
     t = c.config.get("questions", "Not defined")
 
@@ -61,7 +64,7 @@ def test_config_questions():
 
 
 def test_config_choices():
-    c = config.Config(load_from="../sandbox/config.toml")
+    c = config.Config(load_from=CONFIG_DIVERSITY)
     c.load()
     t = c.config.get("choices", "Not defined")
 
@@ -197,7 +200,7 @@ def test_config_choices():
 
 
 def test_config_options():
-    c = config.Config(load_from="../sandbox/config.toml")
+    c = config.Config(load_from=CONFIG_DIVERSITY)
     c.load()
     t = c.config.get("options", "Not defined")
 
@@ -423,7 +426,7 @@ def test_config_options():
 
 
 def test_config_overview():
-    c = config.Config(load_from="../sandbox/config.toml")
+    c = config.Config(load_from=CONFIG_DIVERSITY)
     c.load()
     t = c.config.get("overview", "Not defined")
 
