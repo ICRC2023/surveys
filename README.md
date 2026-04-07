@@ -24,34 +24,34 @@ We will use Python and Jupyter notebooks to create the analysis & plots.
 ```console
 $ git clone git@github.com:ICRC2023/surveys.git
 $ cd surveys
-$ poetry shell
-(venv) $ poetry install
+$ poetry install
 ...（省略）...
-Installing the current project: titanite (0.5.0)
-$ ti --help
+Installing the current project: titanite (0.6.0)
+$ poetry run ti --help
 ```
 
 - ソースコードはGitHubで管理しています。リポジトリをクローンしてください。
 - Poetryを使ってPythonの仮想環境を構築します。
-- 任意の作用用ディレクトリに移動して、リポジトリをクローンする（``git clone``）
-- Pythonの仮想環境をローカルに構築する（``poetry shell``）
-- 必要なパッケージをローカルな仮想環境（``.venv``）インストールする（``poetry install``）
-  - メインは``pandas``と``altair``、 開発用に``jupyterlab``
-  - 補助ツールに``commitizen``と``pysen``
-- ``ti``（``titanite``）コマンドが使えることを確認する（``ti --help``）
+- 任意の作業用ディレクトリに移動して、リポジトリをクローンする（``git clone``）
+- 必要なパッケージをローカルな仮想環境（``.venv``）にインストールする（``poetry install``）
+  - メインは``pandas``と``altair``、開発用に``pytest``と``ruff``
+  - ドキュメント生成用に``sphinx``と``myst-nb``
+  - 補助ツールに``commitizen``
+- ``ti``（``titanite``）コマンドが使えることを確認する（``poetry run ti --help``）
 
 ## Sphinx + Jupyter Notebook
 
 ```console
-$ poetry shell
-(.venv) $ cd docs
-(.venv) $ make html
-(.venv) $ open _build/html/index.html
+$ task docs:build
+Building...
+$ task docs:serve
+# http://localhost:8000 でドキュメントが自動更新されながら表示されます
 ```
 
 - Sphinxを使ってドキュメントを生成します
-- 上記の手順でローカルで確認できます
-- ``MyST-NB``を使っているので、``docs/notebooks``以下のJupyter Notebookの結果も確認できます
+- Taskfileを使うと簡単に操作できます
+- ``MyST-NB``を使っているので、``notebooks/``以下のJupyter Notebookの結果も確認できます
+- ``sphinx-autobuild``により、ファイル変更時に自動で再ビルドされます
 
 ## データの前処理
 
@@ -212,29 +212,28 @@ Altairのギャラリーからサンプルを見繕っておきました
 パッケージを更新するときは``update-packages``ブランチを作成してください。
 GitHub Actionsが実行されるブランチを制限してあり、``main``以外のブランチ名は``update-packages``だけ許可してあります。
 
+### Taskfileを使った更新方法（推奨）
+
 ```console
-$ git branch update-packages
-$ git checkout update-packages
+$ git checkout -b update-packages
+$ task deps:check
+$ task deps:update
+$ task test
+$ git add poetry.lock
+$ git commit -m "build(poetry.lock): update dependencies"
+$ git push origin update-packages
+```
+
+### 個別パッケージを更新する場合
+
+```console
+$ git checkout -b update-packages
 $ poetry show --outdated
 $ poetry add パッケージ名@latest
 $ git add pyproject.toml poetry.lock
-$ git commit
-# コミットメッセージは次のように入力してください
-# build(pyproject.toml): updated パッケージ名: x.y.z -> X.Y.Z
+$ git commit -m "build(pyproject.toml): updated パッケージ名: x.y.z -> X.Y.Z"
 
-# 同様に --group docs / --group dev のパッケージも更新してください
 $ poetry add パッケージ名@latest --group docs
 $ git add pyproject.toml poetry.lock
-$ git commit
-
-$ poetry add パッケージ名@latest --group dev
-$ git add pyproject.toml
-$ git add pyproject.toml poetry.lock
-$ git commit
-
-# GitHub Actionsで実行されるパッケージが以前のバージョンのままだった場合
-$ poetry lock
-$ git add poetry.lock
-$ git commit
-# build(poetry.lock): updated poetry.lock
+$ git commit -m "build(pyproject.toml): updated パッケージ名(docs): x.y.z -> X.Y.Z"
 ```
