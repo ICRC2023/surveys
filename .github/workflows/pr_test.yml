@@ -1,4 +1,4 @@
-name: Check Sphinx Document Build on Pull Requests
+name: Check Tests and Sphinx Build on Pull Requests
 
 # Runs on pull requests targeting the main branch
 on:
@@ -28,9 +28,13 @@ jobs:
 
       # 必要な依存関係をインストール
       - name: Install dependencies
-        run: poetry install --no-root
+        run: poetry install
 
       # テストを実行
+      - name: Run pytest
+        run: poetry run pytest
+
+      # Sphinx ドキュメントをビルド
       - name: Build Sphinx
         run: |
           cd docs

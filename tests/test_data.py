@@ -1,9 +1,12 @@
 """Test config.Data class"""
 
+from pathlib import Path
+
 from titanite import config
 
-CONFIG_DIVERSITY = "../sandbox/config.toml"
-DATA_DIVERSITY = "../data/test_data/prepared_data.csv"
+_ROOT = Path(__file__).parent.parent
+CONFIG_DIVERSITY = str(_ROOT / "sandbox" / "config.toml")
+DATA_DIVERSITY = str(_ROOT / "data" / "test_data" / "prepared_data.csv")
 
 
 def test_data_read():
