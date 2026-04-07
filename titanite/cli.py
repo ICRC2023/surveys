@@ -5,7 +5,7 @@ import pandas as pd
 import typer
 from loguru import logger
 
-from . import core
+from . import _core as core
 from .config import CATEGORICAL_HEADERS, Config, Data
 from .preprocess import categorical_data, preprocess_data, save_data, sentiment_data
 
