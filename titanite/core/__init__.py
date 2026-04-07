@@ -1,0 +1,16 @@
+"""titanite.core — Generic survey processing framework
+
+This subpackage provides the abstract schema-based framework for building
+reusable survey data processing pipelines.
+
+Main exports:
+- SurveySchema: Abstract base class for survey-specific configuration
+- SurveyProcessor: Schema-driven preprocessing pipeline
+- SecureDataHandler: Privacy-safe data operations
+"""
+
+from .schema import SurveySchema
+from .processor import SurveyProcessor
+from .security import SecureDataHandler
+
+__all__ = ["SurveySchema", "SurveyProcessor", "SecureDataHandler"]
