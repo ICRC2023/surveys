@@ -10,7 +10,14 @@ Main exports:
 """
 
 from .processor import SurveyProcessor
-from .schema import SurveySchema
+from .schema import SurveySchema, SplitColumnRule, ClusterRule, BinRule
 from .security import SecureDataHandler
 
-__all__ = ["SurveySchema", "SurveyProcessor", "SecureDataHandler"]
+__all__ = [
+    "SurveySchema",
+    "SurveyProcessor",
+    "SecureDataHandler",
+    "SplitColumnRule",
+    "ClusterRule",
+    "BinRule",
+]
