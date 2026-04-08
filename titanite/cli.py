@@ -1,15 +1,52 @@
+from importlib import import_module
 from pathlib import Path
 
-import altair as alt
 import pandas as pd
 import typer
 from loguru import logger
 
 from . import _core as core
 from .config import CATEGORICAL_HEADERS, Config, Data
+from .core import SurveyProcessor
 from .preprocess import categorical_data, preprocess_data, save_data, sentiment_data
 
 app = typer.Typer()
+
+
+def _load_schema_class(plugin_name: str):
+    """Load a schema class from a plugin module.
+
+    Parameters
+    ----------
+    plugin_name : str
+        Plugin name in format "package.module.ClassName"
+        Example: "plugins.icrc2023.ICRC2023Schema"
+
+    Returns
+    -------
+    type
+        The schema class
+
+    Raises
+    ------
+    typer.Exit
+        If plugin cannot be loaded
+    """
+    try:
+        parts = plugin_name.rsplit(".", 1)
+        if len(parts) != 2:
+            raise ValueError(
+                f"Plugin name must be in format 'package.module.ClassName', "
+                f"got: {plugin_name}"
+            )
+        module_path, class_name = parts
+        module = import_module(module_path)
+        schema_class = getattr(module, class_name)
+        logger.info(f"Loaded schema: {plugin_name}")
+        return schema_class
+    except (ImportError, AttributeError, ValueError) as e:
+        logger.error(f"Failed to load plugin '{plugin_name}': {e}")
+        raise typer.Exit(code=1)
 
 
 @app.command()
@@ -54,6 +91,7 @@ def prepare(
     read_from: str,
     write_dir: str = "../data/test_data/",
     load_from: str = "config.toml",
+    plugin: str | None = None,
 ) -> None:
     """
     Prepare data.
@@ -69,13 +107,28 @@ def prepare(
         path to directory for saving processed files, by default "../data/test_data/"
     load_from : str, optional
         path to configuration file, by default "config.toml"
+    plugin : str, optional
+        plugin name in format "plugins.package.SchemaClassName"
+        If not provided, uses default preprocess_data() workflow
+        Example: "plugins.icrc2023.ICRC2023Schema"
     """
     c = Config(load_from=load_from)
     categories = c.categorical()
 
     logger.info(f"Read data from: {read_from}")
     data = pd.read_csv(read_from, skiprows=1)
-    data = preprocess_data(data)
+
+    if plugin:
+        # Use plugin-based schema
+        schema_class = _load_schema_class(plugin)
+        schema = schema_class()
+        processor = SurveyProcessor(schema)
+        data = processor.process(data, config=c)
+        logger.info(f"Processed data using plugin: {plugin}")
+    else:
+        # Use default preprocess workflow
+        data = preprocess_data(data)
+
     data = categorical_data(data, categories)
     data = sentiment_data(data)
     fname = Path(write_dir) / "prepared_data.csv"
@@ -432,7 +485,7 @@ def is_valid_header(test_header: str, valid_headers: list) -> None:
         exits with code 1 if test_header is not found in valid_headers
     """
 
-    if not test_header in valid_headers:
+    if test_header not in valid_headers:
         logger.error(f"Given header '{test_header}' is invalid.")
         logger.warning(f"Please choose from {valid_headers}")
         raise typer.Exit(code=1)
@@ -454,7 +507,7 @@ def is_valid_path(path: Path) -> None:
     """
     if not path.exists():
         logger.error(f"No file/directory found: {path}")
-        logger.error(f"Make sure if the path is correct or please create it first.")
+        logger.error("Make sure if the path is correct or please create it first.")
         raise typer.Exit(code=1)
 
 
