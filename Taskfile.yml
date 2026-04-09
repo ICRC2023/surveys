@@ -93,7 +93,7 @@ tasks:
   #   5. task push:tags
   #   6. task push:release -- X.Y.Z
   push:release:
-    desc: Create a GitLab release with release notes (Usage - task push:release -- X.Y.Z)
+    desc: Create a GitHub release with release notes (Usage - task push:release -- X.Y.Z)
     requires:
       vars: [CLI_ARGS]
     preconditions:
@@ -104,7 +104,7 @@ tasks:
     vars:
       VERSION: "{{.CLI_ARGS}}"
     cmds:
-      - glab release create {{.VERSION}} --name "v{{.VERSION}}" --notes-file docs/releases/v{{.VERSION}}.md
+      - gh release create v{{.VERSION}} --title "v{{.VERSION}}" --notes-file docs/releases/v{{.VERSION}}.md
 
   # ============================================================================
   # Pre-commit hooks
