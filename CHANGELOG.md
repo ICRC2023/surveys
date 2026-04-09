@@ -1,8 +1,22 @@
-## Unreleased
+## 0.7.0 (2026-04-09)
+
+### Feat
+
+- **cli**: add plugin loading utility and --plugin option to prepare command
+- **plugin**: add ICRC2023Schema plugin with clustering and binning rules
+- **core**: export SplitColumnRule, ClusterRule, BinRule for plugin use
+- **core**: add SurveyProcessor and SecureDataHandler
+- **core**: add SurveySchema abstract base class and dataclasses
 
 ### Fix
 
+- **core**: add DataFrame copy to prevent SettingWithCopyWarning
+- テストのパス修正、pytest設定、ruff追加、CI更新
 - **poetry.lock**: updated packages
+
+### Refactor
+
+- **core**: rename core.py to _core.py to free the core/ namespace
 
 ## 0.6.0 (2024-09-21)
 
