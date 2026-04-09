@@ -9,6 +9,7 @@ maxdepth: 2
 overview
 diversity/index
 report/index
+guides/index
 :::
 
 ## APIs
