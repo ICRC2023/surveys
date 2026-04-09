@@ -104,7 +104,7 @@ tasks:
     vars:
       VERSION: "{{.CLI_ARGS}}"
     cmds:
-      - gh release create v{{.VERSION}} --title "v{{.VERSION}}" --notes-file docs/releases/v{{.VERSION}}.md
+      - gh release create {{.VERSION}} --title "{{.VERSION}}" --notes-file docs/releases/v{{.VERSION}}.md
 
   # ============================================================================
   # Pre-commit hooks
