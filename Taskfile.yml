@@ -149,6 +149,18 @@ tasks:
     cmds:
       - cd docs && poetry run sphinx-build -b html . _build/html
 
+  docs:release:
+    desc: Create new release note from template (Usage - task docs:release -- X.Y.Z)
+    dir: docs/releases
+    requires:
+      vars: [CLI_ARGS]
+    preconditions:
+      - sh: '[ -n "{{.CLI_ARGS}}" ]'
+        msg: "Filename required. Usage: task docs:release -- X.Y.Z"
+    cmds:
+      - cp -i template.md v{{.CLI_ARGS}}.md
+      - echo "Created docs/releases/v{{.CLI_ARGS}}.md - edit to fill in the release details"
+
   # ============================================================================
   # Testing and Code Quality
   # ============================================================================
