@@ -198,11 +198,6 @@ def hbar(
         path to configuration file, by default "config.toml"
     """
     d = Data(read_from=read_from, load_from=load_from)
-    config = d.config()
-    questions = config.get("questions")
-
-    key = header.split("_")[0]
-    t = questions.get(key, "no_title")
 
     data = d.read()
     headers = d.headers([header], sorted(data.columns))
@@ -251,8 +246,6 @@ def hbars(
 
     logger.info(f"Read data from: {read_from}")
     d = Data(read_from=read_from, load_from=load_from)
-    config = d.config()
-    questions = config.get("questions")
 
     data = d.read()
     matches = d.matches(list(data.columns))
@@ -463,7 +456,7 @@ def crosstab(
         - "../data/test/data/crosstab/カラム名/カラム名-相手カラム名.png"
     """
     d = Data(read_from=read_from, load_from=load_from)
-    data = d.read()
+    d.read()
 
     pass
 

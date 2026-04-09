@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 
 from titanite.core import SurveyProcessor
-from titanite.core.schema import SurveySchema, SplitColumnRule, ClusterRule, BinRule
+from titanite.core.schema import BinRule, ClusterRule, SplitColumnRule, SurveySchema
 
 
 class MockSchema(SurveySchema):
@@ -49,12 +49,14 @@ class MockSchema(SurveySchema):
 @pytest.fixture
 def sample_df():
     """Create a minimal test DataFrame."""
-    return pd.DataFrame({
-        "timestamp": ["2023-07-15 10:00:00"],
-        "q01": ["old_value"],
-        "geo": ["Europe / West"],
-        "num": [5],
-    })
+    return pd.DataFrame(
+        {
+            "timestamp": ["2023-07-15 10:00:00"],
+            "q01": ["old_value"],
+            "geo": ["Europe / West"],
+            "num": [5],
+        }
+    )
 
 
 def test_processor_instantiation():
@@ -119,8 +121,17 @@ def test_processor_full_pipeline(sample_df):
     result = processor.process(sample_df, config=None)
 
     # Check all columns are present
-    expected_cols = ["timestamp", "q01", "geo", "num", "response",
-                     "geo_regional", "geo_subregional", "clustered", "num_binned"]
+    expected_cols = [
+        "timestamp",
+        "q01",
+        "geo",
+        "num",
+        "response",
+        "geo_regional",
+        "geo_subregional",
+        "clustered",
+        "num_binned",
+    ]
     for col in expected_cols:
         assert col in result.columns
 

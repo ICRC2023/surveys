@@ -141,7 +141,7 @@ class SecureDataHandler:
     """
     機密データの処理を厳格に管理
     """
-    
+
     @staticmethod
     def load_sensitive_data(filepath: Path) -> pd.DataFrame:
         """
@@ -149,11 +149,11 @@ class SecureDataHandler:
         """
         if not filepath.exists():
             raise FileNotFoundError(f"Data file not found: {filepath}")
-        
+
         # メモリ内でのみ処理
         data = pd.read_csv(filepath)
         return data
-    
+
     @staticmethod
     def suppress_small_cells(data: pd.DataFrame, threshold: int = 5) -> pd.DataFrame:
         """
@@ -162,7 +162,7 @@ class SecureDataHandler:
         """
         # 実装例
         return data[data["count"] >= threshold]
-    
+
     @staticmethod
     def anonymize_for_publication(data: pd.DataFrame) -> pd.DataFrame:
         """
@@ -171,7 +171,7 @@ class SecureDataHandler:
         - タイムスタンプを集約
         - 自由記述テキストを削除
         """
-        safe_columns = [col for col in data.columns 
+        safe_columns = [col for col in data.columns
                        if col not in ["timestamp", "q15", "q16", "q18", "q20", "q21", "q22"]]
         return data[safe_columns]
 ```
@@ -181,7 +181,7 @@ class SecureDataHandler:
 ```python
 # titanite/core/processor.py
 class SurveyProcessor:
-    def process(self, df: pd.DataFrame, config: Config, 
+    def process(self, df: pd.DataFrame, config: Config,
                 secure_mode: bool = True) -> pd.DataFrame:
         """
         secure_mode=True: 個人情報をログに出力しない
@@ -190,7 +190,7 @@ class SurveyProcessor:
             logger.info(f"Processing {len(df)} responses")
             # ❌ 個人データをログに出力しない
             # logger.debug(df.head())  # 危険
-        
+
         # 処理...
         return df
 ```
@@ -231,7 +231,7 @@ jobs:
             exit 1
           fi
           echo "✅ No sensitive data files found"
-      
+
       - name: Run tests (no real data)
         run: |
           poetry run pytest
@@ -267,7 +267,7 @@ from typing import Callable
 class SurveySchema(ABC):
     """
     アンケートスキーマのベースクラス
-    
+
     サブクラスで以下を定義する：
     - categorical_headers: カテゴリ型カラムのリスト
     - numerical_headers: 数値型カラムのリスト
@@ -276,21 +276,21 @@ class SurveySchema(ABC):
     - cluster_rules: クラスタリング定義
     - bin_rules: ビン分割定義
     """
-    
+
     categorical_headers: list[str] = []
     numerical_headers: list[str] = []
     free_text_columns: list[str] = []
-    
+
     @abstractmethod
     def get_replace_rules(self) -> dict:
         """値置換ルール"""
         pass
-    
+
     @abstractmethod
     def get_cluster_rules(self) -> list[dict]:
         """クラスタリング定義"""
         pass
-    
+
     @abstractmethod
     def get_bin_rules(self) -> list[dict]:
         """ビン分割定義"""
@@ -304,7 +304,7 @@ from titanite.core.schema import SurveySchema
 
 class ICRC2023Schema(SurveySchema):
     """ICRC2023ダイバーシティセッション調査"""
-    
+
     categorical_headers = [
         "q01", "q02", "q03_regional", "q03_subregional",
         "q04_regional", "q04_subregional", "q05", "q06", "q07",
@@ -314,16 +314,16 @@ class ICRC2023Schema(SurveySchema):
         "q17_genderbalance", "q17_diversity", "q17_equity",
         "q17_inclusion", "q19",
     ]
-    
+
     numerical_headers = [
         "q10", "q13",
         "q15_polarity", "q15_subjectivity",
         "q16_polarity", "q16_subjectivity",
         # ... etc
     ]
-    
+
     free_text_columns = ["q15", "q16", "q18", "q20", "q21", "q22"]
-    
+
     def get_replace_rules(self) -> dict:
         return {
             "q03": {
@@ -336,7 +336,7 @@ class ICRC2023Schema(SurveySchema):
             },
             "q14": {"No Interest": "No interest"},
         }
-    
+
     def get_cluster_rules(self) -> list[dict]:
         return [
             {
@@ -346,7 +346,7 @@ class ICRC2023Schema(SurveySchema):
             },
             # ... 他の3つのクラスタ
         ]
-    
+
     def get_bin_rules(self) -> list[dict]:
         return [
             {
@@ -356,7 +356,7 @@ class ICRC2023Schema(SurveySchema):
             },
             # ... q13_binned
         ]
-    
+
     @staticmethod
     def _cluster_q01(df):
         # q01クラスタリングロジック
@@ -370,10 +370,10 @@ class SurveyProcessor:
     """
     スキーマベースのアンケート処理パイプライン
     """
-    
+
     def __init__(self, schema: SurveySchema):
         self.schema = schema
-    
+
     def process(self, df: pd.DataFrame, config: Config) -> pd.DataFrame:
         """フルパイプライン実行"""
         df = self._add_timestamp(df)
@@ -385,7 +385,7 @@ class SurveyProcessor:
         df = self._categorize_data(df, config)
         df = self._sentiment_analysis(df)
         return df
-    
+
     def _apply_replace_rules(self, df: pd.DataFrame) -> pd.DataFrame:
         """スキーマの置換ルールを適用"""
         rules = self.schema.get_replace_rules()
@@ -393,14 +393,14 @@ class SurveyProcessor:
             if column in df.columns:
                 df[column] = df[column].replace(replace_map)
         return df
-    
+
     def _apply_cluster_rules(self, df: pd.DataFrame) -> pd.DataFrame:
         """スキーマのクラスタリングルールを適用"""
         rules = self.schema.get_cluster_rules()
         for rule in rules:
             df[rule["name"]] = rule["apply"](df)
         return df
-    
+
     # ... 他のメソッド
 ```
 
@@ -416,7 +416,7 @@ def prepare(
 ) -> None:
     """
     Prepare data with specified survey plugin.
-    
+
     Parameters
     ----------
     read_from : str
@@ -430,17 +430,17 @@ def prepare(
     """
     # プラグインをロード
     schema = _load_schema(plugin)
-    
+
     # 処理実行
     config = Config(load_from=load_from)
     config.load()
-    
+
     logger.info(f"Read data from: {read_from}")
     data = pd.read_csv(read_from, skiprows=1)
-    
+
     processor = SurveyProcessor(schema)
     data = processor.process(data, config)
-    
+
     # 保存
     fname = Path(write_dir) / "prepared_data.csv"
     data.to_csv(fname, index=False)

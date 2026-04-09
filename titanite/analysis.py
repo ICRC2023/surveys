@@ -1,9 +1,7 @@
-import hvplot
-import pandas as pd
-
 from dataclasses import dataclass
 from typing import Any
 
+import pandas as pd
 
 TITLES = {
     "q01": "Q01. Age",

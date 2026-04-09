@@ -4,7 +4,7 @@ This guide explains how to create a new survey schema plugin for the Titanite fr
 
 ## Overview
 
-Titanite is an abstract framework for processing Google Forms survey data. 
+Titanite is an abstract framework for processing Google Forms survey data.
 Survey-specific preprocessing logic (value replacements, geographic splitting, clustering, binning) is implemented as **plugins** and kept separate from the framework core.
 
 ### Benefits
@@ -35,23 +35,23 @@ import pandas as pd
 
 class YourSurveySchema(SurveySchema):
     """Your survey-specific schema implementation."""
-    
+
     categorical_headers = ["q01", "q02", "q03", ...]
     numerical_headers = ["q10", "q13", ...]
     free_text_columns = ["q15", "q16", ...]
-    
+
     def get_replace_rules(self) -> dict[str, dict]:
         """Return value replacements."""
         return {}
-    
+
     def get_split_rules(self) -> list[SplitColumnRule]:
         """Return column splitting rules."""
         return []
-    
+
     def get_cluster_rules(self) -> list[ClusterRule]:
         """Return clustering rules."""
         return []
-    
+
     def get_bin_rules(self) -> list[BinRule]:
         """Return binning rules."""
         return []
@@ -86,10 +86,10 @@ class YourSurveySchema(SurveySchema):
         "q04", "q04_regional", "q04_subregional",
         ...
     ]
-    
+
     # All numerical variables
     numerical_headers = ["q10", "q13", ...]
-    
+
     # Free-text items (require privacy protection)
     free_text_columns = ["q15", "q16", "q18", ...]
 ```
@@ -101,7 +101,7 @@ Some survey responses need standardization before processing.
 ```python
 def get_replace_rules(self) -> dict[str, dict]:
     """Return value replacement rules.
-    
+
     Examples:
     - "No Interest" → "No interest" (capitalize consistently)
     - "Oceania" → "Oceania / Oceania" (unify format)
@@ -129,11 +129,11 @@ Split composite columns (e.g., "Europe / West") into regional components.
 ```python
 def get_split_rules(self) -> list[SplitColumnRule]:
     """Return geographic splitting rules.
-    
+
     Format: "Region / Subregion" → separate into components
     """
     from titanite.core import SplitColumnRule
-    
+
     return [
         SplitColumnRule(
             source_column="q03",
@@ -165,7 +165,7 @@ Combine multiple columns to create derived variables.
 def get_cluster_rules(self) -> list[ClusterRule]:
     """Return clustering rules."""
     from titanite.core import ClusterRule
-    
+
     return [
         ClusterRule(
             output_column="age_cluster",
@@ -182,7 +182,7 @@ def get_cluster_rules(self) -> list[ClusterRule]:
 @staticmethod
 def _cluster_age(df: pd.DataFrame) -> pd.Series:
     """Age-based clustering logic.
-    
+
     Returns a pandas Series with cluster assignments.
     """
     result = pd.Series("Others", index=df.index, dtype=str)
@@ -212,7 +212,7 @@ Convert continuous values into discrete categories.
 def get_bin_rules(self) -> list[BinRule]:
     """Return binning rules."""
     from titanite.core import BinRule
-    
+
     return [
         BinRule(
             source_column="q10",
@@ -285,7 +285,7 @@ def test_processor_integration(sample_data):
     schema = YourSurveySchema()
     processor = SurveyProcessor(schema)
     result = processor.process(sample_data)
-    
+
     # Verify expected columns exist
     assert "timestamp" in result.columns
     assert "response" in result.columns
@@ -341,7 +341,7 @@ def test_processor_integration(sample_data):
    @staticmethod
    def _cluster_age(df):
        df.loc[..., "temp_col"] = ...  # Side effect!
-       
+
    # ✅ GOOD
    @staticmethod
    def _cluster_age(df):
@@ -353,7 +353,7 @@ def test_processor_integration(sample_data):
    ```python
    # ❌ BAD
    result[df["q01"] < "40s"] = "Young"  # Hardcoded string
-   
+
    # ✅ GOOD
    result[df["q01"] < "40s"] = "Cluster1"  # Defined in rule
    ```
@@ -363,7 +363,7 @@ def test_processor_integration(sample_data):
    # ❌ BAD: Multiple rules in one function
    def _complex_cluster(df):
        # clustering + binning + replacement
-       
+
    # ✅ GOOD: Each rule is independent
    def _cluster_age(df): ...
    def _bin_age(df): ...

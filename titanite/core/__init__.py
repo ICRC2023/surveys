@@ -10,7 +10,7 @@ Main exports:
 """
 
 from .processor import SurveyProcessor
-from .schema import SurveySchema, SplitColumnRule, ClusterRule, BinRule
+from .schema import BinRule, ClusterRule, SplitColumnRule, SurveySchema
 from .security import SecureDataHandler
 
 __all__ = [
