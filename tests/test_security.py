@@ -25,10 +25,7 @@ def test_load_reads_csv_successfully(tmp_path):
 
 def test_suppress_small_cells_removes_low_counts():
     """suppress_small_cells filters out rows with count < threshold."""
-    df = pd.DataFrame({
-        "label": ["a", "b", "c", "d"],
-        "count": [1, 3, 5, 10]
-    })
+    df = pd.DataFrame({"label": ["a", "b", "c", "d"], "count": [1, 3, 5, 10]})
     result = SecureDataHandler.suppress_small_cells(df, threshold=5)
     assert len(result) == 2
     assert list(result["count"]) == [5, 10]
@@ -36,9 +33,7 @@ def test_suppress_small_cells_removes_low_counts():
 
 def test_suppress_small_cells_default_threshold():
     """suppress_small_cells uses threshold=5 by default."""
-    df = pd.DataFrame({
-        "count": [1, 4, 5, 6]
-    })
+    df = pd.DataFrame({"count": [1, 4, 5, 6]})
     result = SecureDataHandler.suppress_small_cells(df)
     assert len(result) == 2
     assert list(result["count"]) == [5, 6]
@@ -46,10 +41,10 @@ def test_suppress_small_cells_default_threshold():
 
 def test_suppress_small_cells_custom_column_name():
     """suppress_small_cells accepts custom count column name."""
-    df = pd.DataFrame({
-        "frequency": [2, 5, 10]
-    })
-    result = SecureDataHandler.suppress_small_cells(df, threshold=5, count_column="frequency")
+    df = pd.DataFrame({"frequency": [2, 5, 10]})
+    result = SecureDataHandler.suppress_small_cells(
+        df, threshold=5, count_column="frequency"
+    )
     assert len(result) == 2
     assert list(result["frequency"]) == [5, 10]
 
@@ -57,7 +52,9 @@ def test_suppress_small_cells_custom_column_name():
 def test_suppress_small_cells_missing_column_warning():
     """suppress_small_cells returns data unchanged if count column not found."""
     df = pd.DataFrame({"value": [1, 2, 3]})
-    result = SecureDataHandler.suppress_small_cells(df, threshold=5, count_column="nonexistent")
+    result = SecureDataHandler.suppress_small_cells(
+        df, threshold=5, count_column="nonexistent"
+    )
     # Should return data unchanged when column not found
     assert len(result) == 3
     assert list(result.columns) == ["value"]
@@ -65,12 +62,14 @@ def test_suppress_small_cells_missing_column_warning():
 
 def test_anonymize_removes_sensitive_columns():
     """anonymize_for_publication drops specified columns."""
-    df = pd.DataFrame({
-        "q01": ["30s", "20s"],
-        "timestamp": ["2023-01-01", "2023-01-02"],
-        "q15": ["text1", "text2"],
-        "safe_column": ["a", "b"],
-    })
+    df = pd.DataFrame(
+        {
+            "q01": ["30s", "20s"],
+            "timestamp": ["2023-01-01", "2023-01-02"],
+            "q15": ["text1", "text2"],
+            "safe_column": ["a", "b"],
+        }
+    )
     result = SecureDataHandler.anonymize_for_publication(
         df, sensitive_columns=["timestamp", "q15"]
     )

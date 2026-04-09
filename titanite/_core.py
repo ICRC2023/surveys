@@ -1,11 +1,7 @@
-from pathlib import Path
-
 import altair as alt
 import pandas as pd
 from loguru import logger
 from scipy.stats import chi2_contingency
-
-from .config import Config
 
 
 def comment_data(data: pd.DataFrame) -> dict[str, pd.DataFrame]:

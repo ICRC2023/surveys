@@ -2,7 +2,7 @@
 
 import pytest
 
-from titanite.core.schema import SurveySchema, SplitColumnRule, BinRule, ClusterRule
+from titanite.core.schema import BinRule, ClusterRule, SplitColumnRule, SurveySchema
 
 
 def test_survey_schema_is_abstract():

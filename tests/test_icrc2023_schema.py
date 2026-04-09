@@ -10,37 +10,39 @@ from titanite.core import SurveyProcessor
 @pytest.fixture
 def sample_icrc_data():
     """Create sample ICRC2023 survey data."""
-    return pd.DataFrame({
-        "timestamp": ["2023-07-15 10:00:00"],
-        "q01": ["30s"],
-        "q02": ["Female"],
-        "q03": ["Europe / West"],
-        "q04": ["Asia / East"],
-        "q05": ["Postdoc"],
-        "q06": ["Astroparticles"],
-        "q07": ["Others"],
-        "q08": ["5 years"],
-        "q09": ["Yes"],
-        "q10": [5],
-        "q11": ["Yes"],
-        "q12_genderbalance": ["Good"],
-        "q12_diversity": ["Good"],
-        "q12_equity": ["Good"],
-        "q12_inclusion": ["Good"],
-        "q13": [15],
-        "q14": ["Good"],
-        "q15": ["Text response"],
-        "q16": ["Another text"],
-        "q17_genderbalance": ["Agree"],
-        "q17_diversity": ["Agree"],
-        "q17_equity": ["Agree"],
-        "q17_inclusion": ["Agree"],
-        "q18": ["Text"],
-        "q19": ["University"],
-        "q20": ["Text"],
-        "q21": ["Text"],
-        "q22": ["Text"],
-    })
+    return pd.DataFrame(
+        {
+            "timestamp": ["2023-07-15 10:00:00"],
+            "q01": ["30s"],
+            "q02": ["Female"],
+            "q03": ["Europe / West"],
+            "q04": ["Asia / East"],
+            "q05": ["Postdoc"],
+            "q06": ["Astroparticles"],
+            "q07": ["Others"],
+            "q08": ["5 years"],
+            "q09": ["Yes"],
+            "q10": [5],
+            "q11": ["Yes"],
+            "q12_genderbalance": ["Good"],
+            "q12_diversity": ["Good"],
+            "q12_equity": ["Good"],
+            "q12_inclusion": ["Good"],
+            "q13": [15],
+            "q14": ["Good"],
+            "q15": ["Text response"],
+            "q16": ["Another text"],
+            "q17_genderbalance": ["Agree"],
+            "q17_diversity": ["Agree"],
+            "q17_equity": ["Agree"],
+            "q17_inclusion": ["Agree"],
+            "q18": ["Text"],
+            "q19": ["University"],
+            "q20": ["Text"],
+            "q21": ["Text"],
+            "q22": ["Text"],
+        }
+    )
 
 
 def test_icrc2023_schema_instantiates():
@@ -65,11 +67,17 @@ def test_get_replace_rules():
     rules = schema.get_replace_rules()
 
     assert "q03" in rules
-    assert rules["q03"]["Prefer not to answer"] == "Prefer not to answer / Prefer not to answer"
+    assert (
+        rules["q03"]["Prefer not to answer"]
+        == "Prefer not to answer / Prefer not to answer"
+    )
     assert rules["q03"]["Oceania"] == "Oceania / Oceania"
 
     assert "q04" in rules
-    assert rules["q04"]["Prefer not to answer"] == "Prefer not to answer / Prefer not to answer"
+    assert (
+        rules["q04"]["Prefer not to answer"]
+        == "Prefer not to answer / Prefer not to answer"
+    )
 
     assert "q14" in rules
     assert rules["q14"]["No Interest"] == "No interest"
@@ -138,8 +146,8 @@ def test_cluster_q13_ratio():
 
     assert result.iloc[0] == "Cluster1"  # 10 <= 20
     assert result.iloc[1] == "Cluster1"  # 20 <= 20
-    assert result.iloc[2] == "Others"     # 25 is between
-    assert result.iloc[3] == "Others"     # 30 is between
+    assert result.iloc[2] == "Others"  # 25 is between
+    assert result.iloc[3] == "Others"  # 30 is between
     assert result.iloc[4] == "Cluster2"  # 40 >= 40
     assert result.iloc[5] == "Cluster2"  # 50 >= 40
 
@@ -147,30 +155,31 @@ def test_cluster_q13_ratio():
 def test_cluster_q01q02_young_gender():
     """_cluster_q01q02 classifies young female/male."""
     schema = ICRC2023Schema()
-    df = pd.DataFrame({
-        "q01": ["20s", "20s", "40s", "40s"],
-        "q02": ["Female", "Male", "Female", "Male"]
-    })
+    df = pd.DataFrame(
+        {
+            "q01": ["20s", "20s", "40s", "40s"],
+            "q02": ["Female", "Male", "Female", "Male"],
+        }
+    )
     result = schema._cluster_q01q02(df)
 
     assert result.iloc[0] == "Cluster1"  # Young, Female
     assert result.iloc[1] == "Cluster2"  # Young, Male
-    assert result.iloc[2] == "Others"     # Senior, Female
-    assert result.iloc[3] == "Others"     # Senior, Male
+    assert result.iloc[2] == "Others"  # Senior, Female
+    assert result.iloc[3] == "Others"  # Senior, Male
 
 
 def test_cluster_q13q14_ratio_satisfaction():
     """_cluster_q13q14 classifies ratio-satisfaction."""
     schema = ICRC2023Schema()
-    df = pd.DataFrame({
-        "q13": [15, 15, 30, 30],
-        "q14": ["Poor", "Good", "Poor", "Good"]
-    })
+    df = pd.DataFrame(
+        {"q13": [15, 15, 30, 30], "q14": ["Poor", "Good", "Poor", "Good"]}
+    )
     result = schema._cluster_q13q14(df)
 
     assert result.iloc[0] == "Cluster1"  # <25%, Poor
-    assert result.iloc[1] == "Others"     # <25%, Good
-    assert result.iloc[2] == "Others"     # >25%, Poor
+    assert result.iloc[1] == "Others"  # <25%, Good
+    assert result.iloc[2] == "Others"  # >25%, Poor
     assert result.iloc[3] == "Cluster2"  # >25%, Good
 
 

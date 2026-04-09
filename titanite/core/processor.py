@@ -136,7 +136,9 @@ class SurveyProcessor:
             DataFrame with new regional/subregional columns
         """
         for rule in self.schema.get_split_rules():
-            logger.debug(f"Splitting {rule.source_column} → {rule.regional_column}, {rule.subregional_column}")
+            logger.debug(
+                f"Splitting {rule.source_column} → {rule.regional_column}, {rule.subregional_column}"
+            )
             split = df[rule.source_column].str.split(rule.delimiter, expand=True)
             split[0] = split[0].str.strip()
             split[1] = split[1].str.strip()

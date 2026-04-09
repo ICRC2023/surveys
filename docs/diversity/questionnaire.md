@@ -30,7 +30,7 @@ responses/q11_signup
 
 (Q12 - Q16)
 Asked questions about the actual status of the group to which the respondent belongs.
-The term "group" refers to laboratories at universities, working groups within collaborations, etc. 
+The term "group" refers to laboratories at universities, working groups within collaborations, etc.
 
 ```{toctree}
 ---
@@ -59,4 +59,3 @@ responses/q20_individual_concerns
 responses/q21_dei_hindering
 responses/q22_remarks
 ```
-
