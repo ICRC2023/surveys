@@ -85,8 +85,7 @@ class SecureDataHandler:
         """
         if count_column not in data.columns:
             logger.warning(
-                f"Column '{count_column}' not found in data; "
-                f"suppression not applied"
+                f"Column '{count_column}' not found in data; suppression not applied"
             )
             return data
         return data[data[count_column] >= threshold].copy()
