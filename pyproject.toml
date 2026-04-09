@@ -29,6 +29,7 @@ commitizen = "^4.13.9"
 pytest = "^9.0.2"
 ipykernel = "^7.2.0"
 ruff = "^0.12.4"
+pre-commit = "^4.0.1"
 
 
 [tool.poetry.group.docs.dependencies]
@@ -58,6 +59,10 @@ major_version_zero = true
 version_files = [
     "titanite/__init__.py:__version__"
 ]
+
+[tool.pre-commit]
+default_stages = ["commit"]
+fail_fast = false
 
 [build-system]
 requires = ["poetry-core"]
