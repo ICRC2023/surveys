@@ -28,7 +28,7 @@ hvplot = "^0.12.2"
 commitizen = "^4.13.9"
 pytest = "^9.0.2"
 ipykernel = "^7.2.0"
-ruff = "^0.12.4"
+ruff = "^0.15.9"
 pre-commit = "^4.5.1"
 
 
