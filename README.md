@@ -57,9 +57,11 @@ $ task docs:serve
 
 CSV形式でダウンロードしたGoogleスプレッドシートを前処理して、CSVファイルに変換する
 
+### デフォルト（ICRC2023）での前処理
+
 ```console
 $ cd sandbox
-$ ti prepare ../data/raw_data/回答のスプレッドシート名.csv
+$ poetry run ti prepare ../data/raw_data/回答のスプレッドシート名.csv
 Loaded config from: config.toml
 Read data from: ../data/raw_data/20230720_icrc2023_diversity_presurvey_answers.csv
 - Replace data
@@ -69,6 +71,25 @@ Read data from: ../data/raw_data/20230720_icrc2023_diversity_presurvey_answers.c
 - Binned data
 Saved data to: ../data/test_data/prepared_data.csv
 ```
+
+### プラグインシステムを使った前処理
+
+**NEW**: `--plugin` オプションでアンケートスキーマを指定可能
+
+```console
+$ cd sandbox
+$ poetry run ti prepare ../data/raw_data/survey.csv --plugin plugins.icrc2023.ICRC2023Schema
+```
+
+**プラグインの作成**：
+
+`PLUGIN_DEVELOPMENT_GUIDE.md` を参照して、新しいアンケート用のプラグインを作成できます。
+各プラグインは独立したスキーマで、以下を定義します：
+
+- 値置換ルール（value replacements）
+- 地理情報分割（geographic splitting）
+- クラスタリング（clustering）
+- ビン分割（binning）
 
 ## 回答日時を調べたい
 
@@ -237,3 +258,30 @@ $ poetry add パッケージ名@latest --group docs
 $ git add pyproject.toml poetry.lock
 $ git commit -m "build(pyproject.toml): updated パッケージ名(docs): x.y.z -> X.Y.Z"
 ```
+
+## セキュリティ・プライバシー
+
+### データ保護
+
+このプロジェクトは ICRC2023 のダイバーシティセッションの参加者アンケートを扱っており、個人を特定できる情報を含んでいます。
+
+**重要な注意事項：**
+
+- ✅ **生データ** (`data/raw_data/`) はローカルのみで処理
+- ✅ `.gitignore` で CSV ファイルをリポジトリから除外
+- ✅ 分析結果の公開前に必ずプライバシーレビュー実施
+- ✅ セル抑制（n < 5 の場合は非表示）を実装
+
+**禁止事項：**
+
+- ❌ 生データのアップロード（GitHub/外部サービス）
+- ❌ ログへの個人情報含有
+- ❌ プライバシーレビューなしの公開
+
+### 品質管理
+
+- **Pre-commit フック**: コミット時に自動チェック（lint, format, secret detection）
+- **テストカバレッジ**: 69個のテストで完全カバレッジ
+- **Conventional Commits**: コミットメッセージの自動検証
+
+詳細は `CLAUDE.md` と `PLUGIN_DEVELOPMENT_GUIDE.md` を参照してください。
