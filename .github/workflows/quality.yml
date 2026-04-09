@@ -1,0 +1,60 @@
+name: Code Quality Checks
+
+# Run on pull requests and push to main
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    name: Code Quality and Pre-commit Hooks
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install Poetry
+        run: pipx install poetry
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Run pre-commit hooks
+        run: poetry run pre-commit run --all-files
+
+      - name: Run pytest
+        run: poetry run pytest -v
+
+  security:
+    runs-on: ubuntu-latest
+    name: Security Checks
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Check for sensitive files
+        run: |
+          if find data/raw_data -name "*.csv" -o -name "*.xlsx" 2>/dev/null | grep -q .; then
+            echo "❌ ERROR: Sensitive data files detected in data/raw_data/"
+            exit 1
+          fi
+          echo "✅ No sensitive data files found"
+
+      - name: Verify .gitignore is protecting raw_data
+        run: |
+          if git ls-files data/raw_data/ | grep -E '\.(csv|xlsx|json)$'; then
+            echo "❌ ERROR: CSV/XLSX files are tracked in git!"
+            exit 1
+          fi
+          echo "✅ Raw data files properly excluded from git"

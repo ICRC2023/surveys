@@ -30,6 +30,10 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
+      # Pre-commit フックを実行
+      - name: Run pre-commit hooks
+        run: poetry run pre-commit run --all-files
+
       # テストを実行
       - name: Run pytest
         run: poetry run pytest
