@@ -59,6 +59,7 @@ class SurveyProcessor:
             Fully preprocessed DataFrame with derived columns
         """
         logger.info(f"SurveyProcessor: starting pipeline on {len(df)} rows")
+        df = df.copy()  # Avoid SettingWithCopyWarning on DataFrame slices
         df = self._add_timestamp(df)
         df = self._add_response_counter(df)
         df = self._apply_replace_rules(df)
