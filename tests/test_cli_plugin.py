@@ -1,5 +1,7 @@
 """Tests for CLI plugin integration."""
 
+import re
+
 import pytest
 import typer
 from typer.testing import CliRunner
@@ -8,6 +10,11 @@ from plugins.icrc2023 import ICRC2023Schema
 from titanite.cli import _load_schema_class, app
 
 runner = CliRunner()
+
+
+def _strip_ansi(text: str) -> str:
+    """Remove ANSI escape codes from text."""
+    return re.sub(r"\x1b\[[0-9;]*m", "", text)
 
 
 def test_load_schema_class_with_valid_plugin():
@@ -42,4 +49,4 @@ def test_cli_prepare_accepts_plugin_option():
     # without actually running the full pipeline
     result = runner.invoke(app, ["prepare", "--help"])
     assert result.exit_code == 0
-    assert "--plugin" in result.stdout
+    assert "--plugin" in _strip_ansi(result.stdout)
