@@ -247,3 +247,24 @@ tasks:
     cmds:
       - poetry run jupytext --sync notebooks/nb/*.ipynb
       - git status
+
+  nb:edit:
+    desc: "Start Marimo editor for analysis notebooks (Usage: task nb:edit -- notebooks/analysis/q02_gender.py)"
+    cmds:
+      - poetry run marimo edit {{.CLI_ARGS}}
+
+  nb:run:
+    desc: "Run Marimo notebook as an app (Usage: task nb:run -- notebooks/analysis/q02_gender.py)"
+    cmds:
+      - poetry run marimo run {{.CLI_ARGS}}
+
+  nb:export:
+    desc: "Export Marimo notebooks in analysis/ to static HTML under docs/survey/pre-survey/analysis/"
+    cmds:
+      - mkdir -p docs/survey/pre-survey/analysis
+      - |
+        for f in notebooks/analysis/*.py; do
+          name=$(basename "$f" .py)
+          poetry run marimo export html --no-include-code "$f" -o "docs/survey/pre-survey/analysis/${name}.html"
+        done
+      - echo "✓ Exported notebooks to docs/survey/pre-survey/analysis/"
