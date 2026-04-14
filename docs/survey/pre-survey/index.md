@@ -1,4 +1,4 @@
-# Pre-survey for the diversity session
+# Pre-Conference Survey
 
 The ICRC2023 Diversity session was held on July 28th during lunchtime.
 The pre-conference survey was opened July. 8th - 21st, using Google Form.
