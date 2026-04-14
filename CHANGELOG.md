@@ -1,3 +1,14 @@
+## Unreleased
+
+### Feat
+
+- **docs**: add docs:release task and release note template
+
+### Fix
+
+- **pyproject.toml**: correct pre-commit version constraint
+- **Taskfile**: remove v prefix from GitHub release version
+
 ## 0.7.0 (2026-04-09)
 
 ### Feat
