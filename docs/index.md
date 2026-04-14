@@ -1,16 +1,28 @@
-# ICRC2023 Surveys
+# ICRC2023 Diversity
 
-This page has some results which I am working on.
+ICRC2023 ダイバーシティセッションのアンケート分析プロジェクトです。
 
-:::{toctree}
+## Survey Results
+
+ICRC2023 の事前・事後アンケートの調査結果です。
+
+```{toctree}
 ---
 maxdepth: 2
 ---
-overview
-diversity/index
-report/index
-guides/index
-:::
+survey/index
+```
+
+## titanite
+
+アンケートデータ分析ツール titanite のドキュメントです。
+
+```{toctree}
+---
+maxdepth: 2
+---
+titanite/index
+```
 
 ## APIs
 
