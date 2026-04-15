@@ -3,6 +3,7 @@ from typing import Any
 
 import altair as alt
 import pandas as pd
+import hvplot.pandas
 from scipy.stats import chi2_contingency
 
 TITLES = {
