@@ -341,12 +341,12 @@ def hbar_loop(data: pd.DataFrame, headers: list):
     """
     grouped_data: dict = {}
     hbars_data: dict = {}
-    for h in headers:
-        x, color = h
+    for pair in headers:
+        x, color = pair
         name = f"{x}-{color}"
-        g, h = hbar(data, x=x, color=color, title=name)
-        grouped_data.update({name: g})
-        hbars_data.update({name: h})
+        grouped, chart = hbar(data, x=x, color=color, title=name)
+        grouped_data.update({name: grouped})
+        hbars_data.update({name: chart})
     return grouped_data, hbars_data
 
 
