@@ -5,7 +5,7 @@ import pandas as pd
 import typer
 from loguru import logger
 
-from . import _core as core
+from . import analysis as core
 from .config import CATEGORICAL_HEADERS, Config, Data
 from .core import SurveyProcessor
 from .preprocess import categorical_data, preprocess_data, save_data, sentiment_data
