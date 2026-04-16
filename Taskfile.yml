@@ -23,7 +23,7 @@ tasks:
   code:
     desc: "Start VS Code"
     cmds:
-      - poetry run code .
+      - uv run code .
 
   env:setup:
     desc: "Set up development environment"
@@ -48,17 +48,17 @@ tasks:
   deps:setup:
     desc: Setup Python environment
     cmds:
-      - poetry install
+      - uv sync --all-groups
 
   deps:check:
     desc: Check for outdated packages
     cmds:
-      - poetry show --outdated
+      - uv lock --upgrade --dry-run
 
   deps:update:
     desc: Update dependencies
     cmds:
-      - poetry update
+      - uv lock --upgrade
 
   # ============================================================================
   # Git management tasks - Manage Git
@@ -113,26 +113,26 @@ tasks:
   pre-commit:setup:
     desc: Install pre-commit hooks
     cmds:
-      - poetry run pre-commit install
+      - uv run pre-commit install
       - echo "✓ Pre-commit hooks installed"
     silent: true
 
   pre-commit:
     desc: Run pre-commit hooks on all files
     cmds:
-      - poetry run pre-commit run --all-files
+      - uv run pre-commit run --all-files
 
   pre-commit:update:
     desc: Update pre-commit hooks to latest versions
     cmds:
-      - poetry run pre-commit autoupdate
+      - uv run pre-commit autoupdate
       - echo "✓ Pre-commit hooks updated"
     silent: true
 
   pre-commit:uninstall:
     desc: Uninstall pre-commit hooks
     cmds:
-      - poetry run pre-commit uninstall
+      - uv run pre-commit uninstall
       - echo "✓ Pre-commit hooks uninstalled"
     silent: true
 
@@ -142,12 +142,12 @@ tasks:
   docs:serve:
     desc: "Serve documentation locally with autobuild (http://localhost:8000)"
     cmds:
-      - cd docs && poetry run sphinx-autobuild . _build/html
+      - cd docs && uv run sphinx-autobuild . _build/html
 
   docs:build:
     desc: "Build documentation"
     cmds:
-      - cd docs && poetry run sphinx-build -b html . _build/html
+      - cd docs && uv run sphinx-build -b html . _build/html
 
   docs:release:
     desc: Create new release note from template (Usage - task docs:release -- X.Y.Z)
@@ -168,27 +168,27 @@ tasks:
   test:
     desc: "Run tests"
     cmds:
-      - poetry run pytest
+      - uv run pytest
 
   test:verbose:
     desc: "Run tests with verbose output"
     cmds:
-      - poetry run pytest -v
+      - uv run pytest -v
 
   test:coverage:
     desc: "Run tests with coverage report"
     cmds:
-      - poetry run pytest --cov=titanite
+      - uv run pytest --cov=titanite
 
   format:
     desc: "Format code with ruff"
     cmds:
-      - poetry run ruff format .
+      - uv run ruff format .
 
   lint:
     desc: "Lint code with ruff"
     cmds:
-      - poetry run ruff check .
+      - uv run ruff check .
 
   # ============================================================================
   # Version Management & Release
@@ -202,27 +202,27 @@ tasks:
   bump:check:
     desc: Preview next version bump
     cmds:
-      - poetry run cz bump --check-consistency --changelog --dry-run
+      - uv run cz bump --check-consistency --changelog --dry-run
 
   bump:auto:
     desc: Bump version (auto-detect from commits)
     cmds:
-      - poetry run cz bump --check-consistency --changelog
+      - uv run cz bump --check-consistency --changelog
 
   bump:patch:
     desc: Bump patch version (--increment patch)
     cmds:
-      - poetry run cz bump --check-consistency --changelog --increment patch
+      - uv run cz bump --check-consistency --changelog --increment patch
 
   bump:minor:
     desc: Bump minor version (--increment minor)
     cmds:
-      - poetry run cz bump --check-consistency --changelog --increment minor
+      - uv run cz bump --check-consistency --changelog --increment minor
 
   bump:major:
     desc: Bump major version (--increment major)
     cmds:
-      - poetry run cz bump --check-consistency --changelog --increment major
+      - uv run cz bump --check-consistency --changelog --increment major
 
   # ============================================================================
   # Project Information & CLI
@@ -237,7 +237,7 @@ tasks:
   cli:help:
     desc: "Show CLI help"
     cmds:
-      - poetry run ti --help
+      - uv run ti --help
 
   # ============================================================================
   # Notebooks
@@ -245,18 +245,18 @@ tasks:
   nb:sync:
     desc: "Sync Notebooks (ipynb -> md)"
     cmds:
-      - poetry run jupytext --sync notebooks/nb/*.ipynb
+      - uv run jupytext --sync notebooks/nb/*.ipynb
       - git status
 
   nb:edit:
     desc: "Start Marimo editor for analysis notebooks (Usage: task nb:edit -- notebooks/analysis/q02_gender.py)"
     cmds:
-      - poetry run marimo edit {{.CLI_ARGS}}
+      - uv run marimo edit {{.CLI_ARGS}}
 
   nb:run:
     desc: "Run Marimo notebook as an app (Usage: task nb:run -- notebooks/analysis/q02_gender.py)"
     cmds:
-      - poetry run marimo run {{.CLI_ARGS}}
+      - uv run marimo run {{.CLI_ARGS}}
 
   nb:export:
     desc: "Export Marimo notebooks in analysis/ to static HTML under docs/survey/pre-survey/analysis/"
@@ -265,6 +265,6 @@ tasks:
       - |
         for f in notebooks/analysis/*.py; do
           name=$(basename "$f" .py)
-          poetry run marimo export html --no-include-code "$f" -o "docs/survey/pre-survey/analysis/${name}.html"
+          uv run marimo export html --no-include-code "$f" -o "docs/survey/pre-survey/analysis/${name}.html"
         done
       - echo "✓ Exported notebooks to docs/survey/pre-survey/analysis/"

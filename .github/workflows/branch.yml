@@ -20,22 +20,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Install Poetry
-        run: pipx install poetry
-      - name: Setup Python
-        uses: actions/setup-python@v6
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v5
         with:
           python-version: "3.11"
-          cache: "poetry"
-      - name: Check poetry
-        run: |
-          poetry --version
-          poetry config --list
+          enable-cache: true
+      - name: Show uv version
+        run: uv --version
       - name: Show outdated packages
-        run: poetry show --outdated
+        run: uv lock --upgrade --dry-run
       - name: Install dependencies
-        run: poetry install
+        run: uv sync --all-groups
       - name: Build Sphinx
         run: |
           cd docs
-          poetry run make dirhtml
+          uv run make dirhtml

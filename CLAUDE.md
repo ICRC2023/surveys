@@ -12,10 +12,10 @@ This is an ICRC2023 Diversity Session survey analysis project called "Titanite" 
 # Clone and setup
 git clone git@github.com:ICRC2023/surveys.git
 cd surveys
-poetry install
+uv sync --all-groups
 
 # Verify installation
-poetry run ti --help
+uv run ti --help
 
 # Run tests
 task test
@@ -33,7 +33,7 @@ task docs:serve
 - **`docs/`** - Sphinx documentation site
 - **`notebooks/`** - Development and analysis Jupyter Notebooks
 - **`Taskfile.yml`** - Task automation for common operations
-- **`pyproject.toml`**, **`poetry.lock`** - Dependency management
+- **`pyproject.toml`**, **`uv.lock`** - Dependency management
 
 ## Architecture
 
@@ -54,7 +54,7 @@ Titanite is now a **pluggable survey processing framework**:
 - Can be extended to support multiple surveys without modifying core
 
 **CLI Interface (`titanite.cli`)**
-- Main entry point via `ti` command (use `poetry run ti`)
+- Main entry point via `ti` command (use `uv run ti`)
 - Commands operate from `sandbox/` directory with `config.toml`
 - Most commands support `--read_from`, `--write-dir`, `--load_from` parameters
 - **NEW**: `--plugin` option for dynamic schema selection (e.g., `--plugin plugins.icrc2023.ICRC2023Schema`)
@@ -64,7 +64,7 @@ Titanite is now a **pluggable survey processing framework**:
 - `ti config` - Show configuration (supports `--questions`, `--choices` flags)
 - `ti prepare` - Preprocess raw CSV data and generate prepared_data.csv
   - **NEW**: `--plugin PLUGIN_NAME` option for dynamic schema selection
-  - Example: `poetry run ti prepare data.csv --plugin plugins.icrc2023.ICRC2023Schema`
+  - Example: `uv run ti prepare data.csv --plugin plugins.icrc2023.ICRC2023Schema`
   - Without `--plugin`: uses default backward-compatible workflow
 - `ti comments` - Extract and analyze free-text responses (q15-q22)
 - `ti response` - Create response timeline heatmap
@@ -94,23 +94,23 @@ Titanite is now a **pluggable survey processing framework**:
 **Data Preprocessing**
 ```bash
 cd sandbox
-poetry run ti prepare ../data/raw_data/survey.csv
+uv run ti prepare ../data/raw_data/survey.csv
 # Outputs: prepared_data.csv, categorical_data.csv, sentiment_data.csv
 ```
 
 **Statistical Analysis**
 ```bash
 cd sandbox
-poetry run ti chi2                    # Chi-square tests for all variable pairs
-poetry run ti p005 q13 --save         # Extract significant correlations (p < 0.05)
-poetry run ti crosstabs --save        # Cross-tabulation analysis
+uv run ti chi2                    # Chi-square tests for all variable pairs
+uv run ti p005 q13 --save         # Extract significant correlations (p < 0.05)
+uv run ti crosstabs --save        # Cross-tabulation analysis
 ```
 
 **Visualization**
 ```bash
 cd sandbox
-poetry run ti response                # Timeline of survey responses
-poetry run ti hbars --save            # Histograms for all variables
+uv run ti response                # Timeline of survey responses
+uv run ti hbars --save            # Histograms for all variables
 ```
 
 ### Data Handling Considerations
@@ -188,7 +188,7 @@ class YourSurveySchema(SurveySchema):
 
 ```bash
 cd sandbox
-poetry run ti prepare ../data/raw_data/survey.csv --plugin plugins.your_survey.YourSurveySchema
+uv run ti prepare ../data/raw_data/survey.csv --plugin plugins.your_survey.YourSurveySchema
 ```
 
 ## Development Environment
@@ -209,7 +209,7 @@ All commits are automatically checked for:
 Run manually:
 ```bash
 task pre-commit         # Run all pre-commit hooks
-poetry run pre-commit run --all-files  # Check all files
+uv run pre-commit run --all-files  # Check all files
 ```
 
 ### Common Tasks (Taskfile.yml)
@@ -248,7 +248,7 @@ task docs:build         # One-time build
 
 # Manual build
 cd docs
-poetry run sphinx-build -b html . _build/html
+uv run sphinx-build -b html . _build/html
 open _build/html/index.html
 ```
 
@@ -335,8 +335,8 @@ task deps:update       # Update all dependencies
 task test              # Verify tests pass
 
 # Commit and push
-git add poetry.lock
-git commit -m "build(poetry.lock): update dependencies"
+git add uv.lock
+git commit -m "build(uv.lock): update dependencies"
 git push origin update-packages
 
 # Clean up after PR merge
@@ -355,7 +355,7 @@ The project uses semantic versioning with commitizen:
 task version
 
 # Bump version (auto-detect from commits)
-poetry run cz bump --changelog --check-consistency
+uv run cz bump --changelog --check-consistency
 
 # Push tags
 git push origin --tags
@@ -422,14 +422,14 @@ git push origin --tags
 
 ```bash
 # Run all tests
-poetry run pytest tests/
+uv run pytest tests/
 
 # Run specific test category
-poetry run pytest tests/test_icrc2023_schema.py -v
-poetry run pytest tests/test_integration_real_world.py -v
+uv run pytest tests/test_icrc2023_schema.py -v
+uv run pytest tests/test_integration_real_world.py -v
 
 # Test coverage
-poetry run pytest --cov=titanite tests/
+uv run pytest --cov=titanite tests/
 ```
 
 **Current Coverage:**
@@ -440,8 +440,7 @@ poetry run pytest --cov=titanite tests/
 
 ## Common Gotchas
 
-- Always use `poetry run` for command execution to ensure correct Python environment
-- Avoid using `poetry shell` (deprecated) - use `poetry run` instead
+- Always use `uv run` for command execution to ensure correct Python environment
 - Commands typically run from `sandbox/` directory where `config.toml` is located
 - Use `task` commands instead of manual workflows for consistency
 - **NEW**: Pre-commit hooks run automatically - commit may fail until issues are fixed
