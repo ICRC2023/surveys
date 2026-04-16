@@ -18,22 +18,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v5
         with:
           python-version: "3.11"
-
-      - name: Install Poetry
-        run: pipx install poetry
+          enable-cache: true
 
       - name: Install dependencies
-        run: poetry install
+        run: uv sync --all-groups
 
       - name: Run pre-commit hooks
-        run: poetry run pre-commit run --all-files
+        run: uv run pre-commit run --all-files
 
       - name: Run pytest
-        run: poetry run pytest -v
+        run: uv run pytest -v
 
   security:
     runs-on: ubuntu-latest
