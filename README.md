@@ -26,7 +26,7 @@ $ git clone git@github.com:ICRC2023/surveys.git
 $ cd surveys
 $ uv sync --all-groups
 ...（省略）...
-Installing the current project: titanite (0.6.0)
+Installing the current project: titanite (0.7.0)
 $ uv run ti --help
 ```
 
