@@ -9,6 +9,11 @@
 - **pyproject.toml**: correct pre-commit version constraint
 - **Taskfile**: remove v prefix from GitHub release version
 
+### Refactor
+
+- **analysis**: remove unused hvplot.pandas import
+- deprecate _core.py by moving functions to analysis.py
+
 ## 0.7.0 (2026-04-09)
 
 ### Feat
