@@ -1,6 +1,6 @@
 # https://taskfile.dev
 
-version: '3'
+version: "3"
 
 vars:
   GREETING: "🔬 Titanite - Survey Analysis Tool"
@@ -8,7 +8,7 @@ vars:
 
 tasks:
   default:
-    desc: "Show project information"
+    desc: List available tasks
     cmds:
       - echo "{{.GREETING}}"
       - echo ""
@@ -21,44 +21,44 @@ tasks:
   # ============================================================================
 
   code:
-    desc: "Start VS Code"
+    desc: Start VS Code
     cmds:
       - uv run code .
 
   env:setup:
-    desc: "Set up development environment"
+    desc: Set up development environment
     cmds:
-      - echo "Setting up development environment..."
       - task: deps:setup
       - task: pre-commit:setup
-      - echo "✓ Development environment ready"
-    silent: true
 
   env:clean:
-    desc: "Clean development environment"
+    desc: Remove .venv and caches
     cmds:
       - rm -rf .venv __pycache__ .pytest_cache .ruff_cache
-      - echo "✓ Environment cleaned"
-    silent: true
 
   # ============================================================================
   # Dependency management tasks - Update and check dependencies
   # ============================================================================
 
   deps:setup:
-    desc: Setup Python environment
+    desc: Install dependencies
     cmds:
       - uv sync --all-groups
 
-  deps:check:
-    desc: Check for outdated packages
+  deps:outdated:
+    desc: List outdated dependencies
     cmds:
-      - uv lock --upgrade --dry-run
+      - uv pip list --outdated
 
   deps:update:
     desc: Update dependencies
     cmds:
-      - uv lock --upgrade
+      - uv sync --upgrade --all-groups
+
+  deps:audit:
+    desc: Check for security vulnerabilities in dependencies
+    cmds:
+      - uv audit --preview-features audit-command
 
   # ============================================================================
   # Git management tasks - Manage Git
@@ -67,99 +67,138 @@ tasks:
   status:
     desc: Show git status.
     cmds:
-      - git status
+      - git status --short --branch
+    silent: true
 
   log:
-    desc: Show recent commits (last 10).
+    desc: Show commit history (last 20 commits)
     cmds:
-      - git log --oneline -10
+      - git log --oneline --graph --decorate -n 20
+
+  log:last-tag:
+    desc: Show commits since the last tag
+    vars:
+      LAST_TAG:
+        sh: git describe --tags --abbrev=0
+    preconditions:
+      - sh: "git describe --tags --abbrev=0 >/dev/null 2>&1"
+        msg: "No tags found"
+    cmds:
+      - git log {{.LAST_TAG}}..HEAD --oneline --graph --decorate
+
+  diff:
+    desc: Show unstaged changes
+    cmds:
+      - git diff
+    silent: true
+
+  diff:staged:
+    desc: Show staged changes
+    cmds:
+      - git diff -cached
+    silent: true
+
+  diff:last-tag:
+    desc: Show all changes since the last tag
+    vars:
+      LAST_TAG:
+        sh: git desctibe --tags --abbrev=0
+    preconditions:
+      - sh: "git describe --tags --abbrev=0 >/dev/null 2>&1"
+        msg: "No tags found"
+    cmds:
+      - git diff {{.LAST_TAG}}..HEAD
+    silent: true
 
   push:
-    desc: Push commits to remote (main branch).
+    desc: Push commits to remote
     cmds:
-      - git push origin main
+      - git push origin HEAD
 
   push:tags:
     desc: Push commits and tags to remote.
     cmds:
-      - git push origin main --tags
+      - git push origin HEAD --tags
 
   # Release procedure:
   #   0. task bump:check
   #   1. task bump:patch / bump:minor / bump:major  (ask user before running)
-  #   2. task docs:release -- X.Y.Z  (create and fill in release notes)
-  #   3. Update mkdocs.yml navigation
-  #   4. Commit mkdocs.yml and the release note
-  #   5. task push:tags
-  #   6. task push:release -- X.Y.Z
+  #   2. task push:tags
+  #   3. task docs:release -- X.Y.Z  (create and fill in release notes)
+  #     - Fill in the release note in English
+  #     - Update zensical docs navigation
+  #     - Commit the changes
+  #   4. task push:release -- X.Y.Z (Upload the new release note to remote
   push:release:
-    desc: Create a GitHub release with release notes (Usage - task push:release -- X.Y.Z)
+    desc: "Create a GitHub release with release notes (Usage: task push:release -- X.Y.Z)"
     requires:
       vars: [CLI_ARGS]
+    vars:
+      VERSION: "{{.CLI_ARGS}}"
+      SOURCE: "docs/releases/v{{.CLI_ARGS}}.md"
     preconditions:
       - sh: '[ -n "{{.CLI_ARGS}}" ]'
         msg: "Version required. Usage: task push:release -- X.Y.Z"
-      - sh: "test -f docs/releases/v{{.CLI_ARGS}}.md"
-        msg: "Release notes not found: docs/releases/v{{.CLI_ARGS}}.md"
-    vars:
-      VERSION: "{{.CLI_ARGS}}"
+      - sh: "test -f {{.SOURCE}}"
+        msg: "Release notes not found: {{.SOURCE}}"
     cmds:
-      - gh release create {{.VERSION}} --title "{{.VERSION}}" --notes-file docs/releases/v{{.VERSION}}.md
+      - gh release create {{.VERSION}} --title "{{.VERSION}}" --notes-file {{.SOURCE}}
 
   # ============================================================================
   # Pre-commit hooks
   # ============================================================================
-
-  pre-commit:setup:
-    desc: Install pre-commit hooks
-    cmds:
-      - uv run pre-commit install
-      - echo "✓ Pre-commit hooks installed"
-    silent: true
 
   pre-commit:
     desc: Run pre-commit hooks on all files
     cmds:
       - uv run pre-commit run --all-files
 
+  pre-commit:setup:
+    desc: Install pre-commit hooks
+    cmds:
+      - uv run pre-commit install
+
   pre-commit:update:
     desc: Update pre-commit hooks to latest versions
     cmds:
       - uv run pre-commit autoupdate
-      - echo "✓ Pre-commit hooks updated"
-    silent: true
 
   pre-commit:uninstall:
     desc: Uninstall pre-commit hooks
     cmds:
       - uv run pre-commit uninstall
-      - echo "✓ Pre-commit hooks uninstalled"
-    silent: true
 
   # ============================================================================
   # Documentation - Sphinx-based docs
   # ============================================================================
   docs:serve:
     desc: "Serve documentation locally with autobuild (http://localhost:8000)"
+    dir: docs
     cmds:
-      - cd docs && uv run sphinx-autobuild . _build/html
+      - uv run sphinx-autobuild . _build/html
 
   docs:build:
     desc: "Build documentation"
+    dir: docs
     cmds:
-      - cd docs && uv run sphinx-build -b html . _build/html
+      - uv run sphinx-build -b html . _build/html
 
   docs:release:
-    desc: Create new release note from template (Usage - task docs:release -- X.Y.Z)
-    dir: docs/releases
+    desc: "Scaffold a new release note from template (Usage: task docs:release -- X.Y.Z)"
     requires:
       vars: [CLI_ARGS]
+    vars:
+      VERSION: "{{.CLI_ARGS"
+      SOURCE: "templates/release.md"
+      TARGET: "docs/releases/v{{.CLI_ARGS}}.md"
     preconditions:
       - sh: '[ -n "{{.CLI_ARGS}}" ]'
-        msg: "Filename required. Usage: task docs:release -- X.Y.Z"
+        msg: "Version required. Usage: task docs:release -- X.Y.Z"
+      - sh: "[ ! -f {{.TARGET}} ]"
+        msg: "Release notes already exist: {{.TARGET}}"
     cmds:
-      - cp -i template.md v{{.CLI_ARGS}}.md
-      - echo "Created docs/releases/v{{.CLI_ARGS}}.md - edit to fill in the release details"
+      - cp {{.SOURCE}} {{.TARGET}}
+      - echo "Created {{.TARGET}}. Please edit the file to add release notes."
 
   # ============================================================================
   # Testing and Code Quality
