@@ -2,12 +2,7 @@
 
 titanite を開発・拡張するためのガイドです。
 
-```{toctree}
----
-maxdepth: 2
----
-architecture
-plugin-development
-testing
-contributing
-```
+- [アーキテクチャ](architecture.md)
+- [プラグイン開発](plugin-development.md)
+- [テスト](testing.md)
+- [コントリビューション](contributing.md)
