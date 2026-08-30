@@ -31,6 +31,7 @@ nav = [
     { "Chi-Square Test" = "statistics/chi2_test.md" },
     { "Clustering" = "statistics/clustering.md" },
     { "Binning" = "statistics/binning.md" },
+    { "k-Anonymity" = "statistics/k_anonymity.md" },
   ] },
   { "API Reference" = "reference/index.md" },
   { "Releases" = [

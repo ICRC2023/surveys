@@ -6,6 +6,7 @@ Background on the statistical processing built into titanite's `prepare` and
 - [Chi-Square Test](chi2_test.md) — the association test behind `ti chi2` and `ti p005`
 - [Clustering](clustering.md) — deriving new categorical columns with `ClusterRule`
 - [Binning](binning.md) — turning `q10` / `q13` into categories with `BinRule`
+- [k-Anonymity](k_anonymity.md) — making `ti anonymize` / `ti aggregate` output safe to commit
 
 ## Where the rules live
 
@@ -19,3 +20,8 @@ The ICRC2023 implementation is
 The chi-square code is in [titanite/analysis.py](../../titanite/analysis.py)
 (`crosstab_data`, `crosstab_loop`) and is wired to the CLI in
 [titanite/cli.py](../../titanite/cli.py).
+
+The privacy layer — k-anonymity row suppression, cell suppression, timestamp
+generalization, rare-value masking — is `SecureDataHandler` in
+[titanite/core/security.py](../../titanite/core/security.py), driven by the
+schema's `quasi_identifiers`, `public_drop_columns`, and `public_mask_columns`.
