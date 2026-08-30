@@ -30,7 +30,8 @@ task docs:serve
 - **`tests/`** - Test suite with pytest configuration
 - **`sandbox/`** - Configuration file (config.toml) and CLI working directory
 - **`data/`** - Survey data. `downloaded/` (raw Google Forms exports, git-ignored), `private/` (individual-level pipeline output, git-ignored), `public/` (anonymized extract, committed)
-- **`docs/`** - Sphinx documentation site
+- **`docs/`** - titanite framework docs (Zensical, `zensical.toml`)
+- **`reports/`** - ICRC2023 survey-results reports (Quarto, `reports/_quarto.yml`)
 - **`notebooks/`** - Development and analysis Jupyter Notebooks
 - **`Taskfile.yml`** - Task automation for common operations
 - **`pyproject.toml`**, **`uv.lock`** - Dependency management
@@ -248,8 +249,10 @@ task lint               # Lint code with ruff
 task pre-commit         # Run pre-commit hooks
 
 # Documentation
-task docs:build         # Build Sphinx docs
-task docs:serve         # Serve docs at http://localhost:8000 with auto-reload
+task docs:build         # Build the titanite docs (Zensical)
+task docs:serve         # Serve the titanite docs at http://localhost:8000
+task reports:render     # Render the survey-results reports (Quarto)
+task reports:preview    # Preview the survey-results reports
 
 # Dependencies
 task deps:check         # Check for outdated packages
@@ -261,16 +264,22 @@ task cli:help           # Show CLI help
 
 ### Documentation Generation
 
-```bash
-# Using Taskfile (recommended)
-task docs:serve         # Auto-reload at http://localhost:8000
-task docs:build         # One-time build
+Two independent sites:
 
-# Manual build
-cd docs
-uv run sphinx-build -b html . _build/html
-open _build/html/index.html
-```
+- **titanite framework docs** — Zensical (`zensical.toml`), source in `docs/`
+  ```bash
+  task docs:serve   # http://localhost:8000, auto-reload
+  task docs:build   # one-time build into site/
+  ```
+- **ICRC2023 survey-results reports** — Quarto (`reports/_quarto.yml`), source
+  in `reports/`, reading only `data/public/`
+  ```bash
+  task reports:preview   # local preview
+  task reports:render    # build into reports/_site/ (uses reports/_freeze/)
+  ```
+
+CI (`static.yml`) deploys both to `https://www.icrc2023.org/surveys/` —
+reports at the root, the framework docs under `/titanite/`.
 
 ### Jupyter Notebooks
 

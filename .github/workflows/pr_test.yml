@@ -1,6 +1,5 @@
-name: Check Tests and Sphinx Build on Pull Requests
+name: Check tests and docs build on pull requests
 
-# Runs on pull requests targeting the main branch
 on:
   pull_request:
     branches:
@@ -11,31 +10,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # リポジトリをチェックアウト
       - name: Checkout
         uses: actions/checkout@v7
 
-      # uv をセットアップ
-      - name: Setup uv
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Set up uv
         uses: astral-sh/setup-uv@v7
         with:
           python-version: "3.11"
           enable-cache: true
 
-      # 必要な依存関係をインストール
       - name: Install dependencies
         run: uv sync --all-groups
 
-      # Pre-commit フックを実行
       - name: Run pre-commit hooks
         run: uv run pre-commit run --all-files
 
-      # テストを実行
       - name: Run pytest
         run: uv run pytest
 
-      # Sphinx ドキュメントをビルド
-      - name: Build Sphinx
-        run: |
-          cd docs
-          uv run make dirhtml
+      - name: Build titanite docs (Zensical)
+        run: uv run zensical build --clean
+
+      - name: Render survey reports (Quarto)
+        working-directory: reports
+        run: uv run quarto render

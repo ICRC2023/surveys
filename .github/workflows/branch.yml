@@ -1,37 +1,28 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Check Sphinx Document Build on Branches
+name: Check docs build on branches
 
 on:
-  # Runs on pushes targeting the default branch
-  #push:
-  #  branches: ["main"]
-  # Exclude pushes targetting the main branch
   push:
     branches-ignore:
       - "main"
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
-  # Single deploy job since we're just deploying
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-      - name: Setup uv
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+      - name: Set up uv
         uses: astral-sh/setup-uv@v7
         with:
           python-version: "3.11"
           enable-cache: true
-      - name: Show uv version
-        run: uv --version
-      - name: Show outdated packages
-        run: uv lock --upgrade --dry-run
       - name: Install dependencies
         run: uv sync --all-groups
-      - name: Build Sphinx
-        run: |
-          cd docs
-          uv run make dirhtml
+      - name: Build titanite docs (Zensical)
+        run: uv run zensical build --clean
+      - name: Render survey reports (Quarto)
+        working-directory: reports
+        run: uv run quarto render
