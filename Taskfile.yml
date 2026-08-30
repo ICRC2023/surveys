@@ -46,9 +46,9 @@ tasks:
       - uv sync --all-groups
 
   deps:outdated:
-    desc: List outdated dependencies
+    desc: List outdated direct dependencies
     cmds:
-      - uv pip list --outdated
+      - uv tree --outdated --depth 1
 
   deps:update:
     desc: Update dependencies
