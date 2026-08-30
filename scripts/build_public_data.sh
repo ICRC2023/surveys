@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Regenerate the committed data/public/ extract from the raw export.
 #
-# The raw export lives only in data/raw_data/ (git-ignored). Run this after
-# updating it or the anonymization rules. Output:
+# The raw Google Forms CSV export lives only in data/downloaded/ (git-ignored).
+# Run this after refreshing it or changing the anonymization rules. Output:
 #   data/public/public_data.csv           - k-anonymized individual-level extract
 #   data/public/aggregates/univariate/    - one suppressed frequency table per column
 #   data/public/aggregates/bivariate/     - suppressed cross-tabs for the pairs below
@@ -10,7 +10,7 @@
 # See PLAN.md Phase 5.
 set -euo pipefail
 
-RAW="${1:-../data/raw_data/diversity/20230726_icrc2023_diversity_presurvey_answers.csv}"
+RAW="${1:-../data/downloaded/20230726_icrc2023_diversity_pre_survey.csv}"
 PLUGIN="plugins.icrc2023.ICRC2023Schema"
 
 cd "$(dirname "$0")/../sandbox"

@@ -52,10 +52,11 @@ jobs:
         # its _ja translation. Allows the aggregated data/public/ extract.
         run: python scripts/check_sensitive_data.py
 
-      - name: No raw exports left in the working tree
+      - name: No raw exports checked out in CI
         run: |
-          if find data/raw_data -name "*.csv" -o -name "*.xlsx" 2>/dev/null | grep -q .; then
-            echo "❌ ERROR: raw export files present under data/raw_data/"
+          if git ls-files -- 'data/downloaded/*.csv' 'data/downloaded/*.xlsx' \
+               'data/raw_data/*.csv' 'data/raw_data/*.xlsx' | grep -q .; then
+            echo "❌ ERROR: a raw export is tracked under data/downloaded/ or data/raw_data/"
             exit 1
           fi
-          echo "✅ No raw export files in data/raw_data/"
+          echo "✅ No raw export files tracked in git"

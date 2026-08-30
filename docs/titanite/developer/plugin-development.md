@@ -265,7 +265,7 @@ def test_with_real_data():
 ```bash
 # Test full pipeline with real data
 cd sandbox
-poetry run ti prepare ../data/raw_data/your_survey.csv \
+poetry run ti prepare ../data/downloaded/your_survey.csv \
   --plugin plugins.your_survey.YourSurveySchema
 ```
 

@@ -156,7 +156,7 @@ sandbox/
 └── app.py              # Streamlit dashboard
 
 data/
-├── raw_data/           # Raw survey CSV files
+├── downloaded/         # Raw Google Forms CSV exports
 └── test_data/          # Test datasets
 ```
 

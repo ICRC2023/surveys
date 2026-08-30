@@ -51,7 +51,7 @@ poetry run ti prepare <input_file> [OPTIONS]
 
 ```bash
 cd sandbox
-poetry run ti prepare ../data/raw_data/survey.csv
+poetry run ti prepare ../data/downloaded/survey.csv
 poetry run ti prepare data.csv --plugin plugins.icrc2023.ICRC2023Schema
 ```
 
