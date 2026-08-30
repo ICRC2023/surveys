@@ -815,8 +815,10 @@ reports/              # ICRC2023 アンケート結果（Quarto）
    - `docs/survey/**`、`docs/conf.py`、`docs/index.md`、`docs/Makefile`、
      `docs/make.bat` を削除。post-survey は questionnaire のみ published
      （`responses.ipynb` は実質空だったので捨てた）
-   - `docs/` に残るのは Zensical ソース（`docs/titanite/`）、リリースノート
-     （`docs/releases/`）、ロゴ（`docs/_static/`、README が参照）
+   - `docs/` に残るのは Zensical ソース、リリースノート（`docs/releases/`）、
+     ロゴ（`docs/assets/`、README が参照）。その後 `docs/titanite/*` を
+     `docs/*` に引き上げ、`docs/_static/` を `docs/assets/` に改名
+     （PR: refactor/docs-titanite-to-root）
    - `sphinx-*` / `myst-nb` を依存から削除
    - `static.yml` / `branch.yml` / `pr_test.yml` の `make dirhtml` を
      Zensical ビルド + Quarto レンダーに置換
