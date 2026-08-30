@@ -634,6 +634,15 @@ public_data.csv        (コミット可)  ← timestamp除去 / q15-q22除去 / 
 - CI / pre-commit の機密ファイル検出ガード
 - 履歴クリーンアップの実施記録（実施する場合）
 
+### 補足: 日本語訳（`_ja` カラム）の廃止
+
+`sentiment_data()` の翻訳処理は削除した（`TextBlob.translate` が
+現行版で削除されているため）。`_ja` カラムはどのみち公開されない
+（`ti anonymize` が削除、`check_sensitive_data.py` が検出）ので、
+`data/private/` にのみ残る列を生成する意味は薄い。必要になったら
+オフライン翻訳（argos-translate 等）で任意フラグとして再追加する。
+`prepared_data.csv` は 58 → 52 列（`_ja` 6 列減）。
+
 ---
 
 ## Phase 6: GitHub Actions ワークフロー再編

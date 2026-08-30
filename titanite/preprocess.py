@@ -173,8 +173,12 @@ def categorical_data(data: pd.DataFrame, categories: dict) -> pd.DataFrame:
 def sentiment_data(data):
     """感情分析
 
-    `TextBlob``パッケージを使って、自由記述の内容を感情分析する。
+    ``TextBlob`` パッケージを使って、自由記述の内容を感情分析する。
+    各自由記述カラムに ``_polarity`` と ``_subjectivity`` を追加する。
 
+    TODO: 日本語訳（``_ja`` カラム）の生成は廃止した。
+    ``TextBlob.translate`` が削除されたため。必要になったら
+    オフライン翻訳（argos-translate など）で任意フラグとして再追加する。
     """
     import numpy as np
     from textblob import TextBlob
@@ -198,18 +202,6 @@ def sentiment_data(data):
             # logger.debug(e)
             return np.nan
 
-    def translation(text):
-        try:
-            blob = TextBlob(text)
-            return blob.translate(from_lang="en", to="ja")
-        except TypeError:
-            # logger.debug(e)
-            return np.nan
-
-    # やりたいこと
-    # data["q15_polarity"] = data["q15"].apply(polarity)
-    # data["q15_subjectivity"] = data["q15"].apply(subjectivity)
-
     # 自由記述の回答のカラム
     headers = ["q15", "q16", "q18", "q20", "q21", "q22"]
 
@@ -220,8 +212,6 @@ def sentiment_data(data):
         data[h] = data[header].progress_apply(polarity)
         h = f"{header}_subjectivity"
         data[h] = data[header].progress_apply(subjectivity)
-        h = f"{header}_ja"
-        data[h] = data[header].progress_apply(translation)
         logger.info(f"Processing {header} ... done !")
 
     return data
@@ -479,20 +469,3 @@ def save_data(data: pd.DataFrame, write_dir: str) -> None:
     fname = Path(write_dir) / "sentiment_data.csv"
     data[headers].to_csv(fname, index=False)
     logger.info(f"Saved data to: {fname}")
-
-
-if __name__ == "__main__":
-    logger.debug("Test core.py")
-
-    import titanite as ti
-
-    fname = "../sandbox/config.toml"
-    config = ti.Config(fname=fname)
-    config.load()
-    category = config.categories()
-    logger.debug(category)
-
-    fname = "../data/test_data/20230715_icrc2023_diversity_presurvey_answers.csv"
-    data = pd.read_csv(fname, skiprows=1)
-    data = preprocess_data(data, category)
-    logger.info(data)
