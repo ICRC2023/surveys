@@ -603,11 +603,19 @@ public_data.csv        (コミット可)  ← timestamp除去 / q15-q22除去 / 
 
 ### タスク
 
-1. **[緊急] 追跡中の機密 CSV を除去**
-   - `git rm --cached data/test_data/*.csv data/test_data/chi2_test/*.csv`
-   - `.gitignore` に `data/**/*.csv` `data/**/*.json` を明示追加（本章 72-91 行を反映）
-   - 公開リポジトリのため、履歴からの完全除去（`git filter-repo`）を実施するか要判断
-     - 実施する場合、既存クローン・フォークの扱いを ICRC2023 Diversity Group と協議
+1. **[緊急] 追跡中の機密 CSV を除去** — ✅ 完了
+   - ✅ 追跡停止（PR: feat/untrack-test-data-csv, #221）+ `.gitignore` 強化
+   - ✅ 履歴からの完全除去（`git filter-repo --invert-paths`）を実施:
+     `data/test_data/prepared_data.csv` / `categorical_data.csv` /
+     `sentiment_data.csv` / `chi2_test/chi2_test.csv` を全コミット・全タグから除去
+     （1037 → 1031 commits、main `bb4673a` → `5c4eed9`、タグ 9 個も force update）
+   - バックアップ: `surveys-backup-20260830-222318.git`
+   - 残作業（リポジトリ管理者）:
+     - Diversity Group メンバーへ周知（既存クローンは無効、再クローン or
+       `git fetch && git reset --hard origin/main` が必要）
+     - GitHub Support にキャッシュパージを依頼（force-push 後も一時的に
+       古い blob が API 経由で参照可能なため）
+     - `update-packages` 運用ブランチは次回必要時に main から切り直す
 2. **[緊急] 公開中の GitHub Pages を精査**
    - `q15_*.ipynb` `q16_*.ipynb` `q18_*.ipynb` が自由記述の原文を出力していないか確認
    - 出力していれば、原文を出さず件数・感情スコア分布・カテゴリ集計に作り替え
@@ -678,7 +686,7 @@ public_data.csv        (コミット可)  ← timestamp除去 / q15-q22除去 / 
 - `ti anonymize` コマンドとそのテスト
 - 自由記述を露出しないよう作り替えた q15/q16/q18 ノート
 - CI / pre-commit の機密ファイル検出ガード
-- 履歴クリーンアップの実施記録（実施する場合）
+- ✅ 履歴クリーンアップ完了（`git filter-repo`、タスク1 参照）
 
 ### 補足: 日本語訳（`_ja` カラム）の廃止
 
