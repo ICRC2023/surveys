@@ -25,6 +25,17 @@ repos:
       - id: commitizen-branch
         stages: [pre-push]
 
+  - repo: local
+    hooks:
+      - id: check-sensitive-data
+        name: no individual-level survey data
+        description: >-
+          Reject staged CSV/TSV/JSON under data/ whose columns include a
+          free-text response field or its _ja translation.
+        entry: python scripts/check_sensitive_data.py
+        language: system
+        files: ^data/.*\.(csv|tsv|json)$
+
 ci:
   autofix_commit_msg: 'chore: pre-commit auto-fixes'
   autofix_prs: true
