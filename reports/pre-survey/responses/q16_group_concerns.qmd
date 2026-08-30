@@ -1,0 +1,31 @@
+---
+title: "Q16. Group concerns"
+---
+
+**Please let us know if there is anything your group needs to work on, or any problems related to DE&I.**
+
+This was a free-text question. The answers themselves are not published;
+this page reports only the response count and the sentiment-score
+distribution.
+
+```{python}
+# | echo: false
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path.cwd().parent.parent))
+from _helpers import free_text_answered, free_text_note, sentiment_hist  # noqa: E402
+```
+
+`{python} f"**{free_text_answered('q16')}** of 245 respondents answered."`
+
+## Sentiment of the answers
+
+```{python}
+# | echo: false
+sentiment_hist("q16", title="Q16. Group concerns")
+```
+
+::: {.callout-note appearance="minimal"}
+`{python} free_text_note()`
+:::

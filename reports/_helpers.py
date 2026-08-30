@@ -119,3 +119,57 @@ def suppression_note() -> str:
         f"(privacy suppression). Percentages, where shown, are of the "
         f"non-suppressed total."
     )
+
+
+# -- Free-text questions ---------------------------------------------------
+#
+# Verbatim free-text answers are never published. These helpers report only
+# how many people answered and the distribution of the (non-reversible)
+# TextBlob sentiment scores from the anonymized extract.
+
+
+def free_text_answered(question: str) -> int:
+    """Number of respondents who wrote a free-text answer to ``question``.
+
+    Counted from the non-null sentiment score in ``public_data.csv`` (the
+    answer text itself is not in the extract).
+    """
+    df = load_public()
+    return int(df[f"{question}_polarity"].notna().sum())
+
+
+def sentiment_hist(question: str, *, title: str = "") -> alt.Chart:
+    """Histogram of polarity and subjectivity for a free-text question."""
+    df = load_public()
+    long = (
+        df[[f"{question}_polarity", f"{question}_subjectivity"]]
+        .rename(
+            columns={
+                f"{question}_polarity": "polarity",
+                f"{question}_subjectivity": "subjectivity",
+            }
+        )
+        .melt(var_name="score", value_name="value")
+        .dropna()
+    )
+    return (
+        alt.Chart(long)
+        .mark_bar(opacity=0.7)
+        .encode(
+            x=alt.X("value:Q", bin=alt.Bin(maxbins=20), title="Score"),
+            y=alt.Y("count()", title="Respondents"),
+            color=alt.Color("score:N", title=None),
+            column=alt.Column("score:N", title=None),
+        )
+        .properties(title=title, width=260, height=180)
+    )
+
+
+def free_text_note() -> str:
+    """Caption for the free-text pages."""
+    return (
+        "Verbatim answers are not published. Polarity (negative to positive) "
+        "and subjectivity (factual to opinionated) are TextBlob sentiment "
+        "scores computed on the English text; they cannot be used to "
+        "reconstruct it."
+    )
