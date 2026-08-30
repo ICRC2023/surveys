@@ -182,6 +182,55 @@ class SecureDataHandler:
         return result
 
     @staticmethod
+    def mask_rare_categories(
+        data: pd.DataFrame,
+        columns: list[str],
+        threshold: int = 5,
+        placeholder: str = "(rare)",
+    ) -> pd.DataFrame:
+        """Replace category values that occur fewer than ``threshold`` times.
+
+        A rare value in a single column (e.g. ``q13_binned == "100%"``, one
+        respondent) is a quasi-identifier on its own. Collapsing every such
+        value in ``columns`` to a shared ``placeholder`` keeps the column
+        usable for aggregate distributions without singling anyone out.
+        NaN is left as-is (it is not a disclosive value).
+
+        Parameters
+        ----------
+        data : pd.DataFrame
+            Individual-level DataFrame
+        columns : list[str]
+            Columns to mask (e.g. ["q10_binned", "q13_binned"])
+        threshold : int, optional
+            Minimum value frequency to keep the value as-is, by default 5
+        placeholder : str, optional
+            Replacement label for masked values, by default "(rare)"
+
+        Returns
+        -------
+        pd.DataFrame
+            Copy of data with rare values in ``columns`` replaced.
+        """
+        result = data.copy()
+        for column in columns:
+            if column not in result.columns:
+                logger.warning(f"Column '{column}' not found in data; not masked")
+                continue
+            counts = result[column].value_counts(dropna=True)
+            rare = set(counts[counts < threshold].index)
+            if not rare:
+                continue
+            masked = result[column].isin(rare)
+            logger.info(
+                f"mask_rare_categories: '{column}' - "
+                f"{int(masked.sum())} rows in {len(rare)} rare values -> "
+                f"'{placeholder}'"
+            )
+            result.loc[masked, column] = placeholder
+        return result
+
+    @staticmethod
     def k_anonymize(
         data: pd.DataFrame,
         quasi_identifiers: list[str],
@@ -270,6 +319,7 @@ class SecureDataHandler:
         timestamp_freq: str = "D",
         translation_suffix: str = "_ja",
         extra_drop_columns: list[str] | None = None,
+        mask_columns: list[str] | None = None,
     ) -> pd.DataFrame:
         """Turn an individual-level DataFrame into a publication-safe dataset.
 
@@ -281,6 +331,10 @@ class SecureDataHandler:
            (e.g. "q15_polarity") are non-reversible aggregates and are kept.
         2. Truncate the timestamp column to a coarser resolution.
         3. Enforce k-anonymity on the quasi-identifier combination.
+        4. Mask rare category values in ``mask_columns`` (e.g. a binned
+           numeric column where one respondent sits in an extreme bin).
+           Done last so it also catches values that become rare after the
+           k-anonymity row suppression.
 
         Parameters
         ----------
@@ -303,13 +357,16 @@ class SecureDataHandler:
             Suffix identifying translated free-text columns, by default "_ja"
         extra_drop_columns : list[str] or None, optional
             Additional columns to drop (e.g. ["response"]), by default None
+        mask_columns : list[str] or None, optional
+            Columns whose rare values are collapsed to a placeholder
+            (see :meth:`mask_rare_categories`), by default None
 
         Returns
         -------
         pd.DataFrame
-            Publication-safe copy: no free-text, coarsened timestamp, and
-            every quasi-identifier combination shared by at least ``k``
-            respondents.
+            Publication-safe copy: no free-text, coarsened timestamp, rare
+            values masked in ``mask_columns``, and every quasi-identifier
+            combination shared by at least ``k`` respondents.
         """
         drop_columns = []
         for column in free_text_columns:
@@ -325,4 +382,8 @@ class SecureDataHandler:
         result = SecureDataHandler.k_anonymize(
             result, quasi_identifiers=quasi_identifiers, k=k
         )
+        if mask_columns:
+            result = SecureDataHandler.mask_rare_categories(
+                result, columns=mask_columns, threshold=k
+            )
         return result
