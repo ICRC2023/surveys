@@ -9,4 +9,10 @@ responded.
 
 - **[Overview](overview.qmd)** — period, method, target, and response rate
 - **[Questionnaire](questionnaire.qmd)** — the questions asked and the choices shown
-- **Responses** — per-question breakdowns (see the sidebar)
+- **[Response timeline](response-timeline.qmd)** — when responses came in
+- **Responses** — per-question breakdowns Q01–Q22 (see the sidebar)
+- **[Derived clusters](clusters.qmd)** — the cluster columns used in the analysis
+- **[Chi-square tests](chi2.qmd)** — associations between question pairs
+
+All breakdowns are built from the anonymized, suppressed extract in
+`data/public/` (see [About the data](../index.qmd)).

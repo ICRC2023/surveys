@@ -6,6 +6,7 @@
 #   data/public/public_data.csv           - k-anonymized individual-level extract
 #   data/public/aggregates/univariate/    - one suppressed frequency table per column
 #   data/public/aggregates/bivariate/     - suppressed cross-tabs for the pairs below
+#   data/public/chi2/                     - chi-square test statistics (no counts)
 #
 # See PLAN.md Phase 5.
 set -euo pipefail
@@ -35,5 +36,12 @@ uv run ti aggregate --plugin "$PLUGIN" \
   --pair q10_binned,q02 --pair q13_binned,q02 --pair q14,q02 \
   --pair q17_genderbalance,q02 --pair q17_diversity,q02 \
   --pair q17_equity,q02 --pair q17_inclusion,q02
+
+echo ">> ti chi2 (-> data/public/chi2/, test statistics only)"
+mkdir -p ../data/public/chi2
+uv run ti chi2 \
+  --read-from ../data/private/prepared_data.csv \
+  --write-dir ../data/public/chi2/
+rm -f ../data/public/chi2/*.json
 
 echo ">> done. Review data/public/ before committing."

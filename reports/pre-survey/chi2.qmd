@@ -1,0 +1,66 @@
+---
+title: "Chi-square tests"
+---
+
+Every pair of categorical questions was cross-tabulated and tested for
+independence with a chi-square test (`scipy.stats.chi2_contingency`, Yates'
+correction applied at 1 degree of freedom). This page shows the p-values as
+a heatmap — darker means a stronger association.
+
+```{python}
+# | echo: false
+import sys
+from pathlib import Path
+
+import altair as alt
+import numpy as np
+import pandas as pd
+
+sys.path.insert(0, str(Path.cwd().parent))
+
+_CHI2 = Path.cwd().parent.parent / "data" / "public" / "chi2" / "chi2_test.csv"
+chi2 = pd.read_csv(_CHI2)
+chi2["neg_log10_p"] = -np.log10(chi2["p_value"].clip(lower=1e-300))
+```
+
+## All pairs
+
+```{python}
+# | echo: false
+def heatmap(df, title):
+    return (
+        alt.Chart(df)
+        .mark_rect()
+        .encode(
+            x=alt.X("x:N", title=None),
+            y=alt.Y("y:N", title=None),
+            color=alt.Color(
+                "neg_log10_p:Q",
+                title="-log10(p)",
+                scale=alt.Scale(scheme="blues"),
+            ),
+            tooltip=["x", "y", alt.Tooltip("p_value:Q", format=".2e"), "statistic:Q", "dof:Q"],
+        )
+        .properties(width="container", height=520, title=title)
+    )
+
+
+heatmap(chi2, "All question pairs")
+```
+
+## Significant pairs (p < 0.05)
+
+```{python}
+# | echo: false
+heatmap(chi2[chi2["p_value"] < 0.05], "Pairs with p < 0.05")
+```
+
+The strongest associations are between the geographic questions (Q03/Q04
+region and subregion), and among the four DE&I aspects within Q12 and
+within Q17.
+
+::: {.callout-note appearance="minimal"}
+Computed on the individual-level data locally; only the test statistics
+(p-value, chi-square, degrees of freedom) are published, not any table of
+counts.
+:::
