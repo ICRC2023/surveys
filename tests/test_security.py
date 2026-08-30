@@ -106,3 +106,96 @@ def test_suppress_small_cells_returns_copy():
     df.loc[0, "count"] = 999
     # Result should be unchanged
     assert list(result["count"]) == [5, 10]
+
+
+def test_generalize_timestamp_truncates_to_day():
+    """generalize_timestamp floors timestamps to daily resolution."""
+    df = pd.DataFrame({"timestamp": ["2023-07-15 10:23:45", "2023-07-15 18:59:00"]})
+    result = SecureDataHandler.generalize_timestamp(df)
+    assert list(result["timestamp"]) == [
+        pd.Timestamp("2023-07-15"),
+        pd.Timestamp("2023-07-15"),
+    ]
+
+
+def test_generalize_timestamp_custom_freq():
+    """generalize_timestamp accepts a coarser or finer offset alias."""
+    df = pd.DataFrame({"timestamp": ["2023-07-15 10:23:45"]})
+    result = SecureDataHandler.generalize_timestamp(df, freq="h")
+    assert result["timestamp"].iloc[0] == pd.Timestamp("2023-07-15 10:00:00")
+
+
+def test_generalize_timestamp_missing_column_warns():
+    """generalize_timestamp returns an unchanged copy if column is absent."""
+    df = pd.DataFrame({"q01": ["30s"]})
+    result = SecureDataHandler.generalize_timestamp(df, column="timestamp")
+    assert list(result.columns) == ["q01"]
+    df.loc[0, "q01"] = "modified"
+    assert result.loc[0, "q01"] == "30s"
+
+
+def test_k_anonymize_drops_rare_combinations():
+    """k_anonymize removes quasi-identifier groups smaller than k."""
+    df = pd.DataFrame(
+        {
+            "q01": ["20s"] * 5 + ["30s"] * 2,
+            "q02": ["Female"] * 5 + ["Male"] * 2,
+            "value": range(7),
+        }
+    )
+    result = SecureDataHandler.k_anonymize(df, ["q01", "q02"], k=5)
+    assert len(result) == 5
+    assert set(result["q01"]) == {"20s"}
+
+
+def test_k_anonymize_keeps_all_when_groups_large_enough():
+    """k_anonymize keeps every row when all groups have size >= k."""
+    df = pd.DataFrame({"q01": ["20s"] * 6, "q02": ["Female"] * 6, "value": range(6)})
+    result = SecureDataHandler.k_anonymize(df, ["q01", "q02"], k=5)
+    assert len(result) == 6
+
+
+def test_k_anonymize_returns_copy():
+    """k_anonymize returns a copy, not a view."""
+    df = pd.DataFrame({"q01": ["20s"] * 5, "value": range(5)})
+    result = SecureDataHandler.k_anonymize(df, ["q01"], k=5)
+    df.loc[0, "value"] = 999
+    assert result.loc[0, "value"] == 0
+
+
+def test_k_anonymize_missing_columns_warns():
+    """k_anonymize returns an unchanged copy if no quasi-identifiers exist."""
+    df = pd.DataFrame({"value": [1, 2, 3]})
+    result = SecureDataHandler.k_anonymize(df, ["q01", "q02"], k=5)
+    assert len(result) == 3
+
+
+def test_build_public_dataset_full_pipeline():
+    """build_public_dataset drops free-text, coarsens time, and k-anonymizes."""
+    df = pd.DataFrame(
+        {
+            "timestamp": ["2023-07-15 10:23:45"] * 6 + ["2023-07-16 09:00:00"] * 2,
+            "q01": ["20s"] * 6 + ["70s"] * 2,
+            "q02": ["Female"] * 6 + ["Male"] * 2,
+            "q15": ["text"] * 8,
+            "q15_ja": ["訳"] * 8,
+            "q15_polarity": [0.1] * 8,
+            "response": [1] * 8,
+        }
+    )
+    result = SecureDataHandler.build_public_dataset(
+        df,
+        free_text_columns=["q15"],
+        quasi_identifiers=["q01", "q02"],
+        k=5,
+        extra_drop_columns=["response"],
+    )
+    # Free-text original and translation removed; sentiment score kept
+    assert "q15" not in result.columns
+    assert "q15_ja" not in result.columns
+    assert "q15_polarity" in result.columns
+    assert "response" not in result.columns
+    # Timestamp coarsened to day
+    assert result["timestamp"].iloc[0] == pd.Timestamp("2023-07-15")
+    # Rare (70s, Male) group of 2 dropped, 6 rows retained
+    assert len(result) == 6
