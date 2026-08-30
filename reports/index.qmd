@@ -1,0 +1,30 @@
+---
+title: "ICRC2023 Diversity Survey Results"
+---
+
+ICRC2023 ダイバーシティセッションの事前・事後アンケートの調査結果です。
+
+The ICRC2023 Diversity session was held on July 28th, 2023 during lunchtime.
+Two surveys were run around the conference:
+
+- **[Pre-Conference Survey](pre-survey/index.qmd)** — opened July 8–21, 2023.
+  Sent to all conference participants; approximately 20% responded (295 of 1406).
+- **[Post-Conference Survey](post-survey/index.qmd)** — feedback collected after
+  the session.
+
+## About the data
+
+The published figures and tables are built from an anonymized, aggregated
+extract of the survey responses (`public_data.csv` and suppressed
+cross-tabulations). The individual-level responses and free-text answers are
+kept locally and are never committed or published. See `PLAN.md` Phase 5 for
+the anonymization pipeline.
+
+Notebooks on this site are committed with their output cells and are **not**
+re-executed at render time.
+
+## Tooling
+
+This site is built with [Quarto](https://quarto.org/). The `titanite`
+framework that produced the analysis has its
+[own documentation](https://icrc2023.github.io/surveys/).
