@@ -1,0 +1,34 @@
+---
+title: "Q11. Session sign-up"
+---
+
+**Did you already sign up for the diversity session in ICRC2023?**
+
+```{python}
+# | echo: false
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path.cwd().parent.parent))
+from _helpers import bar, grouped_bar, load_bivariate, load_univariate, suppression_note  # noqa: E402
+```
+
+## Distribution
+
+```{python}
+# | echo: false
+bar(load_univariate("q11"), "q11", title="Q11. Session sign-up")
+```
+
+
+
+## By gender identity (Q02)
+
+```{python}
+# | echo: false
+grouped_bar(load_bivariate("q11", "q02"), "q11", "q02", title="Q11. Session sign-up x Q02", normalize=True)
+```
+
+::: {.callout-note appearance="minimal"}
+`{python} suppression_note()`
+:::

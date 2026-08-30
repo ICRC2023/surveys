@@ -1,0 +1,61 @@
+---
+title: "Q01. Age"
+---
+
+**What is your age?**
+
+Choices: 10s, 20s, 30s, 40s, 50s, 60s, 70s, 80s, 90s+, *Prefer not to answer*.
+
+```{python}
+# | echo: false
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path.cwd().parent.parent))
+from _helpers import (  # noqa: E402
+    bar,
+    grouped_bar,
+    load_bivariate,
+    load_univariate,
+    suppression_note,
+)
+
+AGE_ORDER = ["10s", "20s", "30s", "40s", "50s", "60s", "70s", "80s", "90s+"]
+```
+
+## Distribution
+
+```{python}
+# | echo: false
+bar(load_univariate("q01"), "q01", title="Q01. Age", sort=AGE_ORDER)
+```
+
+Responses cluster in the 20s and 30s.
+
+## By gender identity (Q02)
+
+```{python}
+# | echo: false
+grouped_bar(load_bivariate("q01", "q02"), "q01", "q02", title="Q01 x Q02", normalize=True)
+```
+
+## By job title (Q05)
+
+```{python}
+# | echo: false
+grouped_bar(load_bivariate("q01", "q05"), "q01", "q05", title="Q01 x Q05", normalize=True)
+```
+
+Roughly: 20s are doctoral students, 30s are postdocs, 40s and older hold
+permanent positions.
+
+## By research group (Q06)
+
+```{python}
+# | echo: false
+grouped_bar(load_bivariate("q01", "q06"), "q01", "q06", title="Q01 x Q06", normalize=True)
+```
+
+::: {.callout-note appearance="minimal"}
+`{python} suppression_note()`
+:::

@@ -1,0 +1,34 @@
+---
+title: "Q08. Years in the field"
+---
+
+**How long have you been in this field?**
+
+```{python}
+# | echo: false
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path.cwd().parent.parent))
+from _helpers import bar, grouped_bar, load_bivariate, load_univariate, suppression_note  # noqa: E402
+```
+
+## Distribution
+
+```{python}
+# | echo: false
+bar(load_univariate("q08"), "q08", title="Q08. Years in the field")
+```
+
+
+
+## By gender identity (Q02)
+
+```{python}
+# | echo: false
+grouped_bar(load_bivariate("q08", "q02"), "q08", "q02", title="Q08. Years in the field x Q02", normalize=True)
+```
+
+::: {.callout-note appearance="minimal"}
+`{python} suppression_note()`
+:::
