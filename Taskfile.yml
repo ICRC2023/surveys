@@ -172,8 +172,6 @@ tasks:
   # Documentation
   #   docs:*     -> titanite framework docs (Zensical, zensical.toml)
   #   reports:*  -> ICRC2023 survey-results reports (Quarto, reports/_quarto.yml)
-  #   survey:*   -> legacy Sphinx survey docs (docs/conf.py); removed once the
-  #                 notebooks finish moving to reports/ (PLAN.md Phase 7 task 2)
   # ============================================================================
   docs:serve:
     desc: "Serve the titanite docs locally (Zensical, http://localhost:8000)"
@@ -196,18 +194,6 @@ tasks:
     dir: reports
     cmds:
       - quarto render
-
-  survey:serve:
-    desc: "(legacy) Serve the Sphinx survey docs locally with autobuild"
-    dir: docs
-    cmds:
-      - uv run sphinx-autobuild . _build/html
-
-  survey:build:
-    desc: "(legacy) Build the Sphinx survey docs"
-    dir: docs
-    cmds:
-      - uv run sphinx-build -b html . _build/html
 
   docs:release:
     desc: "Scaffold a new release note from template (Usage: task docs:release -- X.Y.Z)"
