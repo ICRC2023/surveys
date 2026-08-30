@@ -18,7 +18,7 @@ website:
   description: >-
     Results of the pre- and post-conference diversity surveys for the
     International Cosmic Ray Conference 2023.
-  site-url: "https://icrc2023.github.io/surveys/reports/"
+  site-url: "https://www.icrc2023.org/surveys/"
   repo-url: "https://github.com/ICRC2023/surveys"
   repo-subdir: reports
   repo-actions: [source, issue]

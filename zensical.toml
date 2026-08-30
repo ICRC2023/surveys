@@ -9,7 +9,7 @@
 [project]
 site_name = "titanite"
 site_description = "Pluggable survey processing framework for ICRC2023 diversity survey analysis"
-site_url = "https://icrc2023.github.io/surveys/"
+site_url = "https://www.icrc2023.org/surveys/titanite/"
 site_author = "Shota Takahashi / ICRC2023 Diversity Group"
 copyright = "Copyright &copy; 2023 Shota Takahashi"
 

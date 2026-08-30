@@ -1,56 +1,97 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy Sphinx Document to Pages
+# Deploy the documentation to GitHub Pages (https://www.icrc2023.org/surveys/).
+#
+# Two sites are built independently and deployed together (Pages allows a
+# single artifact):
+#   /            -> the ICRC2023 survey-results reports (Quarto, reports/)
+#   /titanite/   -> the titanite framework docs (Zensical, zensical.toml)
+name: Deploy docs to Pages
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
+  build-reports:
+    name: Build survey reports (Quarto)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.11"
+          enable-cache: true
+      - name: Install dependencies
+        run: uv sync --all-groups
+      # reports render from reports/_freeze/, so no notebook re-execution and
+      # no data/private/ needed.
+      - name: Render
+        working-directory: reports
+        run: uv run quarto render
+      - name: Upload reports site
+        uses: actions/upload-artifact@v7
+        with:
+          name: reports-site
+          path: reports/_site/
+
+  build-titanite:
+    name: Build titanite docs (Zensical)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.11"
+          enable-cache: true
+      - name: Install dependencies
+        run: uv sync --all-groups
+      - name: Build
+        run: uv run zensical build --clean
+      - name: Upload titanite site
+        uses: actions/upload-artifact@v7
+        with:
+          name: titanite-site
+          path: site/
+
   deploy:
+    name: Merge and deploy to Pages
+    needs: [build-reports, build-titanite]
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-      - name: Setup uv
-        uses: astral-sh/setup-uv@v7
+      - name: Download reports site
+        uses: actions/download-artifact@v8
         with:
-          python-version: "3.11"
-          enable-cache: true
-      - name: Show outdated packages
-        run: uv lock --upgrade --dry-run
-      - name: Install dependencies
-        run: uv sync --all-groups
-      - name: Build Sphinx
-        run: |
-          cd docs
-          uv run make dirhtml
+          name: reports-site
+          path: _site
+      - name: Download titanite site
+        uses: actions/download-artifact@v8
+        with:
+          name: titanite-site
+          path: _site/titanite
       - name: Setup Pages
         uses: actions/configure-pages@v6
-      - name: Upload artifact
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          # Upload entire repository
-          path: './docs/_build/dirhtml/'
+          path: _site/
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
