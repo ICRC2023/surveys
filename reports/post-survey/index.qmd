@@ -7,5 +7,9 @@ program and session structure, conference organization and venues, the
 Diversity Session, social events, and overall satisfaction.
 
 - **[Questionnaire](questionnaire.qmd)** — the full list of questions asked
-- Response breakdowns will be added here as the analysis is migrated
-  (PLAN.md Phase 5 / Phase 7).
+
+Only the questionnaire is published for the post-conference survey. Its
+responses have not been analysed here: the `titanite` pipeline and the
+anonymization rules cover the pre-conference survey only. Analysing the
+post-conference responses would need its own plugin and a fresh privacy
+review.
