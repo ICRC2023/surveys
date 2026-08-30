@@ -69,7 +69,7 @@ Read data from: ../data/raw_data/20230720_icrc2023_diversity_presurvey_answers.c
 - Sentiment Analysis ... done!
 - Categorize data
 - Binned data
-Saved data to: ../data/test_data/prepared_data.csv
+Saved data to: ../data/private/prepared_data.csv
 ```
 
 ### プラグインシステムを使った前処理
@@ -96,9 +96,9 @@ $ uv run ti prepare ../data/raw_data/survey.csv --plugin plugins.icrc2023.ICRC20
 ```console
 $ cd sandbox
 $ ti response
-Read data from: ../data/test_data/prepared_data.csv
-Saved chart to: ../data/test_data/response.png
-$ open ../data/test_data/response.png
+Read data from: ../data/private/prepared_data.csv
+Saved chart to: ../data/private/response.png
+$ open ../data/private/response.png
 ```
 
 - 引数なしで実行できます
@@ -109,7 +109,7 @@ $ open ../data/test_data/response.png
 
 ```console
 $ cd sandbox
-$ ti histogram --read_from=../data/test_data/prepared_data.csv
+$ ti histogram --read_from=../data/private/prepared_data.csv
 ```
 
 ## クロス集計したい
@@ -118,13 +118,13 @@ $ ti histogram --read_from=../data/test_data/prepared_data.csv
 $ cd sandbox
 $ ti crosstab
 Loaded config from: config.toml
-Read data from: ../data/test_data/prepared_data.csv
+Read data from: ../data/private/prepared_data.csv
 - Categorize
 - Binned
-Saved data to: ../data/test_data/crosstab/q01-q02.csv
-Saved chart to: ../data/test_data/crosstab/q01-q02.png
-Saved data to: ../data/test_data/crosstab/q01-q03.csv
-Saved chart to: ../data/test_data/crosstab/q01-q03.png
+Saved data to: ../data/private/crosstab/q01-q02.csv
+Saved chart to: ../data/private/crosstab/q01-q02.png
+Saved data to: ../data/private/crosstab/q01-q03.csv
+Saved chart to: ../data/private/crosstab/q01-q03.png
 ...
 ```
 
@@ -139,13 +139,13 @@ Saved chart to: ../data/test_data/crosstab/q01-q03.png
 $ cd sandbox
 $ ti chi2
 Loaded config from: config.toml
-Read data from: ../data/test_data/prepared_data.csv
+Read data from: ../data/private/prepared_data.csv
 - Categorize
 - Binned
-Saved data to: ../data/test_data/chi2_test/chi2_test.csv
-Saved data to: ../data/test_data/chi2_test/chi2_test.json
-Saved data to: ../data/test_data/chi2_test/chi2_test_p005.csv
-Saved data to: ../data/test_data/chi2_test/chi2_test_p005.json
+Saved data to: ../data/private/chi2_test/chi2_test.csv
+Saved data to: ../data/private/chi2_test/chi2_test.json
+Saved data to: ../data/private/chi2_test/chi2_test_p005.csv
+Saved data to: ../data/private/chi2_test/chi2_test_p005.json
 ```
 
 - 引数なしで実行できます（ただし、そのうち変えるかも？）
@@ -160,9 +160,9 @@ $ cd sandbox
 $ ti p005 カラム名 --save
 - Categorize
 - Binned
-Saved data to ../data/test_data/p005/カラム名/chi2_test_p005_カラム名.csv
-Saved data to ../data/test_data/p005/カラム名/chi2_test_p005_カラム名.json
-Saved chart to ../data/test_data/p005/カラム名/カラム名-相手カラム名.png
+Saved data to ../data/private/p005/カラム名/chi2_test_p005_カラム名.csv
+Saved data to ../data/private/p005/カラム名/chi2_test_p005_カラム名.json
+Saved chart to ../data/private/p005/カラム名/カラム名-相手カラム名.png
 ```
 
 - 引数にカラム名を指定し、相関がある（＝``p < 0.05``）の項目を確認できます

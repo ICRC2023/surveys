@@ -596,9 +596,12 @@ public_data.csv        (コミット可)  ← timestamp除去 / q15-q22除去 / 
 4. **方式A: 集計データ公開コマンドを実装**（別 PR）
    - `suppress_small_cells` で n<5 セルを伏せた集計 CSV を生成
    - q03/q04 の subregional 内訳、demographics、少数セルはこちらで扱う
-5. **`ti prepare` の出力パスを見直し**
-   - `prepared_data.csv` は `.gitignore` 対象ディレクトリ（例: `data/local/`）に出す
-   - `write_dir` のデフォルトを変更
+5. **`ti prepare` の出力パスを見直し** — ✅ 完了（PR: feat/prepare-output-to-local）
+   - `prepared_data.csv` を `.gitignore` 対象の `data/private/` に出す
+   - `prepare` と全分析コマンド（`chi2` / `crosstabs` / `hbars` / `hbar` /
+     `p005` / `comments` / `response`）の `read_from` / `write_dir` デフォルトを
+     `../data/private/` に統一（`anonymize` は既にそうだった）
+   - `data/test_data/` の追跡停止はタスク1（`tests/test_data.py` の fixture 化と一体）
 6. **ノート 26 個の参照先を一括置換**（Phase 7 と一体で実施）
    - q01〜q14 の 23 ノート: データ参照を `public_data.csv` に置換
    - q03/q04/demographics の 3 ノート: 方式A の集計 CSV を読む形に改修

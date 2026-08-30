@@ -105,8 +105,13 @@ Titanite is now a **pluggable survey processing framework**:
 ```bash
 cd sandbox
 uv run ti prepare ../data/raw_data/survey.csv
-# Outputs: prepared_data.csv, categorical_data.csv, sentiment_data.csv
+# Outputs to ../data/private/ (git-ignored, individual-level):
+#   prepared_data.csv, categorical_data.csv, sentiment_data.csv
 ```
+`data/private/` holds individual-level data and is never committed. Analysis
+commands (`chi2`, `crosstabs`, `hbars`, `p005`, `comments`, `response`) read
+from `../data/private/prepared_data.csv` by default. Use `ti anonymize` to
+produce the committable `data/public/public_data.csv`.
 
 **Statistical Analysis**
 ```bash

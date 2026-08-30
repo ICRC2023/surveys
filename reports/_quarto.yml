@@ -5,7 +5,7 @@ project:
 # Notebooks are committed with their output cells. Quarto must not re-execute
 # them at render time: the render environment has no access to the
 # individual-level survey data, and the published output is fixed at commit
-# time. Run notebooks locally against data/local/ or data/public/ and commit
+# time. Run notebooks locally against data/private/ or data/public/ and commit
 # the results. See PLAN.md Phase 5 and Phase 7.
 execute:
   freeze: true
