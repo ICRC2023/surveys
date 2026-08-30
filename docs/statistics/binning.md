@@ -141,10 +141,10 @@ Once created, `q10_binned` is treated as categorical:
 
 ```bash
 # Chi-square tests with binned variables
-poetry run ti chi2
+uv run ti chi2
 
 # Visualize distribution
-poetry run ti hbars
+uv run ti hbars
 ```
 
 ## Binning Workflow
@@ -156,7 +156,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Load data
-df = pd.read_csv("prepared_data.csv")
+df = pd.read_csv("../data/private/prepared_data.csv")
 
 # Examine distribution
 print(df["age"].describe())
@@ -210,14 +210,14 @@ def get_bin_rules(self) -> list[BinRule]:
 
 ```bash
 # Process data
-poetry run ti prepare data.csv
+uv run ti prepare data.csv
 
 # Verify binning
-poetry run ti config --choices
+uv run ti config --choices
 # Check that q10_age_group has expected categories
 
 # View distribution
-poetry run ti hbars
+uv run ti hbars
 # Visualize binned variable
 ```
 
@@ -292,7 +292,7 @@ After binning, check that analysis is meaningful:
 
 ```bash
 # View contingency table
-poetry run ti crosstabs
+uv run ti crosstabs
 
 # Check cell sizes are adequate (n ≥ 5)
 # If small cells exist, consider merging bins

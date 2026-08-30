@@ -135,13 +135,13 @@ Once created, `q13q14_clustered` is treated as a categorical variable:
 
 ```bash
 # Chi-square tests including clustered variable
-poetry run ti chi2
+uv run ti chi2
 
 # Cross-tabulations with clustered variable
-poetry run ti crosstabs
+uv run ti crosstabs
 
 # Visualizations
-poetry run ti hbars
+uv run ti hbars
 ```
 
 ## Creating Effective Clusters
@@ -231,21 +231,21 @@ def get_cluster_rules(self) -> list[ClusterRule]:
 ### Step 2: Prepare Data
 
 ```bash
-poetry run ti prepare data.csv --plugin plugins.your_survey.YourSchema
+uv run ti prepare data.csv --plugin plugins.your_survey.YourSchema
 ```
 
 Check output columns:
 ```bash
-ls prepared_data.csv
+ls ../data/private/prepared_data.csv
 # Should include "experience_cluster" column
 ```
 
 ### Step 3: Analyze Clusters
 
 ```bash
-poetry run ti chi2           # Test associations with clusters
-poetry run ti crosstabs      # Cross-tabulations
-poetry run ti hbars          # Visualizations
+uv run ti chi2           # Test associations with clusters
+uv run ti crosstabs      # Cross-tabulations
+uv run ti hbars          # Visualizations
 ```
 
 ### Step 4: Interpret Results
@@ -253,7 +253,7 @@ poetry run ti hbars          # Visualizations
 Examine how the clustered variable associates with other variables:
 
 ```bash
-poetry run ti p005 experience_cluster --save
+uv run ti p005 experience_cluster --save
 ```
 
 This shows which variables are significantly associated with the cluster.
@@ -338,11 +338,11 @@ After creating clusters, verify they make sense:
 
 ```bash
 # View unique cluster values
-poetry run ti config --choices
+uv run ti config --choices
 # Look for "your_cluster" column
 
 # Check distribution
-poetry run ti hbars --save
+uv run ti hbars --save
 # Visualize cluster distribution
 ```
 
@@ -352,7 +352,7 @@ Ensure clustered variable isn't just repeating information:
 
 ```bash
 # Chi-square test source columns with other variables
-poetry run ti chi2
+uv run ti chi2
 # Compare results before and after clustering
 ```
 
