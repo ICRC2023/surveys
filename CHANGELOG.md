@@ -1,11 +1,19 @@
-## Unreleased
+## 0.8.0 (2026-08-30)
 
 ### Feat
 
+- **reports**: response timeline, clusters, and chi-square pages (#229)
+- **anonymize**: drop raw q10/q13 and mask rare binned values (#228)
+- **reports**: Q03/Q04, Q12/Q14/Q17 and free-text response pages (#226)
+- **reports**: first batch of Quarto response pages from public data (#225)
+- **cli**: add ti aggregate for suppressed frequency tables (#223)
+- **cli**: write prepare/analysis output to data/private/ (#220)
+- **cli**: add ti anonymize to build a publication-safe dataset (#215)
 - **docs**: add docs:release task and release note template
 
 ### Fix
 
+- **preprocess**: drop the broken _ja translation step (#224)
 - **pyproject.toml**: correct pre-commit version constraint
 - **Taskfile**: remove v prefix from GitHub release version
 
