@@ -815,14 +815,25 @@ reports/              # ICRC2023 アンケート結果（Quarto）
      エクスポートした形で埋め込み）
    - `.md` の Sphinx 固有記法を Quarto Markdown に変換
    - `myst-nb` を依存から削除
-3. **`conf.py` / `docs/Makefile` を撤去**、`docs/_build` `docs/jupyter_execute`
-   `docs/apidocs` の `.gitignore` エントリを整理
+3. **`conf.py` / `docs/Makefile` を撤去** — ✅ 完了（PR: feat/retire-sphinx）
+   - `docs/survey/**`、`docs/conf.py`、`docs/index.md`、`docs/Makefile`、
+     `docs/make.bat` を削除。post-survey は questionnaire のみ published
+     （`responses.ipynb` は実質空だったので捨てた）
+   - `docs/` に残るのは Zensical ソース（`docs/titanite/`）、リリースノート
+     （`docs/releases/`）、ロゴ（`docs/_static/`、README が参照）
+   - `sphinx-*` / `myst-nb` を依存から削除
+   - `static.yml` / `branch.yml` / `pr_test.yml` の `make dirhtml` を
+     Zensical ビルド + Quarto レンダーに置換
+   - `static.yml` は reports を Pages ルート、Zensical を `/titanite/` に
+     マージして `https://www.icrc2023.org/surveys/` へデプロイ
+   - `zensical.toml` / `reports/_quarto.yml` の `site_url` を icrc2023.org に
 4. **`pages.yml` を 2 ビルド統合デプロイに更新**（Phase 6 タスク3）
-5. **`Taskfile.yml` を更新**
-   - `docs:build` → Zensical ビルド、`docs:serve` → Zensical プレビュー
-   - `reports:render` / `reports:preview` を追加（Quarto）
-6. **AGENTS.md / CLAUDE.md のドキュメント関連記述を更新**
-   - `task docs:serve` の説明、ツール名、ディレクトリ構成
+   - タスク3 で `static.yml` を統合デプロイに書き換えた。Phase 6 では
+     `workflow_run`（CI 成功後）トリガーへの変更が残る
+5. **`Taskfile.yml` を更新** — ✅ 完了（PR: feat/retire-sphinx）
+   - `docs:build` / `docs:serve` は Zensical、`reports:render` /
+     `reports:preview` は Quarto、`survey:*` は削除
+6. **AGENTS.md のドキュメント関連記述を更新** — ✅ 完了（PR: feat/retire-sphinx）
 
 ### 前提・順序
 
