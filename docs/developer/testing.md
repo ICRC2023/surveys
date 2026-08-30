@@ -20,31 +20,31 @@ tests/
 ### Run All Tests
 
 ```bash
-poetry run pytest tests/ -v
+uv run pytest tests/ -v
 ```
 
 ### Run Specific Test File
 
 ```bash
-poetry run pytest tests/test_icrc2023_schema.py -v
+uv run pytest tests/test_icrc2023_schema.py -v
 ```
 
 ### Run Specific Test
 
 ```bash
-poetry run pytest tests/test_processor.py::test_pipeline_basic -v
+uv run pytest tests/test_processor.py::test_pipeline_basic -v
 ```
 
 ### Run with Coverage
 
 ```bash
-poetry run pytest --cov=titanite tests/
+uv run pytest --cov=titanite tests/
 ```
 
 ### Run Tests in Watch Mode
 
 ```bash
-poetry run pytest tests/ -v --tb=short -x
+uv run pytest tests/ -v --tb=short -x
 ```
 
 ## Test Categories
@@ -107,19 +107,15 @@ Test the full pipeline with real or realistic data.
 **Example: Full Pipeline Test**
 
 ```python
-def test_integration_full_pipeline():
-    """Test complete data processing pipeline."""
+def test_integration_full_pipeline(diverse_survey_data):
+    """Run the full pipeline on a synthetic DataFrame fixture."""
     schema = ICRC2023Schema()
     processor = SurveyProcessor(schema)
 
-    # Load test data
-    df = pd.read_csv("data/test_data/icrc2023_sample.csv")
-
-    # Run full pipeline
-    result = processor.process(df)
+    result = processor.process(diverse_survey_data)
 
     # Verify output
-    assert len(result) == len(df)  # No rows lost
+    assert len(result) == len(diverse_survey_data)  # No rows lost
     assert "q01_clustered" in result.columns  # Derived columns created
     assert result["q01"].isna().sum() == 0  # No missing required values
 ```
@@ -197,16 +193,11 @@ def test_with_fixture(sample_survey_data, icrc2023_schema):
     assert len(result) == 3
 ```
 
-### Test Data Files
+### Test data
 
-Keep test data in `data/test_data/`:
-
-```
-data/test_data/
-├── icrc2023_sample.csv        # Small sample (5-10 rows)
-├── icrc2023_edge_cases.csv    # Edge cases (missing values, etc.)
-└── icrc2023_full.csv          # Full test dataset
-```
+Tests use **synthetic DataFrame fixtures** built in the test files, not
+CSVs on disk — see `minimal_survey_data` / `diverse_survey_data` in
+`tests/test_integration_real_world.py`. No real survey data is read.
 
 ## Coverage Requirements
 
@@ -222,7 +213,7 @@ Current test coverage: **69 tests** covering:
 Run coverage report:
 
 ```bash
-poetry run pytest --cov=titanite --cov-report=html tests/
+uv run pytest --cov=titanite --cov-report=html tests/
 open htmlcov/index.html
 ```
 
@@ -351,19 +342,19 @@ task pre-commit        # Run all pre-commit checks
 Or run individually:
 
 ```bash
-poetry run pytest tests/ -v
-poetry run ruff check --fix
-poetry run pre-commit run --all-files
+uv run pytest tests/ -v
+uv run ruff check --fix
+uv run pre-commit run --all-files
 ```
 
 ## Troubleshooting Tests
 
-### Import Errors
+### Import errors
 
-Ensure poetry environment is activated:
+Run through the project environment:
 
 ```bash
-poetry run pytest tests/
+uv run pytest tests/
 ```
 
 ### Test Data Not Found
@@ -372,7 +363,7 @@ Tests use relative paths from repository root. Run from root:
 
 ```bash
 cd /path/to/surveys
-poetry run pytest tests/
+uv run pytest tests/
 ```
 
 ### Fixture Conflicts
@@ -381,7 +372,7 @@ Clear pytest cache:
 
 ```bash
 rm -rf .pytest_cache
-poetry run pytest tests/ --cache-clear
+uv run pytest tests/ --cache-clear
 ```
 
 ### Test Timeout
@@ -389,7 +380,7 @@ poetry run pytest tests/ --cache-clear
 Some integration tests may be slow. Run with timeout:
 
 ```bash
-poetry run pytest tests/ --timeout=300 -v
+uv run pytest tests/ --timeout=300 -v
 ```
 
 ## Writing Tests for New Features
@@ -413,16 +404,16 @@ def test_new_feature():
 EOF
 
 # 2. Run test (should fail)
-poetry run pytest tests/test_new_feature.py
+uv run pytest tests/test_new_feature.py
 
 # 3. Implement feature
 # ... edit titanite/
 
 # 4. Run test (should pass)
-poetry run pytest tests/test_new_feature.py -v
+uv run pytest tests/test_new_feature.py -v
 
 # 5. Check coverage
-poetry run pytest --cov=titanite tests/
+uv run pytest --cov=titanite tests/
 ```
 
 ## Resources

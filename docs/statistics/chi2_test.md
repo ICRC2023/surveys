@@ -67,7 +67,7 @@ Test all variable pairs:
 
 ```bash
 cd sandbox
-poetry run ti chi2
+uv run ti chi2
 ```
 
 This generates a matrix showing:
@@ -81,7 +81,7 @@ This generates a matrix showing:
 Extract only pairs with p < 0.05:
 
 ```bash
-poetry run ti p005 q13 --save
+uv run ti p005 q13 --save
 ```
 
 This saves significant correlations for a specific column (e.g., q13).
