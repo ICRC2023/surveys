@@ -608,13 +608,22 @@ public_data.csv        (コミット可)  ← timestamp除去 / q15-q22除去 / 
      `p005` / `comments` / `response`）の `read_from` / `write_dir` デフォルトを
      `../data/private/` に統一（`anonymize` は既にそうだった）
    - `data/test_data/` の追跡停止はタスク1（`tests/test_data.py` の fixture 化と一体）
-6. **ノート 26 個の参照先を一括置換**（Phase 7 と一体で実施）
-   - q01〜q14 の 23 ノート: データ参照を `public_data.csv` に置換
-   - q03/q04/demographics の 3 ノート: 方式A の集計 CSV を読む形に改修
-   - 自由記述系ノート（q15/q16/q18）は 2. の作り替えで対応
-   - 併せてノートを `reports/`（Quarto プロジェクト）へ移動する（Phase 7 参照）
-   - ノートは出力込みでコミットし、CI ではノートを再実行しない
-     （公開物の内容をコミット時点で確定させ、CI が個票 CSV を要求しないようにする）
+6. **ノートを `reports/`（Quarto）へ移行**（Phase 7 タスク2 と一体）— 進行中
+   - 旧 `docs/survey/` のノートは `prepared_data.csv`（個票）を読み、かつ
+     `ti.analysis.breakdowns` が `hvplot` 未 import で壊れているので、
+     `data/public/` を読む Quarto ページとして作り直す
+   - ✅ 第1弾（PR: feat/reports-response-pages）: `data/public/` 生成・コミット、
+     `reports/_helpers.py`、Q01/Q02/Q05-Q09/Q11/Q19 の 9 ページ
+   - ✅ 第2弾（PR: feat/reports-geo-and-numeric-pages）: Q03/Q04（地理）
+   - 残り: Q12/Q14/Q17（DEI 評価）、自由記述（Q15/Q16/Q18/Q20/Q21/Q22、
+     原文非表示・感情スコアと件数のみ）、クラスタ系、集約ノート
+     （demographics / icrc2023_diversity / responses / chi2_test_map）、post-survey
+   - ノートは出力込みでコミット（`reports/_freeze/`）、CI では再実行しない
+   - **別途対応が必要**: `q10` / `q13` の生の数値が `public_data.csv` に残り、
+     外れ値（例: `q13=100` が 1 人）が準識別子になる。`ICRC2023Schema` に
+     `q10_binned` / `q13_binned` / `q13_clustered` を `categorical_headers` として
+     追加し、`ti anonymize` が `q10` / `q13` の生値を落として binned 版に
+     置き換える改修を別 PR で行う。それまで Q10 / Q13 ページは保留
 7. **CI ガードを追加** — ✅ 完了（PR: feat/ci-sensitive-data-guard）
    - `scripts/check_sensitive_data.py`: 追跡中／ステージ済みの `data/**` の
      CSV/TSV/JSON を内容判定し、自由記述列（q15/q16/q18/q20/q21/q22）または
