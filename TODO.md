@@ -105,14 +105,19 @@
 
 ### 5. ドキュメントの改善
 
+- [ ] **titanite ドキュメントとアンケート結果ドキュメントの分離** — 詳細は `PLAN.md`「Phase 7: ドキュメントの分離」を参照
+  - titanite（`docs/titanite/` + API）→ Zensical + mkdocstrings
+  - アンケート結果（`docs/survey/` + `docs/diversity/`）→ `reports/`（Quarto、ノート埋め込み、`freeze: true`）
+  - Sphinx / myst-nb / sphinx-autodoc2 は撤去
+  - CI が個票 CSV なしでビルドできる状態にする（Phase 5・6 と連動）
+
 - [ ] **APIドキュメントの充実**
-  - ツール：Sphinx + autodoc2（すでに設定済み）
+  - ツール：Zensical + mkdocstrings（Phase 7 で移行）
   - 対応：型ヒント追加後のドキュメント品質向上
-  - ターゲット：docs/apidocs/
 
 - [ ] **開発ガイドの統一**
-  - README.mdとCLAUDE.mdの役割分担が明確化済み
-  - 今後：CLAUDE.mdを拡充
+  - README.mdとAGENTS.md/CLAUDE.mdの役割分担が明確化済み（AGENTS.md に統合）
+  - 今後：ドキュメント分離（Phase 7）に合わせて更新
 
 ### 6. プロジェクト構造の最適化
 
