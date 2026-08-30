@@ -169,16 +169,29 @@ tasks:
       - uv run pre-commit uninstall
 
   # ============================================================================
-  # Documentation - Sphinx-based docs
+  # Documentation
+  #   docs:*    -> titanite framework docs (Zensical, zensical.toml)
+  #   survey:*  -> ICRC2023 survey-results docs (Sphinx, docs/conf.py)
+  #               moves to a Quarto project under reports/ (PLAN.md Phase 7)
   # ============================================================================
   docs:serve:
-    desc: "Serve documentation locally with autobuild (http://localhost:8000)"
+    desc: "Serve the titanite docs locally (Zensical, http://localhost:8000)"
+    cmds:
+      - uv run zensical serve
+
+  docs:build:
+    desc: "Build the titanite docs (Zensical) into site/"
+    cmds:
+      - uv run zensical build --clean
+
+  survey:serve:
+    desc: "Serve the ICRC2023 survey-results docs locally with autobuild"
     dir: docs
     cmds:
       - uv run sphinx-autobuild . _build/html
 
-  docs:build:
-    desc: "Build documentation"
+  survey:build:
+    desc: "Build the ICRC2023 survey-results docs (Sphinx)"
     dir: docs
     cmds:
       - uv run sphinx-build -b html . _build/html

@@ -2,11 +2,6 @@
 
 Supplementary documentation for statistical analysis and data processing methods.
 
-```{toctree}
----
-maxdepth: 2
----
-chi2_test
-clustering
-binning
-```
+- [Chi-Square Test](chi2_test.md)
+- [Clustering](clustering.md)
+- [Binning](binning.md)

@@ -2,12 +2,7 @@
 
 titanite を使用するためのガイドです。
 
-```{toctree}
----
-maxdepth: 2
----
-quickstart
-installation
-cli-commands
-configuration
-```
+- [クイックスタート](quickstart.md)
+- [インストール](installation.md)
+- [CLI コマンド](cli-commands.md)
+- [設定](configuration.md)

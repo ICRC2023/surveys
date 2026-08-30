@@ -36,6 +36,12 @@ dev = [
     "marimo>=0.23.9",
 ]
 docs = [
+    # titanite framework docs (Zensical) — see zensical.toml
+    "zensical>=0.0.57",
+    "mkdocstrings-python>=2.0.7",
+    # ICRC2023 survey-results docs (Sphinx) — see docs/conf.py.
+    # Moves to a Quarto project under reports/ (PLAN.md Phase 7 task 2),
+    # after which these are removed.
     "sphinx-book-theme>=1.2.0",
     "sphinx-copybutton>=0.5.2",
     "myst-nb>=1.4.0",
