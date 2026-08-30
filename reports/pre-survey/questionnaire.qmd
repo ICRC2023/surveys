@@ -1,0 +1,46 @@
+---
+title: "Questionnaire"
+---
+
+The list of questions asked and the choices shown. Per-question breakdowns are
+linked from the sidebar under **Responses**.
+
+## Basic demographic information (Q01–Q11)
+
+Basic demographic information of the respondents. Workplace and
+birthplace/hometown were asked separately. All questions were mandatory but
+included a "Prefer not to answer" option.
+
+- Q01 Age
+- Q02 Gender identity
+- Q03 Workplace
+- Q04 Hometown
+- Q05 Job title
+- Q06 Research domain
+- Q07 Research type
+- Q08 Research years
+- Q09 Career satisfaction
+- Q10 Hours
+- Q11 Session sign-up
+
+## Status of the group you belong to (Q12–Q16)
+
+The actual status of the group to which the respondent belongs. "Group" refers
+to laboratories at universities, working groups within collaborations, etc.
+
+- Q12 DE&I of the group
+- Q13 Female ratio
+- Q14 Thoughts on the female ratio
+- Q15 Good-practice examples
+- Q16 Group concerns
+
+## Awareness of individuals (Q17–Q22)
+
+How individuals feel about DE&I initiatives.
+
+- Q17 DE&I (individual)
+- Q18 Agree / disagree
+- Q19 Science interest
+- Q20 Individual concerns
+- Q21 What hinders DE&I
+- Q22 Remarks

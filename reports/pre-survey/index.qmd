@@ -1,0 +1,12 @@
+---
+title: "Pre-Conference Survey"
+---
+
+The ICRC2023 Diversity session was held on July 28th during lunchtime.
+The pre-conference survey was open July 8–21, 2023, using Google Forms.
+A request was sent to all participants of the conference; approximately 20%
+responded.
+
+- **[Overview](overview.qmd)** — period, method, target, and response rate
+- **[Questionnaire](questionnaire.qmd)** — the questions asked and the choices shown
+- **Responses** — per-question breakdowns (see the sidebar)

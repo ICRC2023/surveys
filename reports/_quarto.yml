@@ -1,0 +1,61 @@
+project:
+  type: website
+  output-dir: _site
+
+# Notebooks are committed with their output cells. Quarto must not re-execute
+# them at render time: the render environment has no access to the
+# individual-level survey data, and the published output is fixed at commit
+# time. Run notebooks locally against data/local/ or data/public/ and commit
+# the results. See PLAN.md Phase 5 and Phase 7.
+execute:
+  freeze: true
+  enabled: false
+
+website:
+  title: "ICRC2023 Diversity Survey Results"
+  description: >-
+    Results of the pre- and post-conference diversity surveys for the
+    International Cosmic Ray Conference 2023.
+  site-url: "https://icrc2023.github.io/surveys/reports/"
+  repo-url: "https://github.com/ICRC2023/surveys"
+  repo-subdir: reports
+  repo-actions: [source, issue]
+  page-navigation: true
+  navbar:
+    left:
+      - text: "Pre-Survey"
+        file: pre-survey/index.qmd
+      - text: "Post-Survey"
+        file: post-survey/index.qmd
+    right:
+      - icon: github
+        href: "https://github.com/ICRC2023/surveys"
+  sidebar:
+    - id: pre-survey
+      title: "Pre-Conference Survey"
+      contents:
+        - pre-survey/index.qmd
+        - pre-survey/overview.qmd
+        - pre-survey/questionnaire.qmd
+        # Per-question response notebooks are added under
+        # pre-survey/responses/ as they migrate from the Sphinx site
+        # (PLAN.md Phase 7 task 2). Quarto auto-discovers them here:
+        - section: "Responses"
+          contents:
+            - "pre-survey/responses/*"
+    - id: post-survey
+      title: "Post-Conference Survey"
+      contents:
+        - post-survey/index.qmd
+        - post-survey/questionnaire.qmd
+
+format:
+  html:
+    theme:
+      light: cosmo
+      dark: darkly
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    code-tools: true
+    fig-responsive: true

@@ -1,0 +1,11 @@
+---
+title: "Post-Conference Survey"
+---
+
+Feedback survey collected after ICRC2023, covering the hybrid meeting format,
+program and session structure, conference organization and venues, the
+Diversity Session, social events, and overall satisfaction.
+
+- **[Questionnaire](questionnaire.qmd)** — the full list of questions asked
+- Response breakdowns will be added here as the analysis is migrated
+  (PLAN.md Phase 5 / Phase 7).
