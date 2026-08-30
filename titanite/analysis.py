@@ -47,22 +47,16 @@ TITLES = {
     "q13_binned": "Q13. Female Ratio",
     "q15_polarity": "Q15. Polarity",
     "q15_subjectivity": "Q15. Subjectivity",
-    "q15_ja": "",
     "q16_polarity": "Q16. Polarity",
     "q16_subjectivity": "Q16. Subjectivity",
-    "q16_ja": "",
     "q18_polarity": "Q18. Polarity",
     "q18_subjectivity": "Q18. Subjectivity",
-    "q18_ja": "",
     "q20_polarity": "Q20. Polarity",
     "q20_subjectivity": "Q20. Subjectivity",
-    "q20_ja": "",
     "q21_polarity": "Q21. Polarity",
     "q21_subjectivity": "Q21. Subjectivity",
-    "q21_ja": "",
-    "q22_polarity": "Q21. Polarity",
-    "q22_subjectivity": "Q21. Subjectivity",
-    "q22_ja": "",
+    "q22_polarity": "Q22. Polarity",
+    "q22_subjectivity": "Q22. Subjectivity",
 }
 """Columns & Titles"""
 
@@ -130,7 +124,7 @@ def comment_data(data: pd.DataFrame) -> dict[str, pd.DataFrame]:
     Extracts free-text responses from q15, q16, q18, q20, q21, and q22,
     dropping rows with no answer. Each question's comments are returned as a
     separate DataFrame that includes demographic cluster columns and the
-    corresponding sentiment and translation columns.
+    corresponding sentiment columns.
 
     Parameters
     ----------
@@ -160,7 +154,6 @@ def comment_data(data: pd.DataFrame) -> dict[str, pd.DataFrame]:
         q = data.dropna(subset=header)
         h = clusters + [
             header,
-            f"{header}_ja",
             f"{header}_polarity",
             f"{header}_subjectivity",
         ]
