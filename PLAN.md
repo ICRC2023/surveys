@@ -609,9 +609,16 @@ public_data.csv        (コミット可)  ← timestamp除去 / q15-q22除去 / 
    - 併せてノートを `reports/`（Quarto プロジェクト）へ移動する（Phase 7 参照）
    - ノートは出力込みでコミットし、CI ではノートを再実行しない
      （公開物の内容をコミット時点で確定させ、CI が個票 CSV を要求しないようにする）
-7. **CI ガードを追加**（本章 212-238 行を反映、Phase 6 タスク1 の `guard` ジョブと共通）
-   - `data/` 配下に個票 CSV（自由記述列を持つ CSV）が含まれていないかチェックするジョブ
-   - pre-commit フックにも同等のチェックを追加
+7. **CI ガードを追加** — ✅ 完了（PR: feat/ci-sensitive-data-guard）
+   - `scripts/check_sensitive_data.py`: 追跡中／ステージ済みの `data/**` の
+     CSV/TSV/JSON を内容判定し、自由記述列（q15/q16/q18/q20/q21/q22）または
+     `_ja` 翻訳列を持つものを拒否。集計ファイル（`data/public/`）は通過
+   - `.github/workflows/quality.yml` の security ジョブがこれを全追跡ファイルに
+     対して実行（`data/raw_data/` 限定の `find` を置換）
+   - `.pre-commit-config.yaml` に local hook を追加（ステージ済み `data/` の
+     CSV/TSV/JSON に対して実行）
+   - `tests/test_check_sensitive_data.py` で検証
+   - Phase 6 タスク1 の `guard` ジョブはこのスクリプトを再利用する
 
 ### 成果物
 

@@ -41,18 +41,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Check for sensitive files
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: No individual-level survey data tracked in git
+        # Content-based check across all of data/**: rejects any tracked
+        # CSV/TSV/JSON whose columns include a free-text response field or
+        # its _ja translation. Allows the aggregated data/public/ extract.
+        run: python scripts/check_sensitive_data.py
+
+      - name: No raw exports left in the working tree
         run: |
           if find data/raw_data -name "*.csv" -o -name "*.xlsx" 2>/dev/null | grep -q .; then
-            echo "❌ ERROR: Sensitive data files detected in data/raw_data/"
+            echo "❌ ERROR: raw export files present under data/raw_data/"
             exit 1
           fi
-          echo "✅ No sensitive data files found"
-
-      - name: Verify .gitignore is protecting raw_data
-        run: |
-          if git ls-files data/raw_data/ | grep -E '\.(csv|xlsx|json)$'; then
-            echo "❌ ERROR: CSV/XLSX files are tracked in git!"
-            exit 1
-          fi
-          echo "✅ Raw data files properly excluded from git"
+          echo "✅ No raw export files in data/raw_data/"
