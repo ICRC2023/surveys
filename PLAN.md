@@ -174,8 +174,11 @@ class SecureDataHandler:
         - タイムスタンプを集約
         - 自由記述テキストを削除
         """
-        safe_columns = [col for col in data.columns
-                       if col not in ["timestamp", "q15", "q16", "q18", "q20", "q21", "q22"]]
+        safe_columns = [
+            col
+            for col in data.columns
+            if col not in ["timestamp", "q15", "q16", "q18", "q20", "q21", "q22"]
+        ]
         return data[safe_columns]
 ```
 
@@ -184,8 +187,9 @@ class SecureDataHandler:
 ```python
 # titanite/core/processor.py
 class SurveyProcessor:
-    def process(self, df: pd.DataFrame, config: Config,
-                secure_mode: bool = True) -> pd.DataFrame:
+    def process(
+        self, df: pd.DataFrame, config: Config, secure_mode: bool = True
+    ) -> pd.DataFrame:
         """
         secure_mode=True: 個人情報をログに出力しない
         """
@@ -203,6 +207,7 @@ class SurveyProcessor:
 ```python
 # 処理完了後、機密データをメモリから削除
 import gc
+
 
 def cleanup_sensitive_data(data: pd.DataFrame):
     """
@@ -267,6 +272,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Callable
 
+
 class SurveySchema(ABC):
     """
     アンケートスキーマのベースクラス
@@ -305,23 +311,44 @@ class SurveySchema(ABC):
 ```python
 from titanite.core.schema import SurveySchema
 
+
 class ICRC2023Schema(SurveySchema):
     """ICRC2023ダイバーシティセッション調査"""
 
     categorical_headers = [
-        "q01", "q02", "q03_regional", "q03_subregional",
-        "q04_regional", "q04_subregional", "q05", "q06", "q07",
-        "q08", "q09", "q10_binned", "q11",
-        "q12_genderbalance", "q12_diversity", "q12_equity",
-        "q12_inclusion", "q13_binned", "q14",
-        "q17_genderbalance", "q17_diversity", "q17_equity",
-        "q17_inclusion", "q19",
+        "q01",
+        "q02",
+        "q03_regional",
+        "q03_subregional",
+        "q04_regional",
+        "q04_subregional",
+        "q05",
+        "q06",
+        "q07",
+        "q08",
+        "q09",
+        "q10_binned",
+        "q11",
+        "q12_genderbalance",
+        "q12_diversity",
+        "q12_equity",
+        "q12_inclusion",
+        "q13_binned",
+        "q14",
+        "q17_genderbalance",
+        "q17_diversity",
+        "q17_equity",
+        "q17_inclusion",
+        "q19",
     ]
 
     numerical_headers = [
-        "q10", "q13",
-        "q15_polarity", "q15_subjectivity",
-        "q16_polarity", "q16_subjectivity",
+        "q10",
+        "q13",
+        "q15_polarity",
+        "q15_subjectivity",
+        "q16_polarity",
+        "q16_subjectivity",
         # ... etc
     ]
 
@@ -449,9 +476,11 @@ def prepare(
     data.to_csv(fname, index=False)
     save_data(data, write_dir)
 
+
 def _load_schema(plugin_name: str):
     """プラグインからスキーマを動的ロード"""
     import importlib
+
     module = importlib.import_module(f"titanite.plugins.{plugin_name}.schema")
     return module.ICRC2023Schema()  # または getattr で動的に
 ```

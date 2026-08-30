@@ -62,6 +62,7 @@ def test_schema_categorical_headers():
     assert isinstance(schema.categorical_headers, list)
     assert len(schema.categorical_headers) > 0
 
+
 def test_replace_rules_format():
     """Test that replace rules have correct structure."""
     schema = YourSurveySchema()
@@ -82,6 +83,7 @@ def test_processor_initialization():
     schema = YourSurveySchema()
     processor = SurveyProcessor(schema)
     assert processor.schema is not None
+
 
 def test_processor_steps():
     """Test individual processing steps."""
@@ -138,6 +140,7 @@ def test_icrc2023_replace_rules():
     assert rules["q01"]["Man"] == "man"
     assert rules["q01"]["Woman"] == "woman"
 
+
 def test_icrc2023_geographic_splitting():
     """Test UN geoscheme geographic splitting."""
     schema = ICRC2023Schema()
@@ -146,6 +149,7 @@ def test_icrc2023_geographic_splitting():
     # Verify geographic splits are configured
     geo_rules = [r for r in rules if "region" in r.target_columns]
     assert len(geo_rules) > 0
+
 
 def test_icrc2023_clustering():
     """Test ICRC2023 clustering rules."""
@@ -167,20 +171,25 @@ Create reusable test data fixtures:
 import pytest
 import pandas as pd
 
+
 @pytest.fixture
 def sample_survey_data():
     """Sample survey data for testing."""
-    return pd.DataFrame({
-        "q01": ["Male", "Female", "Other"],
-        "q02": ["Yes", "No", "Yes"],
-        "q03": ["United States - California", "UK - London", "Japan - Tokyo"],
-        "q10": [1.5, 2.3, 3.1],
-    })
+    return pd.DataFrame(
+        {
+            "q01": ["Male", "Female", "Other"],
+            "q02": ["Yes", "No", "Yes"],
+            "q03": ["United States - California", "UK - London", "Japan - Tokyo"],
+            "q10": [1.5, 2.3, 3.1],
+        }
+    )
+
 
 @pytest.fixture
 def icrc2023_schema():
     """ICRC2023 survey schema."""
     return ICRC2023Schema()
+
 
 def test_with_fixture(sample_survey_data, icrc2023_schema):
     processor = SurveyProcessor(icrc2023_schema)
@@ -228,6 +237,7 @@ Use clear, descriptive test names:
 def test_processor_splits_geographic_columns():
     pass
 
+
 # Bad
 def test_split():
     pass
@@ -259,11 +269,15 @@ def test_replace_rules(sample_data):
     result = processor.process(df)
     assert result is not None
 
+
 # Bad - Tests depend on shared state
 shared_df = None
+
+
 def test_one():
     global shared_df
     shared_df = load_data()
+
 
 def test_two():
     result = processor.process(shared_df)  # Depends on test_one
@@ -293,17 +307,22 @@ Include tests for edge cases:
 ```python
 def test_missing_values():
     """Test handling of missing/empty values."""
-    df = pd.DataFrame({
-        "q01": ["Male", "", None, "Female"],
-    })
+    df = pd.DataFrame(
+        {
+            "q01": ["Male", "", None, "Female"],
+        }
+    )
     result = processor.process(df)
     assert result is not None
 
+
 def test_unknown_categories():
     """Test handling of unexpected categorical values."""
-    df = pd.DataFrame({
-        "q01": ["Male", "Female", "Alien"],
-    })
+    df = pd.DataFrame(
+        {
+            "q01": ["Male", "Female", "Alien"],
+        }
+    )
     result = processor.process(df)
     # Should either replace with "other" or raise informative error
 ```

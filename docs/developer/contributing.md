@@ -108,9 +108,11 @@ def process_data():
     survey_responses = []
     return survey_responses
 
+
 # Classes
 class SurveySchema:
     pass
+
 
 # Constants
 MAX_RESPONSES = 1000
@@ -144,6 +146,7 @@ def replace_values(df: pd.DataFrame, rules: dict) -> pd.DataFrame:
     for column, replacements in rules.items():
         result[column] = result[column].replace(replacements)
     return result
+
 
 # Avoid - Too complex
 def process_everything(df, rules, splits, clusters):
@@ -199,10 +202,14 @@ Use type hints for clarity:
 def process(data: pd.DataFrame) -> pd.DataFrame:
     pass
 
+
 # Good - Complex types
 from typing import list
+
+
 def get_columns(df: pd.DataFrame, types: list[str]) -> list[str]:
     pass
+
 
 # Avoid - No hints
 def process(data):
