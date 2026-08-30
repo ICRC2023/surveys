@@ -72,7 +72,12 @@ Titanite is now a **pluggable survey processing framework**:
   - Enforces k-anonymity (default `--k 5`) on the schema's `quasi_identifiers`
   - Drops the schema's `public_drop_columns` (geography finer than the quasi-identifiers)
   - Example: `uv run ti anonymize --plugin plugins.icrc2023.ICRC2023Schema`
-  - Output: `public_data.csv` (safe to commit; `prepared_data.csv` is not)
+  - Output: `data/public/public_data.csv` (safe to commit; `prepared_data.csv` is not)
+- `ti aggregate` - Build suppressed frequency tables from `prepared_data.csv`
+  - `univariate/<col>.csv` for every `categorical_headers` column; `--pair X,Y` (repeatable) for cross-tabs
+  - Cells with a count below `--threshold` (default 5) are suppressed
+  - Output: `data/public/aggregates/` (safe to commit) — used for the finer
+    breakdowns (e.g. `q03_subregional`) that `ti anonymize` drops
 - `ti comments` - Extract and analyze free-text responses (q15-q22)
 - `ti response` - Create response timeline heatmap
 - `ti hbar` - Create histogram for a single variable (WIP)
