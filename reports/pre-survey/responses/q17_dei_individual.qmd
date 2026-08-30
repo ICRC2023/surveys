@@ -1,0 +1,58 @@
+---
+title: "Q17. Thoughts on DE&I initiatives"
+---
+
+**What are your thoughts on diversity, equity & inclusion initiatives?**
+
+Asked as agree/disagree on four aspects — gender balance, diversity,
+equity, inclusion — plus *No interest* and *Prefer not to answer*.
+
+```{python}
+# | echo: false
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path.cwd().parent.parent))
+from _helpers import bar, load_univariate, suppression_note  # noqa: E402
+
+ORDER = ["Agree", "Disagree", "No interest", "Prefer not to answer"]
+
+
+def agree_bar(col, label):
+    return bar(load_univariate(col), col, title=label, sort=ORDER)
+```
+
+## Gender balance
+
+```{python}
+# | echo: false
+agree_bar("q17_genderbalance", "Q17. Gender balance (individual)")
+```
+
+## Diversity
+
+```{python}
+# | echo: false
+agree_bar("q17_diversity", "Q17. Diversity (individual)")
+```
+
+## Equity
+
+```{python}
+# | echo: false
+agree_bar("q17_equity", "Q17. Equity (individual)")
+```
+
+## Inclusion
+
+```{python}
+# | echo: false
+agree_bar("q17_inclusion", "Q17. Inclusion (individual)")
+```
+
+Agreement is high on all four aspects (above 80% of non-suppressed
+responses). Free-text elaboration was collected in Q18.
+
+::: {.callout-note appearance="minimal"}
+`{python} suppression_note()`
+:::
