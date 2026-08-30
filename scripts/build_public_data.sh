@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# Regenerate the committed data/public/ extract from the raw export.
+#
+# The raw export lives only in data/raw_data/ (git-ignored). Run this after
+# updating it or the anonymization rules. Output:
+#   data/public/public_data.csv           - k-anonymized individual-level extract
+#   data/public/aggregates/univariate/    - one suppressed frequency table per column
+#   data/public/aggregates/bivariate/     - suppressed cross-tabs for the pairs below
+#
+# See PLAN.md Phase 5.
+set -euo pipefail
+
+RAW="${1:-../data/raw_data/diversity/20230726_icrc2023_diversity_presurvey_answers.csv}"
+PLUGIN="plugins.icrc2023.ICRC2023Schema"
+
+cd "$(dirname "$0")/../sandbox"
+
+echo ">> ti prepare (raw -> data/private/, individual-level, not committed)"
+uv run ti prepare "$RAW" --plugin "$PLUGIN"
+
+echo ">> ti anonymize (-> data/public/public_data.csv)"
+uv run ti anonymize --plugin "$PLUGIN"
+
+echo ">> ti aggregate (-> data/public/aggregates/)"
+uv run ti aggregate --plugin "$PLUGIN" \
+  --pair q01,q02 --pair q01,q05 --pair q01,q06 \
+  --pair q02,q05 --pair q02,q06 --pair q02,q07 \
+  --pair q03_regional,q02 --pair q03_subregional,q02 \
+  --pair q04_regional,q02 --pair q04_subregional,q02 \
+  --pair q05,q02 --pair q06,q02 --pair q08,q02 \
+  --pair q13_binned,q02 --pair q14,q02
+
+echo ">> done. Review data/public/ before committing."
