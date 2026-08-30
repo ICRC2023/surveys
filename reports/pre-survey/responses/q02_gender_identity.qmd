@@ -1,0 +1,32 @@
+---
+title: "Q02. Gender identity"
+---
+
+**What gender do you identify as?**
+
+Choices: Male, Female, Non-binary, *Prefer to self-identify*, *Prefer not to answer*.
+
+```{python}
+# | echo: false
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path.cwd().parent.parent))
+from _helpers import bar, load_univariate, suppression_note  # noqa: E402
+```
+
+## Distribution
+
+```{python}
+# | echo: false
+bar(load_univariate("q02"), "q02", title="Q02. Gender identity")
+```
+
+Most cross-tabs on the other response pages are broken down by this
+question. Gender balance by workplace region is on the
+[Q03 page](q03_workplace.qmd); by field and seniority on the
+[Q05](q05_job_title.qmd) / [Q06](q06_research_domain.qmd) pages.
+
+::: {.callout-note appearance="minimal"}
+`{python} suppression_note()`
+:::
