@@ -1,0 +1,114 @@
+# Zensical configuration for the titanite framework documentation.
+#
+# Scope: the titanite framework docs only (docs/titanite/** and the generated
+# API reference). The ICRC2023 survey-results docs (docs/survey/**,
+# docs/diversity/**) are still built with Sphinx (docs/conf.py) and will move
+# to a separate Quarto project under reports/ (PLAN.md Phase 7 task 2). Once
+# that lands, docs/conf.py is removed and this config's docs_dir widens.
+
+[project]
+site_name = "titanite"
+site_description = "Pluggable survey processing framework for ICRC2023 diversity survey analysis"
+site_url = "https://icrc2023.github.io/surveys/"
+site_author = "Shota Takahashi / ICRC2023 Diversity Group"
+copyright = "Copyright &copy; 2023 Shota Takahashi"
+
+repo_url = "https://github.com/ICRC2023/surveys"
+repo_name = "ICRC2023/surveys"
+edit_uri = "edit/main/docs/"
+
+docs_dir = "docs/titanite"
+site_dir = "site"
+
+nav = [
+  { "titanite" = "index.md" },
+  { "User Guide" = [
+    { "Overview" = "user/index.md" },
+    { "Quick Start" = "user/quickstart.md" },
+    { "Installation" = "user/installation.md" },
+    { "CLI Commands" = "user/cli-commands.md" },
+    { "Configuration" = "user/configuration.md" },
+  ] },
+  { "Developer Guide" = [
+    { "Overview" = "developer/index.md" },
+    { "Architecture" = "developer/architecture.md" },
+    { "Plugin Development" = "developer/plugin-development.md" },
+    { "Testing" = "developer/testing.md" },
+    { "Contributing" = "developer/contributing.md" },
+  ] },
+  { "Statistics" = [
+    { "Overview" = "statistics/index.md" },
+    { "Chi-Square Test" = "statistics/chi2_test.md" },
+    { "Clustering" = "statistics/clustering.md" },
+    { "Binning" = "statistics/binning.md" },
+  ] },
+  { "API Reference" = "reference/index.md" },
+]
+
+[project.theme]
+language = "en"
+features = [
+  "content.code.copy",
+  "content.code.annotate",
+  "navigation.indexes",
+  "navigation.instant",
+  "navigation.sections",
+  "navigation.top",
+  "navigation.tracking",
+  "search.highlight",
+  "toc.follow",
+]
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme)"
+toggle.icon = "lucide/sun-moon"
+toggle.name = "Switch to light mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to system preference"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/github"
+link = "https://github.com/ICRC2023/surveys"
+
+[project.markdown_extensions]
+abbr = {}
+admonition = {}
+attr_list = {}
+def_list = {}
+footnotes = {}
+md_in_html = {}
+toc.permalink = true
+pymdownx.betterem = {}
+pymdownx.details = {}
+pymdownx.highlight.anchor_linenums = true
+pymdownx.highlight.line_spans = "__span"
+pymdownx.highlight.pygments_lang_class = true
+pymdownx.inlinehilite = {}
+pymdownx.superfences.custom_fences = [
+  { name = "mermaid", class = "mermaid", format = "pymdownx.superfences.fence_code_format" },
+]
+pymdownx.tabbed.alternate_style = true
+pymdownx.tasklist.custom_checkbox = true
+"zensical.extensions.mkdocstrings" = { default_handler = "python" }
+
+[project.plugins.mkdocstrings.handlers.python]
+paths = ["../.."]
+
+[project.plugins.mkdocstrings.handlers.python.options]
+docstring_style = "numpy"
+show_source = false
+show_root_heading = true
+show_symbol_type_heading = true
+show_symbol_type_toc = true
+members_order = "source"
+separate_signature = true

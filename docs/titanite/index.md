@@ -2,11 +2,9 @@
 
 titanite は ICRC2023 のアンケートデータを分析するためのプラグイン型サーベイ処理フレームワークです。
 
-```{toctree}
----
-maxdepth: 2
----
-user/index
-developer/index
-statistics/index
-```
+## ドキュメント構成
+
+- **[ユーザーガイド](user/index.md)** — インストール、クイックスタート、CLI コマンド、設定
+- **[開発者ガイド](developer/index.md)** — アーキテクチャ、プラグイン開発、テスト、コントリビューション
+- **[統計処理ガイド](statistics/index.md)** — カイ二乗検定、クラスタリング、ビニング
+- **[API リファレンス](reference/index.md)** — `titanite` パッケージの自動生成ドキュメント

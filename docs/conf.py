@@ -13,10 +13,18 @@ author = "Shota Takahashi / ICRC2023 Diversity Group"
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["myst_nb", "autodoc2", "sphinx.ext.napoleon"]
+extensions = ["myst_nb", "sphinx.ext.napoleon"]
 
 templates_path = ["_templates"]
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+# titanite/** and apidocs/** are the titanite framework docs, now built with
+# Zensical (zensical.toml). This Sphinx project covers only the survey results.
+exclude_patterns = [
+    "_build",
+    "Thumbs.db",
+    ".DS_Store",
+    "titanite",
+    "apidocs",
+]
 
 # -- Options for MyST parser --
 myst_enable_extensions = [
@@ -33,10 +41,6 @@ myst_enable_extensions = [
     "substitution",
     "tasklist",
 ]
-
-# -- Options for autodoc2 -------------------------------------------------
-autodoc2_packages = ["../titanite"]
-autodoc2_render_plugin = "myst"
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
