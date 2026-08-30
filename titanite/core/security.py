@@ -19,15 +19,20 @@ class SecureDataHandler:
     Focuses on:
 
     - Safe data loading
-    - Cell suppression (n < threshold removal)
+    - Cell suppression (n < threshold removal, for aggregated data)
+    - k-anonymization (row suppression, for individual-level data)
+    - Timestamp generalization (precision reduction)
     - Anonymization (sensitive column removal)
+    - build_public_dataset: the full individual-level publication pipeline
 
     Examples
     --------
-    >>> df = SecureDataHandler.load_sensitive_data("data.csv")
-    >>> suppressed = SecureDataHandler.suppress_small_cells(df, threshold=5)
-    >>> safe = SecureDataHandler.anonymize_for_publication(
-    ...     suppressed, sensitive_columns=["timestamp", "q15"]
+    >>> df = SecureDataHandler.load_sensitive_data("prepared_data.csv")
+    >>> public = SecureDataHandler.build_public_dataset(
+    ...     df,
+    ...     free_text_columns=["q15", "q16"],
+    ...     quasi_identifiers=["q01", "q02", "q03_subregional", "q05"],
+    ...     k=5,
     ... )
     """
 
@@ -91,6 +96,96 @@ class SecureDataHandler:
         return data[data[count_column] >= threshold].copy()
 
     @staticmethod
+    def generalize_timestamp(
+        data: pd.DataFrame,
+        column: str = "timestamp",
+        freq: str = "D",
+    ) -> pd.DataFrame:
+        """Reduce timestamp precision by truncating to a coarser frequency.
+
+        A second-level response timestamp is a quasi-identifier: it can be
+        matched against mailing logs or event schedules to re-identify a
+        respondent. Truncating to daily (or coarser) granularity removes that
+        risk while keeping the timeline usable for aggregate response plots.
+
+        Parameters
+        ----------
+        data : pd.DataFrame
+            DataFrame containing the timestamp column
+        column : str, optional
+            Name of the timestamp column, by default "timestamp"
+        freq : str, optional
+            Target resolution as a pandas offset alias (e.g. "D" for day,
+            "h" for hour, "W" for week), by default "D"
+
+        Returns
+        -------
+        pd.DataFrame
+            Copy of data with the timestamp column truncated. If the column
+            is not present, returns data unchanged with a warning.
+        """
+        if column not in data.columns:
+            logger.warning(
+                f"Column '{column}' not found in data; timestamp not generalized"
+            )
+            return data.copy()
+        result = data.copy()
+        result[column] = pd.to_datetime(result[column]).dt.floor(freq)
+        return result
+
+    @staticmethod
+    def k_anonymize(
+        data: pd.DataFrame,
+        quasi_identifiers: list[str],
+        k: int = 5,
+    ) -> pd.DataFrame:
+        """Enforce k-anonymity on individual-level records by row suppression.
+
+        Groups rows by the combination of quasi-identifier values and drops
+        every group whose size is smaller than ``k``. After this, no
+        respondent can be singled out by any combination of the given
+        quasi-identifiers plus outside knowledge (e.g. a public attendee
+        list): each surviving combination is shared by at least ``k`` people.
+
+        Parameters
+        ----------
+        data : pd.DataFrame
+            Individual-level (one row per respondent) DataFrame
+        quasi_identifiers : list[str]
+            Column names that could be linked against external data
+            (e.g. ["q01", "q02", "q03_subregional", "q05"])
+        k : int, optional
+            Minimum group size to retain, by default 5
+
+        Returns
+        -------
+        pd.DataFrame
+            Copy of data containing only rows whose quasi-identifier
+            combination occurs at least ``k`` times. If none of the
+            quasi-identifier columns are present, returns data unchanged
+            with a warning.
+        """
+        present = [c for c in quasi_identifiers if c in data.columns]
+        if not present:
+            logger.warning(
+                "None of the quasi-identifier columns found in data; "
+                "k-anonymization not applied"
+            )
+            return data.copy()
+        if len(present) < len(quasi_identifiers):
+            missing = [c for c in quasi_identifiers if c not in data.columns]
+            logger.warning(f"Quasi-identifier columns not found: {missing}")
+        group_sizes = data.groupby(present, dropna=False)[present[0]].transform("size")
+        mask = group_sizes >= k
+        dropped = int((~mask).sum())
+        if dropped:
+            logger.info(
+                f"k-anonymization (k={k}): dropped {dropped} rows, "
+                f"{int(mask.sum())} rows retained"
+            )
+        return data[mask].copy()
+
+    @staticmethod
     def anonymize_for_publication(
         data: pd.DataFrame,
         sensitive_columns: list[str],
@@ -116,3 +211,70 @@ class SecureDataHandler:
         if columns_to_drop:
             logger.info(f"Dropping sensitive columns: {columns_to_drop}")
         return data.drop(columns=columns_to_drop).copy()
+
+    @staticmethod
+    def build_public_dataset(
+        data: pd.DataFrame,
+        free_text_columns: list[str],
+        quasi_identifiers: list[str],
+        k: int = 5,
+        timestamp_column: str = "timestamp",
+        timestamp_freq: str = "D",
+        translation_suffix: str = "_ja",
+        extra_drop_columns: list[str] | None = None,
+    ) -> pd.DataFrame:
+        """Turn an individual-level DataFrame into a publication-safe dataset.
+
+        Combines the lower-level privacy operations into the full pipeline
+        used by ``ti anonymize``:
+
+        1. Drop free-text response columns and their translations
+           (e.g. "q15" and "q15_ja"). Their sentiment scores
+           (e.g. "q15_polarity") are non-reversible aggregates and are kept.
+        2. Truncate the timestamp column to a coarser resolution.
+        3. Enforce k-anonymity on the quasi-identifier combination.
+
+        Parameters
+        ----------
+        data : pd.DataFrame
+            Individual-level (one row per respondent) DataFrame, typically
+            loaded from ``prepared_data.csv``
+        free_text_columns : list[str]
+            Free-text response column names (e.g. ["q15", "q16", ...]).
+            For each name, ``name`` and ``name + translation_suffix`` are
+            dropped if present.
+        quasi_identifiers : list[str]
+            Columns to protect via k-anonymity (see :meth:`k_anonymize`)
+        k : int, optional
+            Minimum group size for k-anonymity, by default 5
+        timestamp_column : str, optional
+            Timestamp column to generalize, by default "timestamp"
+        timestamp_freq : str, optional
+            Target timestamp resolution, by default "D" (daily)
+        translation_suffix : str, optional
+            Suffix identifying translated free-text columns, by default "_ja"
+        extra_drop_columns : list[str] or None, optional
+            Additional columns to drop (e.g. ["response"]), by default None
+
+        Returns
+        -------
+        pd.DataFrame
+            Publication-safe copy: no free-text, coarsened timestamp, and
+            every quasi-identifier combination shared by at least ``k``
+            respondents.
+        """
+        drop_columns = []
+        for column in free_text_columns:
+            drop_columns.append(column)
+            drop_columns.append(f"{column}{translation_suffix}")
+        if extra_drop_columns:
+            drop_columns.extend(extra_drop_columns)
+
+        result = SecureDataHandler.anonymize_for_publication(data, drop_columns)
+        result = SecureDataHandler.generalize_timestamp(
+            result, column=timestamp_column, freq=timestamp_freq
+        )
+        result = SecureDataHandler.k_anonymize(
+            result, quasi_identifiers=quasi_identifiers, k=k
+        )
+        return result

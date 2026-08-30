@@ -7,8 +7,10 @@ from loguru import logger
 
 from . import analysis as core
 from .config import CATEGORICAL_HEADERS, Config, Data
-from .core import SurveyProcessor
+from .core import SecureDataHandler, SurveyProcessor
 from .preprocess import categorical_data, preprocess_data, save_data, sentiment_data
+
+DEFAULT_PLUGIN = "plugins.icrc2023.ICRC2023Schema"
 
 app = typer.Typer()
 
@@ -135,6 +137,59 @@ def prepare(
     data.to_csv(fname, index=False)
 
     save_data(data, write_dir)
+
+
+@app.command()
+def anonymize(
+    read_from: str = "../data/local/prepared_data.csv",
+    write_dir: str = "../data/public/",
+    plugin: str = DEFAULT_PLUGIN,
+    k: int = 5,
+) -> None:
+    """
+    Build a publication-safe dataset from prepared (individual-level) data.
+
+    個票データ（prepared_data.csv）を読み込み、以下を適用して
+    公開可能な public_data.csv を生成します。
+
+    - 自由記述カラムとその翻訳（q15, q15_ja など）を削除
+    - タイムスタンプを日付粒度に丸める
+    - 準識別子の組み合わせで k 人未満の行を削除（k-匿名化）
+
+    Parameters
+    ----------
+    read_from : str, optional
+        path to prepared (individual-level) CSV file,
+        by default "../data/local/prepared_data.csv"
+    write_dir : str, optional
+        path to directory for saving public_data.csv,
+        by default "../data/public/"
+    plugin : str, optional
+        plugin name in format "plugins.package.SchemaClassName";
+        the schema supplies free_text_columns and quasi_identifiers,
+        by default "plugins.icrc2023.ICRC2023Schema"
+    k : int, optional
+        minimum group size for k-anonymity, by default 5
+    """
+    schema_class = _load_schema_class(plugin)
+    schema = schema_class()
+
+    logger.info(f"Read data from: {read_from}")
+    data = SecureDataHandler.load_sensitive_data(read_from)
+    logger.info(f"Loaded {len(data)} individual-level rows")
+
+    public = SecureDataHandler.build_public_dataset(
+        data,
+        free_text_columns=schema.free_text_columns,
+        quasi_identifiers=schema.quasi_identifiers,
+        k=k,
+        extra_drop_columns=schema.public_drop_columns,
+    )
+    logger.info(f"Public dataset: {len(public)} rows, {len(public.columns)} columns")
+
+    fname = Path(write_dir) / "public_data.csv"
+    public.to_csv(fname, index=False)
+    logger.info(f"Saved data to: {fname}")
 
 
 @app.command()
