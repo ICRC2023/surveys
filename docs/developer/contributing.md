@@ -398,13 +398,15 @@ Closes #123
 ├── titanite/          # Main package
 ├── plugins/           # Survey plugins
 ├── tests/             # Test suite
-├── docs/              # Documentation
-├── notebooks/         # Jupyter notebooks
-├── data/              # Data files
+├── docs/              # Framework docs (Zensical)
+├── reports/           # ICRC2023 survey-results site (Quarto)
+├── notebooks/         # Legacy Jupyter notebooks (being migrated to reports/)
+├── data/              # Data files (downloaded/ private/ public/)
 ├── sandbox/           # CLI working directory
 ├── Taskfile.yml       # Task automation
 ├── pyproject.toml     # Project configuration
-└── CLAUDE.md          # Developer guide
+├── AGENTS.md          # Shared contributor + agent guide
+└── CLAUDE.md          # Claude Code specific notes
 ```
 
 ## Useful Commands

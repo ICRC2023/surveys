@@ -41,16 +41,22 @@ Each survey gets its own plugin implementing `SurveySchema`:
 ```
 plugins/icrc2023/
 ├── __init__.py
-└── ICRC2023Schema
-    ├── categorical_headers
-    ├── numerical_headers
-    ├── free_text_columns
-    └── Methods:
-        ├── get_replace_rules()
-        ├── get_split_rules()
-        ├── get_cluster_rules()
-        ├── get_bin_rules()
+└── schema.py           # class ICRC2023Schema(SurveySchema)
 ```
+
+`plugins/icrc2023/__init__.py` re-exports the class, so both
+`plugins.icrc2023.ICRC2023Schema` and
+`plugins.icrc2023.schema.ICRC2023Schema` work as `--plugin` values.
+
+`ICRC2023Schema` defines the class attributes `categorical_headers`,
+`numerical_headers`, `free_text_columns`, `quasi_identifiers`,
+`public_drop_columns`, `public_mask_columns` and implements
+`get_replace_rules()`, `get_split_rules()`, `get_cluster_rules()`,
+`get_bin_rules()`.
+
+Plugins are loaded by dotted path at runtime
+(`--plugin plugins.icrc2023.ICRC2023Schema`); no entry-point
+registration is required.
 
 ### CLI Interface (`titanite/cli.py`)
 
@@ -58,6 +64,7 @@ Main entry point via `ti` command. Commands are organized by function:
 
 - **Configuration**: `config`
 - **Data Preparation**: `prepare`
+- **Publication**: `anonymize` (individual-level → publication-safe dataset), `aggregate` (individual-level → suppressed frequency tables)
 - **Analysis**: `chi2`, `p005`, `crosstabs`, `crosstab`
 - **Visualization**: `response`, `hbars`, `hbar`
 - **Text Analysis**: `comments`
@@ -143,7 +150,7 @@ plugins/
 ├── __init__.py
 └── icrc2023/
     ├── __init__.py
-    └── ICRC2023Schema  # Survey-specific implementation
+    └── schema.py       # class ICRC2023Schema (survey-specific implementation)
 
 tests/
 ├── test_core.py
@@ -191,7 +198,7 @@ Stored separately for privacy protection.
 
 ### Adding a New Survey
 
-1. Create plugin: `plugins/your_survey/`
+1. Create plugin: `plugins/your_survey/schema.py`
 2. Implement `SurveySchema` with rule methods
 3. Define `categorical_headers`, `numerical_headers`, `free_text_columns`
 4. Implement rule methods:
@@ -199,8 +206,8 @@ Stored separately for privacy protection.
    - `get_split_rules()` - column splitting
    - `get_cluster_rules()` - derived columns
    - `get_bin_rules()` - numerical binning
-5. Register plugin in `pyproject.toml` entry points
-6. Add configuration to `sandbox/config.toml`
+5. Add configuration to `sandbox/config.toml`
+6. Pass the dotted class path at runtime: `--plugin plugins.your_survey.YourSurveySchema` (no entry-point registration needed)
 
 ### Custom Analysis
 

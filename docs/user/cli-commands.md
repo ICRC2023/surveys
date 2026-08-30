@@ -44,7 +44,7 @@ Turn `prepared_data.csv` into a publication-safe individual-level extract.
 uv run ti anonymize --plugin plugins.icrc2023.ICRC2023Schema
 ```
 
-- drops the free-text columns and their `_ja` translations (sentiment scores kept)
+- drops the free-text columns (sentiment scores kept)
 - truncates `timestamp` to the day
 - drops the schema's `public_drop_columns` (geography finer than the quasi-identifiers)
 - masks rare values in `public_mask_columns` to `(rare)`
