@@ -2,11 +2,24 @@
 
 from pathlib import Path
 
+import pytest
+
 from titanite import config
 
 _ROOT = Path(__file__).parent.parent
 CONFIG_DIVERSITY = str(_ROOT / "sandbox" / "config.toml")
 DATA_DIVERSITY = str(_ROOT / "data" / "test_data" / "prepared_data.csv")
+
+# These two tests read a committed individual-level CSV
+# (data/test_data/prepared_data.csv), which is being untracked as part of
+# PLAN.md Phase 5. They are skipped until the survey analysis is rebuilt on
+# the anonymized data/public/public_data.csv extract, at which point they
+# should be rewritten against that file or a synthetic fixture with the same
+# column layout.
+pytestmark = pytest.mark.skip(
+    reason="depends on the untracked data/test_data/prepared_data.csv; "
+    "rebuild on data/public/public_data.csv (PLAN.md Phase 5)"
+)
 
 
 def test_data_read():
