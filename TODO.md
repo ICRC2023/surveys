@@ -106,7 +106,7 @@
 ### 5. ドキュメントの改善
 
 - [ ] **titanite ドキュメントとアンケート結果ドキュメントの分離** — 詳細は `PLAN.md`「Phase 7: ドキュメントの分離」を参照
-  - titanite（`docs/titanite/` + API）→ Zensical + mkdocstrings
+  - titanite（`docs/` + API）→ Zensical + mkdocstrings
   - アンケート結果（`docs/survey/` + `docs/diversity/`）→ `reports/`（Quarto、ノート埋め込み、`freeze: true`）
   - Sphinx / myst-nb / sphinx-autodoc2 は撤去
   - CI が個票 CSV なしでビルドできる状態にする（Phase 5・6 と連動）
