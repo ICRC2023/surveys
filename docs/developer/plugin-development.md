@@ -49,7 +49,7 @@ class YourSurveySchema(SurveySchema):
 ### 3. Use Plugin
 
 ```bash
-poetry run ti prepare data.csv --plugin plugins.your_survey.YourSurveySchema
+uv run ti prepare data.csv --plugin plugins.your_survey.YourSurveySchema
 ```
 
 ## Detailed Implementation
@@ -255,12 +255,18 @@ def test_split_rules():
     assert rules[0].target_columns
 
 
-def test_with_real_data():
-    """Test plugin with actual survey data."""
+def test_with_synthetic_data():
+    """Test the plugin on a synthetic DataFrame with your survey's columns."""
     schema = YourSurveySchema()
-    df = pd.read_csv("data/test_data/your_survey.csv")
+    df = pd.DataFrame(
+        {
+            "timestamp": ["2023-07-15 10:00:00"],
+            "q01": ["30s"],
+            "q02": ["Female"],
+            # ... one row per case you want to cover
+        }
+    )
 
-    # Run processing pipeline
     processor = SurveyProcessor(schema)
     result = processor.process(df)
 
@@ -273,7 +279,7 @@ def test_with_real_data():
 ```bash
 # Test full pipeline with real data
 cd sandbox
-poetry run ti prepare ../data/downloaded/your_survey.csv \
+uv run ti prepare ../data/downloaded/your_survey.csv \
   --plugin plugins.your_survey.YourSurveySchema
 ```
 
@@ -344,7 +350,7 @@ def get_replace_rules(self) -> dict[str, dict]:
 Always test with representative sample data:
 
 ```bash
-poetry run ti prepare sample_data.csv \
+uv run ti prepare sample_data.csv \
   --plugin plugins.your_survey.YourSurveySchema
 ```
 
@@ -362,28 +368,26 @@ Ensure the module path is correct:
 
 ```bash
 # Correct format: plugins.package.ClassName
-poetry run ti prepare data.csv --plugin plugins.your_survey.YourSurveySchema
+uv run ti prepare data.csv --plugin plugins.your_survey.YourSurveySchema
 
 # NOT: plugins/your_survey/YourSurveySchema
 # NOT: your_survey.YourSurveySchema
 ```
 
-### Import Errors
+### Import errors
 
-Add plugin to `pyproject.toml` if needed:
+The plugin is loaded by dotted path at runtime (`--plugin
+plugins.your_survey.YourSurveySchema`); it just needs to be importable
+from the project root. No entry-point registration is required.
 
-```toml
-[tool.poetry.plugins."titanite.surveys"]
-your_survey = "plugins.your_survey.YourSurveySchema"
-```
+### Data type mismatches
 
-### Data Type Mismatches
-
-Ensure categorical values match `config.toml`:
+Categorical values must match a list in `config.toml`'s `[choices]`;
+unmatched values become NaN after `categorical_data()`.
 
 ```toml
-[categorical_choices]
-q01 = ["male", "female", "other"]  # Lowercase
+[choices]
+your_q01 = ["10s", "20s", "30s", "Prefer not to answer"]
 ```
 
 ### Missing Replacements
@@ -392,7 +396,7 @@ Check that all observed values have replacement rules:
 
 ```bash
 # Run validation to find unmapped values
-poetry run ti config --questions
+uv run ti config --questions
 ```
 
 ## Example: ICRC2023Schema

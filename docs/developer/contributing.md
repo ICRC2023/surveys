@@ -21,7 +21,7 @@ cd ../worktrees/feature-name
 task env:setup
 
 # Install pre-commit hooks
-poetry run pre-commit install
+uv run pre-commit install
 ```
 
 ### 3. Make Changes
@@ -226,10 +226,10 @@ All new code must include tests:
 
 ```bash
 # Write tests in tests/test_new_feature.py
-poetry run pytest tests/test_new_feature.py -v
+uv run pytest tests/test_new_feature.py -v
 
 # Check coverage
-poetry run pytest --cov=titanite tests/
+uv run pytest --cov=titanite tests/
 ```
 
 See [Testing](testing.md) for detailed guidelines.
@@ -336,7 +336,7 @@ task deps:check
 task deps:update
 
 # Commit and tag
-poetry run cz bump --changelog --check-consistency
+uv run cz bump --changelog --check-consistency
 git push origin --tags
 ```
 
@@ -412,7 +412,7 @@ Closes #123
 ```bash
 # Setup
 task env:setup
-poetry run pre-commit install
+uv run pre-commit install
 
 # Development
 task test               # Run tests

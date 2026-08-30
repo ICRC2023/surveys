@@ -156,8 +156,11 @@ sandbox/
 └── app.py              # Streamlit dashboard
 
 data/
-├── downloaded/         # Raw Google Forms CSV exports
-└── test_data/          # Test datasets
+├── downloaded/         # raw Google Forms CSV exports (git-ignored)
+├── private/            # ti prepare / analysis output, individual-level (git-ignored)
+└── public/             # ti anonymize / ti aggregate output (committed)
+
+reports/                # ICRC2023 survey-results site (Quarto)
 ```
 
 ## Data Structure
@@ -216,7 +219,7 @@ Stored separately for privacy protection.
 Run with:
 
 ```bash
-poetry run pytest tests/ -v
+uv run pytest tests/ -v
 ```
 
 See [Testing](testing.md) for comprehensive guide.
@@ -253,14 +256,20 @@ Core dependencies:
 - **pydantic** - Data validation
 - **pyarrow** - Data I/O
 
-Development dependencies:
+Development dependencies (`dev` group):
 
-- **pytest** - Testing framework
-- **sphinx** - Documentation
-- **ruff** - Code linting/formatting
+- **pytest** / **pytest-cov** - Testing and coverage
+- **ruff** - Linting and formatting
 - **pre-commit** - Git hooks
+- **commitizen** - Conventional commits and versioning
+- **marimo** - Interactive notebooks
 
-See `pyproject.toml` for complete dependency list.
+Documentation (`docs` group):
+
+- **zensical** + **mkdocstrings-python** - the framework docs in `docs/`
+- Quarto (a separate CLI) - the ICRC2023 survey-results site in `reports/`
+
+See `pyproject.toml` for the complete list.
 
 ## Performance Considerations
 
