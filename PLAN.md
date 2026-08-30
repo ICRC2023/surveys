@@ -748,10 +748,11 @@ Phase 5 のガード追加（タスク7）に合わせて、`.github/workflows/`
    - `workflow_dispatch` は残す
    - デプロイ内容（reports を `/`、Zensical を `/titanite/`）は Phase 7 タスク3 で対応済み
    - `uv lock --upgrade --dry-run` は Phase 7 タスク3 の書き換えで既に除去済み
-4. **`update_changelog.yml` → `changelog.yml`**
-   - `git push origin main` をやめ `peter-evans/create-pull-request` で
-     PR を作る（通常の CI ゲートを通す）
+4. **`update_changelog.yml` を PR ベースに** — ✅ 完了（PR: ci/changelog-via-pr）
+   - `git push origin main [skip ci]` をやめ `peter-evans/create-pull-request@v8`
+     で `chore/update-changelog` ブランチに PR を作る（通常の CI ゲートを通す）
    - `permissions: { contents: write, pull-requests: write }` を明示
+   - ファイル名は `update_changelog.yml` のまま（`changelog.yml` へのリネームは見送り）
 5. **`release.yml` を作成**（任意、後回し可）
    - `workflow_dispatch` で `cz bump --changelog --check-consistency` →
      タグ push → GitHub Release 作成
@@ -759,8 +760,9 @@ Phase 5 のガード追加（タスク7）に合わせて、`.github/workflows/`
 
 ### 成果物
 
-- `ci.yml` / `pages.yml` / `changelog.yml`（+ 任意 `release.yml`）
-- 削除された `pr_test.yml` / `branch.yml`
+- `ci.yml` / `static.yml`（Pages）/ `update_changelog.yml`（PR ベース）
+  （+ 任意 `release.yml`）
+- 削除された `pr_test.yml` / `branch.yml` / `quality.yml`
 - CI でのカバレッジ計測
 - 未検証コードが Pages にデプロイされない構造
 - main への直接 push を行うワークフローの排除
