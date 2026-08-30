@@ -1,218 +1,163 @@
 # Chi-Square Test
 
-Understanding chi-square tests for categorical association analysis.
+The association test behind `ti chi2`, `ti p005`, and `ti crosstabs`.
 
 ## Overview
 
-The chi-square test is a statistical test used to determine whether there is a significant association between two categorical variables. In titanite, chi-square tests are used to identify relationships in survey data.
+The chi-square test of independence checks whether two categorical variables are
+associated — whether the joint distribution differs from what independence would
+predict. In titanite it is run over every pair of `categorical_headers` columns
+in the prepared dataset to surface which question pairs are related.
 
-**When to use:**
-- Analyzing associations between categorical variables (e.g., gender vs. department)
-- Testing independence of two categorical variables
-- Identifying which variable pairs have statistically significant relationships
+**Use it for:**
 
-## The Chi-Square Statistic
+- associations between categorical answers (e.g. `q02` gender vs `q05` field)
+- testing independence of a derived cluster (`q13_clustered`) against other answers
+- ranking which pairs, out of many, look non-random
 
-The chi-square statistic (χ²) measures how much the observed frequencies differ from what we would expect if there were no association between variables:
+## The statistic
 
 $$\chi^2 = \sum \frac{(O - E)^2}{E}$$
 
-Where:
-- **O** = Observed frequency (actual count in data)
-- **E** = Expected frequency (count if variables were independent)
+- **O** — observed count in a contingency-table cell
+- **E** — count expected under independence,
+  $E_{ij} = (\text{row}_i\ \text{total}) \times (\text{col}_j\ \text{total}) / n$
 
-## Interpreting Results
+Degrees of freedom: $df = (r - 1)(c - 1)$ for an $r \times c$ table.
 
-### P-value
+titanite computes this with
+[`scipy.stats.chi2_contingency`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.chi2_contingency.html)
+on `pd.crosstab(data[x], data[y])` — see `crosstab_data` in
+[titanite/analysis.py](../../titanite/analysis.py). `chi2_contingency` defaults
+to `correction=True`, so **Yates' continuity correction is applied when
+`df == 1`** (2×2 tables). This inflates the p-value slightly to compensate for
+small counts.
 
-The p-value indicates the probability that the observed association occurred by chance:
+## Interpreting the p-value
 
-- **p < 0.05** - Statistically significant association (reject null hypothesis of independence)
-- **p ≥ 0.05** - No significant association (cannot reject null hypothesis)
+The p-value is the probability of a $\chi^2$ this large or larger if the two
+variables were independent.
 
-**Interpretation:**
-- Small p-value (e.g., p = 0.001): Very unlikely to occur by chance → Strong evidence of association
-- Large p-value (e.g., p = 0.5): Likely to occur by chance → No evidence of association
+- **p < 0.05** — conventionally "significant"; the observed association is
+  unlikely under independence
+- **p ≥ 0.05** — no evidence against independence
 
-### Degrees of Freedom
+A small p-value says the association is unlikely to be noise. It says **nothing**
+about how strong the association is, or which variable drives the other.
 
-Degrees of freedom (df) indicate the flexibility in the data:
+## Using it in titanite
 
-$$df = (rows - 1) \times (columns - 1)$$
-
-More rows/columns = more degrees of freedom = larger χ² value needed for significance.
-
-### Effect Size
-
-The chi-square statistic alone doesn't indicate strength of association. Use Cramér's V for effect size:
-
-$$V = \sqrt{\frac{\chi^2}{n \times (k - 1)}}$$
-
-Where:
-- **χ²** = Chi-square statistic
-- **n** = Sample size
-- **k** = Minimum of (rows, columns)
-
-**Interpretation:**
-- **V < 0.1** - Negligible association
-- **0.1 ≤ V < 0.3** - Weak association
-- **0.3 ≤ V < 0.5** - Moderate association
-- **V ≥ 0.5** - Strong association
-
-## Using in Titanite
-
-### Running Chi-Square Tests
-
-Test all variable pairs:
+### `ti chi2` — every pair
 
 ```bash
 cd sandbox
 uv run ti chi2
 ```
 
-This generates a matrix showing:
-- Chi-square statistic for each pair
-- P-value
-- Degrees of freedom
-- Effect size (Cramér's V)
+Reads `../data/private/prepared_data.csv`, takes every 2-combination of the
+`categorical_headers` present, and writes to `../data/private/chi2_test/`:
 
-### Extracting Significant Results
+| File | Contents |
+|---|---|
+| `chi2_test.csv` / `.json` | one row per pair |
+| `chi2_test_p005.csv` / `.json` | the subset with `p_value < 0.05` |
 
-Extract only pairs with p < 0.05:
+Columns in those files (`crosstab_loop` in
+[analysis.py](../../titanite/analysis.py)):
+
+| Column | Meaning |
+|---|---|
+| `questions` | `"<x>-<y>"` pair label |
+| `p_value` | `chi2_contingency` p-value |
+| `statistic` | the $\chi^2$ value |
+| `dof` | degrees of freedom |
+| `x`, `y` | the two column names |
+
+There is **no effect-size column** (no Cramér's V) and **no multiple-comparison
+adjustment** — `chi2_test_p005.csv` is a raw `p_value < 0.05` filter. If you need
+those, compute them from the CSV yourself (see below).
+
+### `ti p005` — one focus column
 
 ```bash
-uv run ti p005 q13 --save
+uv run ti p005 q13_clustered          # writes ../data/private/p005/q13_clustered/
+uv run ti p005 q13_clustered --save   # also saves heatmap PNGs for each pair
 ```
 
-This saves significant correlations for a specific column (e.g., q13).
+Cross-tabulates `header` against every other column and keeps the pairs with
+`p_value < 0.05`, writing `chi2_test_p005_<header>.csv` / `.json` under
+`../data/private/p005/<header>/`. `--save` renders an Altair heatmap PNG per
+significant pair.
 
-### Interpreting Output
+### `ti crosstabs` — tables and heatmaps
 
-Example output:
-
-```
-Variable Pair: q01 vs q02
-χ² = 15.42
-p = 0.0008
-df = 2
-V = 0.245 (weak association)
+```bash
+uv run ti crosstabs --save
 ```
 
-**Interpretation:**
-- Strong statistical evidence (p = 0.0008) of association between q01 and q02
-- Weak practical effect (V = 0.245)
-- Knowing q01 slightly improves prediction of q02, but not dramatically
+Builds the full contingency table and heatmap for every pair (the same
+`crosstab_loop`), for visual inspection alongside the numbers.
 
-## Example Analysis
+## Assumptions and limitations
 
-### Survey Scenario
+**Assumptions**
 
-**Question:** Is there an association between gender (q01) and field of study (q05)?
+1. **Independent observations** — one row per respondent
+2. **Categorical data** — bin numeric columns first (see [Binning](binning.md))
+3. **Adequate expected counts** — the usual rule of thumb is $E \ge 5$ in ~80%
+   of cells; sparse tables make the p-value unreliable. `chi2_contingency`
+   returns the `expected` array but titanite does not check it or warn — inspect
+   the cross-tab from `ti crosstabs` when a table looks thin.
 
-**Data:**
+For small or sparse tables, Fisher's exact test is more appropriate; titanite
+does not implement it. Collapsing rare categories (or using a coarser
+`ClusterRule` / `BinRule`) is the practical fix.
 
-|        | Physics | Biology | Chemistry |
-|--------|---------|---------|-----------|
-| Male   | 45      | 20      | 25        |
-| Female | 30      | 35      | 40        |
-| Other  | 5       | 10      | 8         |
+**Limitations**
 
-### Calculate Expected Frequencies
+- **Association, not causation** — a significant pair may be driven by a
+  confounder (e.g. age relating to both answers).
+- **Sample-size sensitivity** — with a large `n`, trivially small differences
+  reach `p < 0.05`. Always look at the contingency table, not just the p-value.
+- **Multiple comparisons** — `ti chi2` tests many pairs at once. At $\alpha =
+  0.05$, roughly 5% of truly-independent pairs land in `chi2_test_p005.csv` by
+  chance.
 
-Under independence (no association):
+## Effect size and multiple comparisons (do this yourself)
 
-$$E_{ij} = \frac{(\text{row total}) \times (\text{column total})}{\text{grand total}}$$
+titanite reports raw p-values only. To go further, load `chi2_test.csv` and add:
 
-Total respondents = 218
+**Cramér's V** (effect size, 0–1):
 
-Expected males in Physics:
-$$E = \frac{90 \times 80}{218} = 33.0$$
+```python
+import numpy as np
+import pandas as pd
 
-### Chi-Square Calculation
-
-$$\chi^2 = \frac{(45-33)^2}{33} + \frac{(20-27)^2}{27} + ... = 8.47$$
-
-With df = 4 (3-1) × (3-1), this gives p ≈ 0.076
-
-**Conclusion:** No statistically significant association at p < 0.05 level.
-
-## Assumptions and Limitations
-
-### Required Assumptions
-
-1. **Independence of observations** - Each respondent counted once
-2. **Categorical variables** - Data must be categorical, not continuous
-3. **Sufficient sample size** - Generally need n ≥ 20
-4. **Expected cell frequencies** - Typically need E ≥ 5 for most cells
-
-If assumptions violated:
-- Use Fisher's exact test for small samples
-- Consider exact chi-square test for sparse tables
-- Combine categories if E < 5 in many cells
-
-### Limitations
-
-- **Chi-square tests for association, not causation** - Significant association doesn't mean one variable causes the other
-- **Sensitive to sample size** - Large datasets can show "significant" associations with small practical effect
-- **Multiple comparisons problem** - Testing many pairs increases chance of false positives
-
-## Multiple Comparisons Correction
-
-When running many chi-square tests, use Bonferroni correction:
-
-**Adjusted p-value threshold:**
-$$p_{adjusted} = \frac{p_{original}}{n_{tests}}$$
-
-Example: Testing 50 variable pairs
-$$p_{adjusted} = \frac{0.05}{50} = 0.001$$
-
-Only accept associations with p < 0.001 to maintain overall significance level of 0.05.
-
-Titanite implements this correction in `chi2` and `p005` commands.
-
-## Common Pitfalls
-
-### 1. Confusing Association with Causation
-
-```
-Finding: High p < 0.05 correlation between coffee consumption and heart disease
-
-Possible explanations:
-- Coffee causes heart disease (unlikely)
-- Heart disease causes coffee avoidance (reverse causation)
-- Age confounds both (older people drink more coffee AND have more heart disease)
+df = pd.read_csv("../data/private/chi2_test/chi2_test.csv")
+# k = min(rows, cols) for each pair; recompute from the crosstab, or read n and k
+# from ti crosstabs output. With n and k in hand:
+df["cramers_v"] = np.sqrt(df["statistic"] / (df["n"] * (df["k"] - 1)))
 ```
 
-### 2. Ignoring Effect Size
+Rough guide: V < 0.1 negligible, 0.1–0.3 weak, 0.3–0.5 moderate, ≥ 0.5 strong.
 
+**Bonferroni** (family-wise error control):
+
+```python
+m = len(df)  # number of pairs tested
+df["significant"] = df["p_value"] < 0.05 / m
 ```
-Chi-square test: p = 0.02, V = 0.08 (negligible effect)
 
-Interpretation:
-- Statistical significance: YES (unlikely due to chance)
-- Practical significance: NO (effect too weak to matter)
-```
+Or use `statsmodels.stats.multitest.multipletests(df["p_value"], method="fdr_bh")`
+for a less conservative Benjamini–Hochberg FDR.
 
-### 3. Multiple Comparisons Without Correction
+## Further reading
 
-Testing 100 variable pairs:
-- Expected false positives: 100 × 0.05 = 5 spurious significant results
-- Always apply multiple comparisons correction
-
-### 4. Violating Assumptions
-
-Small expected cell frequencies:
-- Combining rare categories
-- Using Fisher's exact test instead
-- Reporting warnings appropriately
-
-## Further Reading
-
-- [Chi-square test guide](https://en.wikipedia.org/wiki/Chi-squared_test)
-- [Effect size in chi-square tests](https://en.wikipedia.org/wiki/Cram%C3%A9r%27s_V)
+- [Chi-squared test](https://en.wikipedia.org/wiki/Chi-squared_test)
+- [Cramér's V](https://en.wikipedia.org/wiki/Cram%C3%A9r%27s_V)
 - [Multiple comparisons problem](https://en.wikipedia.org/wiki/Multiple_comparisons_problem)
 
 ## See Also
 
-- [Clustering](clustering.md) - Creating composite variables
-- [Binning](binning.md) - Converting continuous data for chi-square tests
+- [Binning](binning.md) — making numeric columns testable
+- [Clustering](clustering.md) — derived categorical columns to test
