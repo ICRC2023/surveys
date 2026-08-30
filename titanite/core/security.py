@@ -96,6 +96,54 @@ class SecureDataHandler:
         return data[data[count_column] >= threshold].copy()
 
     @staticmethod
+    def aggregate_counts(
+        data: pd.DataFrame,
+        columns: list[str],
+        threshold: int = 5,
+        count_column: str = "count",
+    ) -> pd.DataFrame:
+        """Build a suppressed frequency table from individual-level data.
+
+        Groups the rows by ``columns`` and counts them, then drops every
+        combination seen fewer than ``threshold`` times. The result is safe
+        to publish: it carries only category values and counts, and no cell
+        represents a group small enough to single out a respondent.
+
+        Parameters
+        ----------
+        data : pd.DataFrame
+            Individual-level (one row per respondent) DataFrame
+        columns : list[str]
+            One or two column names to cross-tabulate (e.g. ["q03_subregional"]
+            or ["q03_subregional", "q02"])
+        threshold : int, optional
+            Minimum count to retain a row, by default 5
+        count_column : str, optional
+            Name of the count column in the output, by default "count"
+
+        Returns
+        -------
+        pd.DataFrame
+            Long-format frequency table: one row per surviving combination,
+            with the group columns plus ``count_column``. Empty if no
+            combination reaches ``threshold``.
+        """
+        present = [c for c in columns if c in data.columns]
+        missing = [c for c in columns if c not in data.columns]
+        if missing:
+            logger.warning(f"Columns not found, skipped: {missing}")
+        if not present:
+            return pd.DataFrame(columns=[*columns, count_column])
+        counts = (
+            data.groupby(present, dropna=False, observed=True)
+            .size()
+            .reset_index(name=count_column)
+        )
+        return SecureDataHandler.suppress_small_cells(
+            counts, threshold=threshold, count_column=count_column
+        )
+
+    @staticmethod
     def generalize_timestamp(
         data: pd.DataFrame,
         column: str = "timestamp",

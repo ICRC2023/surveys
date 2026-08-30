@@ -193,6 +193,79 @@ def anonymize(
 
 
 @app.command()
+def aggregate(
+    read_from: str = "../data/private/prepared_data.csv",
+    write_dir: str = "../data/public/aggregates/",
+    plugin: str = DEFAULT_PLUGIN,
+    threshold: int = 5,
+    pair: list[str] = typer.Option(  # noqa: B008 - typer option default
+        None,
+        help='column pair "X,Y" to cross-tabulate; repeatable',
+    ),
+) -> None:
+    """
+    Build suppressed frequency tables from prepared (individual-level) data.
+
+    個票データ（prepared_data.csv）から、公開可能な集計 CSV を生成します。
+    各セルは n < threshold のとき秘匿されます。
+
+    - univariate/<col>.csv : スキーマの categorical_headers ごとの単変量頻度
+    - bivariate/<x>__<y>.csv : --pair で指定した組み合わせのクロス集計
+
+    Parameters
+    ----------
+    read_from : str, optional
+        path to prepared (individual-level) CSV file,
+        by default "../data/private/prepared_data.csv"
+    write_dir : str, optional
+        path to directory for saving the aggregate CSVs,
+        by default "../data/public/aggregates/"
+    plugin : str, optional
+        plugin name in format "plugins.package.SchemaClassName";
+        the schema supplies categorical_headers,
+        by default "plugins.icrc2023.ICRC2023Schema"
+    threshold : int, optional
+        cells with a count below this are suppressed, by default 5
+    pair : list[str], optional
+        column pair "X,Y" to cross-tabulate; pass multiple times
+    """
+    schema_class = _load_schema_class(plugin)
+    schema = schema_class()
+
+    logger.info(f"Read data from: {read_from}")
+    data = SecureDataHandler.load_sensitive_data(read_from)
+    logger.info(f"Loaded {len(data)} individual-level rows")
+
+    uni_dir = Path(write_dir) / "univariate"
+    uni_dir.mkdir(parents=True, exist_ok=True)
+    for col in schema.categorical_headers:
+        if col not in data.columns:
+            logger.warning(f"Column '{col}' not in data; skipped")
+            continue
+        table = SecureDataHandler.aggregate_counts(data, [col], threshold=threshold)
+        fname = uni_dir / f"{col}.csv"
+        table.to_csv(fname, index=False)
+        logger.info(f"Saved data to: {fname} ({len(table)} rows)")
+
+    pairs = pair or []
+    if pairs:
+        bi_dir = Path(write_dir) / "bivariate"
+        bi_dir.mkdir(parents=True, exist_ok=True)
+        for spec in pairs:
+            parts = [p.strip() for p in spec.split(",")]
+            if len(parts) != 2:
+                logger.error(f"Ignoring malformed --pair '{spec}' (want 'X,Y')")
+                continue
+            x, y = parts
+            table = SecureDataHandler.aggregate_counts(
+                data, [x, y], threshold=threshold
+            )
+            fname = bi_dir / f"{x}__{y}.csv"
+            table.to_csv(fname, index=False)
+            logger.info(f"Saved data to: {fname} ({len(table)} rows)")
+
+
+@app.command()
 def comments(
     read_from: str = "../data/private/prepared_data.csv",
     write_dir: str = "../data/private/comment/",

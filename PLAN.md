@@ -593,9 +593,15 @@ public_data.csv        (コミット可)  ← timestamp除去 / q15-q22除去 / 
    - 出力 `data/public/public_data.csv`（コミット対象）
    - 個票の抜け道になる `q03/q04` の subregional は落とす。subregional 粒度の
      内訳は次項の集計データ（方式A）で n<5 秘匿して公開する
-4. **方式A: 集計データ公開コマンドを実装**（別 PR）
-   - `suppress_small_cells` で n<5 セルを伏せた集計 CSV を生成
-   - q03/q04 の subregional 内訳、demographics、少数セルはこちらで扱う
+4. **方式A: 集計データ公開コマンドを実装** — ✅ 完了（PR: feat/ti-aggregate）
+   - `SecureDataHandler.aggregate_counts`: 個票を 1〜2 変数で頻度集計し、
+     `suppress_small_cells` で n<threshold のセルを伏せる
+   - `ti aggregate`: `categorical_headers` 全列の単変量集計を
+     `data/public/aggregates/univariate/<col>.csv` に、`--pair X,Y`（複数可）の
+     クロス集計を `bivariate/<x>__<y>.csv` に出力
+   - q03/q04 の subregional 内訳、demographics、少数セルはこれで公開する
+     （`ti anonymize` は subregional を落とすため）
+   - 実データでの集計 CSV 生成とコミットはタスク6（ノート移行）と一体
 5. **`ti prepare` の出力パスを見直し** — ✅ 完了（PR: feat/prepare-output-to-local）
    - `prepared_data.csv` を `.gitignore` 対象の `data/private/` に出す
    - `prepare` と全分析コマンド（`chi2` / `crosstabs` / `hbars` / `hbar` /
