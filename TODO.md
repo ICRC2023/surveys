@@ -81,7 +81,16 @@
 
 ### 4. GitHub Actions / CI/CD改善
 
-- [ ] **品質チェック自動化**
+- [ ] **ワークフロー全体の再編** — 詳細は `PLAN.md`「Phase 6: GitHub Actions ワークフロー再編」を参照
+  - 現状 5 本（branch / pr_test / quality / static / update_changelog）を
+    `ci.yml` / `pages.yml` / `changelog.yml`（+ 任意 `release.yml`）の 3〜4 本に整理
+  - PR での品質チェック二重実行を解消（`pr_test.yml` を `quality.yml` に統合）
+  - `static.yml` を `workflow_run` トリガーにして、CI 成功後のみ Pages デプロイ
+  - CI に `pytest --cov` を追加（カバレッジ劣化の検知）
+  - `update_changelog.yml` の main 直 push を PR 化、`permissions` を明示
+  - `guard` ジョブを `data/**` 全体 + 自由記述列を持つ CSV に拡張（Phase 5 タスク7と共通）
+
+- [ ] **品質チェック自動化**（上記再編の中で扱う）
   ```yaml
   # .github/workflows/quality.yml（新規作成）
   - name: Run Ruff
