@@ -1,3 +1,7 @@
+# reports/_freeze/ is Quarto's render cache: generated files committed
+# verbatim so CI can render without executing. Don't let the hooks rewrite it.
+exclude: '^reports/_freeze/'
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0

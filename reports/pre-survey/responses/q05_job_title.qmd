@@ -1,0 +1,34 @@
+---
+title: "Q05. Job title"
+---
+
+**What is your job title?**
+
+```{python}
+# | echo: false
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path.cwd().parent.parent))
+from _helpers import bar, grouped_bar, load_bivariate, load_univariate, suppression_note  # noqa: E402
+```
+
+## Distribution
+
+```{python}
+# | echo: false
+bar(load_univariate("q05"), "q05", title="Q05. Job title")
+```
+
+
+
+## By gender identity (Q02)
+
+```{python}
+# | echo: false
+grouped_bar(load_bivariate("q05", "q02"), "q05", "q02", title="Q05. Job title x Q02", normalize=True)
+```
+
+::: {.callout-note appearance="minimal"}
+`{python} suppression_note()`
+:::

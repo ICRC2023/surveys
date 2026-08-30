@@ -1,0 +1,34 @@
+---
+title: "Q07. Research type"
+---
+
+**What is your research type?**
+
+```{python}
+# | echo: false
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path.cwd().parent.parent))
+from _helpers import bar, grouped_bar, load_bivariate, load_univariate, suppression_note  # noqa: E402
+```
+
+## Distribution
+
+```{python}
+# | echo: false
+bar(load_univariate("q07"), "q07", title="Q07. Research type")
+```
+
+
+
+## By gender identity (Q02)
+
+```{python}
+# | echo: false
+grouped_bar(load_bivariate("q07", "q02"), "q07", "q02", title="Q07. Research type x Q02", normalize=True)
+```
+
+::: {.callout-note appearance="minimal"}
+`{python} suppression_note()`
+:::

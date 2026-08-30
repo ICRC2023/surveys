@@ -2,14 +2,17 @@ project:
   type: website
   output-dir: _site
 
-# Notebooks are committed with their output cells. Quarto must not re-execute
-# them at render time: the render environment has no access to the
-# individual-level survey data, and the published output is fixed at commit
-# time. Run notebooks locally against data/private/ or data/public/ and commit
-# the results. See PLAN.md Phase 5 and Phase 7.
+# freeze: pages are executed locally (`task reports:render`) and their output
+# is cached under reports/_freeze/, which is committed. CI only renders the
+# cached output, so the render environment never needs data/public/ (let
+# alone data/private/). Re-run `task reports:render` after changing a page or
+# regenerating data/public/. See PLAN.md Phase 5 and Phase 7.
 execute:
   freeze: true
-  enabled: false
+
+# Pages read data/public/ via reports/_helpers.py.
+resources:
+  - "_helpers.py"
 
 website:
   title: "ICRC2023 Diversity Survey Results"
