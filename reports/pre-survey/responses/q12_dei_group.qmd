@@ -1,0 +1,66 @@
+---
+title: "Q12. DE&I of your group"
+---
+
+**What do you think about the initiatives on DE&I of your group?**
+
+Rated separately on four aspects — gender balance, diversity, equity,
+inclusion — from *Very Poor* to *Very Good*, plus *No interest* and
+*Prefer not to answer*.
+
+```{python}
+# | echo: false
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path.cwd().parent.parent))
+from _helpers import bar, load_univariate, suppression_note  # noqa: E402
+
+RATING_ORDER = [
+    "Very Good",
+    "Good",
+    "Poor",
+    "Very Poor",
+    "No interest",
+    "Prefer not to answer",
+]
+
+
+def rating_bar(col, label):
+    return bar(load_univariate(col), col, title=label, sort=RATING_ORDER)
+```
+
+## Gender balance
+
+```{python}
+# | echo: false
+rating_bar("q12_genderbalance", "Q12. Gender balance (group)")
+```
+
+## Diversity
+
+```{python}
+# | echo: false
+rating_bar("q12_diversity", "Q12. Diversity (group)")
+```
+
+## Equity
+
+```{python}
+# | echo: false
+rating_bar("q12_equity", "Q12. Equity (group)")
+```
+
+## Inclusion
+
+```{python}
+# | echo: false
+rating_bar("q12_inclusion", "Q12. Inclusion (group)")
+```
+
+Across all four aspects, *Good* is the most common answer, with equity and
+inclusion rated somewhat more favourably than gender balance.
+
+::: {.callout-note appearance="minimal"}
+`{python} suppression_note()`
+:::
