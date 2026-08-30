@@ -37,9 +37,23 @@ def load_univariate(column: str) -> pd.DataFrame:
 
 
 def load_bivariate(x: str, y: str) -> pd.DataFrame:
-    """Return the suppressed cross-tab for ``x`` x ``y`` (order as built)."""
-    path = _PUBLIC / "aggregates" / "bivariate" / f"{x}__{y}.csv"
-    return pd.read_csv(path)
+    """Return the suppressed cross-tab for ``x`` x ``y``.
+
+    The aggregate was written under one column order; try both, and always
+    return it with ``x`` first so callers can pass either order.
+    """
+    bi = _PUBLIC / "aggregates" / "bivariate"
+    forward = bi / f"{x}__{y}.csv"
+    reverse = bi / f"{y}__{x}.csv"
+    if forward.exists():
+        return pd.read_csv(forward)
+    if reverse.exists():
+        table = pd.read_csv(reverse)
+        return table[[x, y, "count"]]
+    raise FileNotFoundError(
+        f"no aggregate for {x} x {y}; add '--pair {x},{y}' to "
+        f"scripts/build_public_data.sh and rerun it"
+    )
 
 
 def bar(
