@@ -1,0 +1,65 @@
+---
+title: "Q04. Hometown"
+---
+
+**Which geographical region do you most strongly associate with?**
+
+Answered on the UN geoscheme, split here into a regional and a subregional
+level. Unlike Q03 (workplace), this question offered a "Prefer not to
+answer" option.
+
+```{python}
+# | echo: false
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path.cwd().parent.parent))
+from _helpers import bar, grouped_bar, load_bivariate, load_univariate, suppression_note  # noqa: E402
+```
+
+## By region
+
+```{python}
+# | echo: false
+bar(load_univariate("q04_regional"), "q04_regional", title="Q04. Hometown region")
+```
+
+## By subregion
+
+```{python}
+# | echo: false
+bar(load_univariate("q04_subregional"), "q04_subregional", title="Q04. Hometown subregion")
+```
+
+Europe accounts for about half of the respondents, followed by Asia (with
+Japan the largest single subregion) and the Americas.
+
+## Gender balance by region
+
+```{python}
+# | echo: false
+grouped_bar(
+    load_bivariate("q04_regional", "q02"),
+    "q04_regional",
+    "q02",
+    title="Q04 region x Q02",
+    normalize=True,
+)
+```
+
+## Gender balance by subregion
+
+```{python}
+# | echo: false
+grouped_bar(
+    load_bivariate("q04_subregional", "q02"),
+    "q04_subregional",
+    "q02",
+    title="Q04 subregion x Q02",
+    normalize=True,
+)
+```
+
+::: {.callout-note appearance="minimal"}
+`{python} suppression_note()`
+:::

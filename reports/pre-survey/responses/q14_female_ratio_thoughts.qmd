@@ -1,0 +1,49 @@
+---
+title: "Q14. Thoughts on the female ratio"
+---
+
+**What do you think about the percentage of female researchers in your
+group (Q13)?**
+
+Rated from *Very Poor* to *Very Good*, plus *No interest* and *Prefer not
+to answer*.
+
+```{python}
+# | echo: false
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path.cwd().parent.parent))
+from _helpers import bar, grouped_bar, load_bivariate, load_univariate, suppression_note  # noqa: E402
+
+RATING_ORDER = [
+    "Very Good",
+    "Good",
+    "Poor",
+    "Very Poor",
+    "No interest",
+    "Prefer not to answer",
+]
+```
+
+## Distribution
+
+```{python}
+# | echo: false
+bar(load_univariate("q14"), "q14", title="Q14. Thoughts on the female ratio", sort=RATING_ORDER)
+```
+
+*Poor* is the most common answer, and *Poor* + *Very Poor* together
+outnumber *Good* + *Very Good* — respondents are more dissatisfied than
+satisfied with the gender ratio in their groups.
+
+## By gender identity (Q02)
+
+```{python}
+# | echo: false
+grouped_bar(load_bivariate("q14", "q02"), "q14", "q02", title="Q14 x Q02", normalize=True)
+```
+
+::: {.callout-note appearance="minimal"}
+`{python} suppression_note()`
+:::
