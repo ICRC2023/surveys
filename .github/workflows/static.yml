@@ -1,6 +1,7 @@
 # Deploy the documentation to GitHub Pages (https://www.icrc2023.org/surveys/).
 #
-# Two sites share the deployment:
+# Two sites are built independently and deployed together (Pages allows a
+# single artifact):
 #   /            -> the ICRC2023 survey-results reports (Quarto, reports/)
 #   /titanite/   -> the titanite framework docs (Zensical, zensical.toml)
 name: Deploy docs to Pages
@@ -20,10 +21,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build-reports:
+    name: Build survey reports (Quarto)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -39,20 +38,60 @@ jobs:
         run: uv sync --all-groups
       # reports render from reports/_freeze/, so no notebook re-execution and
       # no data/private/ needed.
-      - name: Render survey reports (Quarto)
+      - name: Render
         working-directory: reports
         run: uv run quarto render
-      - name: Build titanite docs (Zensical) and place them under /titanite/
-        run: |
-          uv run zensical build --clean
-          mkdir -p reports/_site/titanite
-          cp -r site/. reports/_site/titanite/
+      - name: Upload reports site
+        uses: actions/upload-artifact@v7
+        with:
+          name: reports-site
+          path: reports/_site/
+
+  build-titanite:
+    name: Build titanite docs (Zensical)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.11"
+          enable-cache: true
+      - name: Install dependencies
+        run: uv sync --all-groups
+      - name: Build
+        run: uv run zensical build --clean
+      - name: Upload titanite site
+        uses: actions/upload-artifact@v7
+        with:
+          name: titanite-site
+          path: site/
+
+  deploy:
+    name: Merge and deploy to Pages
+    needs: [build-reports, build-titanite]
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download reports site
+        uses: actions/download-artifact@v8
+        with:
+          name: reports-site
+          path: _site
+      - name: Download titanite site
+        uses: actions/download-artifact@v8
+        with:
+          name: titanite-site
+          path: _site/titanite
       - name: Setup Pages
         uses: actions/configure-pages@v6
-      - name: Upload artifact
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          path: "./reports/_site/"
+          path: _site/
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
