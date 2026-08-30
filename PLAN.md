@@ -617,6 +617,90 @@ public_data.csv        (コミット可)  ← timestamp除去 / q15-q22除去 / 
 
 ---
 
+## Phase 6: GitHub Actions ワークフロー再編
+
+Phase 5 のガード追加（タスク7）に合わせて、`.github/workflows/` 全体の
+ロジックを整理する。原則は「トリガー 1 つ = ワークフロー 1 つ、責務が重ならない」。
+
+### 現状の問題（2026-08 レビューで判明）
+
+- **PR で品質チェックが二重実行**: `pr_test.yml` と `quality.yml` が
+  どちらも `uv sync` + pre-commit + pytest を回す（差分は docs ビルド /
+  security ジョブのみ）
+- **未検証コードが公開されうる**: `static.yml` は `on: push: [main]` で
+  `quality.yml` と依存関係なく走るため、pytest が落ちている main でも
+  Pages がデプロイされる。`update_changelog.yml` の `[skip ci]` 直 push も
+  検証を経ずに公開される
+- **カバレッジが CI で計測されない**: `Taskfile` に `test:coverage`、
+  `pyproject` に `--cov` があるのにワークフローが使っていない。低カバレッジ
+  領域（`analysis.py` 22% / `cli.py` 23% / `preprocess.py` 15%）の劣化を
+  検知できない
+- **CHANGELOG 自動更新が無検証で main に直 push**:
+  `update_changelog.yml` が `cz changelog` の出力をレビューせず
+  `git push origin main`。`permissions` も未宣言でリポジトリ既定の
+  `write` を暗黙継承
+- **リリース（bump / tag / release）が全手動**: `commitizen` 運用なのに
+  `cz bump` を回す CI が無い。`pyproject` ↔ `titanite/__init__.py` の
+  バージョン整合も CI で検証されない
+- `branch.yml` は feature ブランチで docs ビルドのみ確認（pytest / lint は
+  走らない）ため用途が限定的
+
+### 目標構成（5 本 → 3 本 + 任意 1 本）
+
+| 現行 | 再編後 | 変更点 |
+|------|--------|--------|
+| `pr_test.yml` | （廃止） | `ci.yml` に統合、二重実行を解消 |
+| `quality.yml` | `ci.yml` | `--cov` 追加、guard ジョブ拡張、docs ジョブ追加 |
+| `branch.yml` | （廃止） | `ci.yml` の docs ジョブが代替（PR 必須運用に） |
+| `static.yml` | `pages.yml` | `workflow_run`（CI 成功後）トリガーに変更、本番経路をスリム化 |
+| `update_changelog.yml` | `changelog.yml` | main 直 push → PR 化、`permissions` 明示 |
+| （なし） | `release.yml`（任意） | `cz bump --check-consistency` の CI 化 |
+
+### タスク
+
+1. **`ci.yml` を作成**（`pr_test.yml` + `quality.yml` を統合）
+   - トリガー: `pull_request` / `push: [main]`
+   - `permissions: { contents: read }`、`concurrency` で PR の古い実行をキャンセル
+   - ジョブ `quality`: pre-commit（ruff / ruff-format / commitizen 含む）+
+     `pytest --cov=titanite --cov=plugins`（劣化可視化、閾値ゲートは任意）
+   - ジョブ `guard`: Phase 5 タスク7 の機密データ検査
+     （`data/**/*.csv` `data/**/*.json` 全体 + 自由記述列を持つ CSV が
+     追跡されていないか）
+   - ジョブ `docs`: myst-nb ビルド（デプロイはしない、通ることの確認のみ）
+2. **`pr_test.yml` と `branch.yml` を削除**
+   - PR を作れば `ci.yml` が全てカバーする前提に統一
+3. **`static.yml` → `pages.yml`**
+   - `on: push: [main]` → `on: workflow_run: { workflows: [CI], types: [completed], branches: [main] }`
+   - `if: workflow_run.conclusion == 'success'` でゲート
+   - `workflow_dispatch` は残す
+   - `uv lock --upgrade --dry-run` を削除、必要なら `uv sync --locked` で
+     lockfile 整合を検証
+4. **`update_changelog.yml` → `changelog.yml`**
+   - `git push origin main` をやめ `peter-evans/create-pull-request` で
+     PR を作る（通常の CI ゲートを通す）
+   - `permissions: { contents: write, pull-requests: write }` を明示
+5. **`release.yml` を作成**（任意、後回し可）
+   - `workflow_dispatch` で `cz bump --changelog --check-consistency` →
+     タグ push → GitHub Release 作成
+   - バージョン整合（`pyproject` ↔ `version_files`）の崩れを検知
+
+### 成果物
+
+- `ci.yml` / `pages.yml` / `changelog.yml`（+ 任意 `release.yml`）
+- 削除された `pr_test.yml` / `branch.yml`
+- CI でのカバレッジ計測
+- 未検証コードが Pages にデプロイされない構造
+- main への直接 push を行うワークフローの排除
+
+### 実装順序
+
+1. タスク 1-2（`ci.yml` 統合、冗長解消）— 1 PR
+2. タスク 3（`pages.yml` のゲート化）— 同 PR か次 PR
+3. タスク 4（`changelog.yml` の PR 化）— 別 PR
+4. タスク 5（`release.yml`）— 後回し可
+
+---
+
 ## 次のステップ
 
 1. このPLAN.mdをレビュー・承認する
