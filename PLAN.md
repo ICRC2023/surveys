@@ -581,19 +581,29 @@ public_data.csv        (コミット可)  ← timestamp除去 / q15-q22除去 / 
    - 出力していれば、原文を出さず件数・感情スコア分布・カテゴリ集計に作り替え
    - n<5 のクロス集計表がそのまま出ていないか確認
    - 精査完了まで Pages デプロイを一時停止するか要判断
-3. **`ti anonymize` コマンドを実装**
-   - `SecureDataHandler.anonymize_for_publication` + `suppress_small_cells` を組み合わせる
-   - `free_text_columns` はスキーマ（`ICRC2023Schema.free_text_columns`）から取得
-   - `timestamp` は日付粒度に丸めるか完全除去
-   - 出力 `public_data.csv` をコミット対象にする
-4. **`ti prepare` の出力パスを見直し**
+3. **`ti anonymize` コマンドを実装** — ✅ 完了（PR: feat/ti-anonymize）
+   - `SecureDataHandler` に `generalize_timestamp` / `k_anonymize` /
+     `build_public_dataset` を追加（既存 3 メソッドは非変更）
+   - `SurveySchema` に `quasi_identifiers` / `public_drop_columns` を追加、
+     `ICRC2023Schema` で `["q01", "q02", "q03_regional"]` /
+     地域詳細列 + `response` を指定
+   - 自由記述列（`free_text_columns`）と `_ja` 翻訳を削除、感情スコアは保持
+   - `timestamp` を日付粒度に丸め（`dt.floor("D")`）
+   - k=5 の k-匿名化で 295 → 245 行（残 83%）
+   - 出力 `data/public/public_data.csv`（コミット対象）
+   - 個票の抜け道になる `q03/q04` の subregional は落とす。subregional 粒度の
+     内訳は次項の集計データ（方式A）で n<5 秘匿して公開する
+4. **方式A: 集計データ公開コマンドを実装**（別 PR）
+   - `suppress_small_cells` で n<5 セルを伏せた集計 CSV を生成
+   - q03/q04 の subregional 内訳、demographics、少数セルはこちらで扱う
+5. **`ti prepare` の出力パスを見直し**
    - `prepared_data.csv` は `.gitignore` 対象ディレクトリ（例: `data/local/`）に出す
    - `write_dir` のデフォルトを変更
-5. **ノート 26 個の参照先を一括置換**
-   - `f_csv = ".../prepared_data.csv"` → `".../public_data.csv"`
-   - 属性・スコア列のみ使うノート（q01〜q14）はそのまま動く想定
-   - 自由記述系ノートは 2. の作り替えで対応
-6. **CI ガードを追加**（本章 212-238 行を反映）
+6. **ノート 26 個の参照先を一括置換**
+   - q01〜q14 の 23 ノート: `f_csv` を `.../public_data.csv` に置換
+   - q03/q04/demographics の 3 ノート: 方式A の集計 CSV を読む形に改修
+   - 自由記述系ノート（q15/q16/q18）は 2. の作り替えで対応
+7. **CI ガードを追加**（本章 212-238 行を反映）
    - `data/` 配下に個票 CSV（自由記述列を持つ CSV）が含まれていないかチェックするジョブ
    - pre-commit フックにも同等のチェックを追加
 

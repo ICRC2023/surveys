@@ -66,6 +66,13 @@ Titanite is now a **pluggable survey processing framework**:
   - **NEW**: `--plugin PLUGIN_NAME` option for dynamic schema selection
   - Example: `uv run ti prepare data.csv --plugin plugins.icrc2023.ICRC2023Schema`
   - Without `--plugin`: uses default backward-compatible workflow
+- `ti anonymize` - Build a publication-safe individual-level dataset from `prepared_data.csv`
+  - Drops free-text columns and their `_ja` translations (sentiment scores kept)
+  - Truncates `timestamp` to daily resolution
+  - Enforces k-anonymity (default `--k 5`) on the schema's `quasi_identifiers`
+  - Drops the schema's `public_drop_columns` (geography finer than the quasi-identifiers)
+  - Example: `uv run ti anonymize --plugin plugins.icrc2023.ICRC2023Schema`
+  - Output: `public_data.csv` (safe to commit; `prepared_data.csv` is not)
 - `ti comments` - Extract and analyze free-text responses (q15-q22)
 - `ti response` - Create response timeline heatmap
 - `ti hbar` - Create histogram for a single variable (WIP)
@@ -77,10 +84,13 @@ Titanite is now a **pluggable survey processing framework**:
 
 **Data Pipeline**
 
-1. **Raw Data**: CSV files from Google Forms in `data/raw_data/`
+1. **Raw Data**: CSV files from Google Forms in `data/raw_data/` (local only, git-ignored)
 2. **Preprocessing** (`titanite.preprocess`): Categorical conversion, sentiment analysis, clustering
-3. **Analysis** (`titanite.analysis`, `titanite.core`): Statistical analysis and visualization
-4. **Configuration** (`titanite.config`): Categorical/numerical headers and survey question mappings
+   - Produces `prepared_data.csv` — individual-level, contains free text; local only, do not commit
+3. **Anonymization** (`ti anonymize`, `titanite.core.SecureDataHandler`): free-text removal,
+   timestamp generalization, k-anonymity — produces `public_data.csv`, which is safe to commit
+4. **Analysis** (`titanite.analysis`, `titanite.core`): Statistical analysis and visualization
+5. **Configuration** (`titanite.config`): Categorical/numerical headers and survey question mappings
 
 **Data Structure**
 

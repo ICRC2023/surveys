@@ -87,6 +87,11 @@ class SurveySchema(ABC):
     - categorical_headers: Column names of categorical type
     - numerical_headers: Column names of numerical type
     - free_text_columns: Column names containing free-text responses
+    - quasi_identifiers: Column names that could re-identify a respondent
+      when linked against external data (used for k-anonymization)
+    - public_drop_columns: Extra columns to drop from the public
+      individual-level dataset (e.g. geography finer than the
+      quasi-identifiers, or bookkeeping columns like "response")
 
     Examples
     --------
@@ -117,6 +122,8 @@ class SurveySchema(ABC):
     categorical_headers: list[str] = []
     numerical_headers: list[str] = []
     free_text_columns: list[str] = []
+    quasi_identifiers: list[str] = []
+    public_drop_columns: list[str] = []
 
     @abstractmethod
     def get_replace_rules(self) -> dict[str, dict]:

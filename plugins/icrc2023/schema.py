@@ -57,6 +57,24 @@ class ICRC2023Schema(SurveySchema):
 
     free_text_columns = ["q15", "q16", "q18", "q20", "q21", "q22"]
 
+    # Columns that, combined with a public attendee list, could re-identify a
+    # respondent. Used by SecureDataHandler.k_anonymize when building the
+    # publication-safe individual-level dataset. The coarse regional level is
+    # used (not subregional) so k=5 retains most rows; the finer subregional
+    # breakdown is published separately as suppressed aggregates.
+    quasi_identifiers = ["q01", "q02", "q03_regional"]
+
+    # Extra columns dropped from the public individual-level dataset because
+    # they would defeat the k-anonymization above (finer geography than the
+    # quasi-identifiers). Published separately as suppressed aggregates.
+    public_drop_columns = [
+        "q03",
+        "q04",
+        "q03_subregional",
+        "q04_subregional",
+        "response",
+    ]
+
     def get_replace_rules(self) -> dict[str, dict]:
         """Return value replacement rules for q03, q04, q14.
 
