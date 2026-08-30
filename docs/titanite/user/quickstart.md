@@ -24,7 +24,7 @@ Process raw CSV data from Google Forms:
 
 ```bash
 cd sandbox
-poetry run ti prepare ../data/raw_data/survey.csv
+poetry run ti prepare ../data/downloaded/survey.csv
 ```
 
 This generates:
