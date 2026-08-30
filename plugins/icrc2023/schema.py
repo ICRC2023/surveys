@@ -48,7 +48,10 @@ class ICRC2023Schema(SurveySchema):
         "q17_equity",
         "q17_inclusion",
         "q19",
+        "q10_binned",
+        "q13_binned",
         "q01_clustered",
+        "q13_clustered",
         "q01q02_clustered",
         "q13q14_clustered",
     ]
@@ -64,16 +67,27 @@ class ICRC2023Schema(SurveySchema):
     # breakdown is published separately as suppressed aggregates.
     quasi_identifiers = ["q01", "q02", "q03_regional"]
 
-    # Extra columns dropped from the public individual-level dataset because
-    # they would defeat the k-anonymization above (finer geography than the
-    # quasi-identifiers). Published separately as suppressed aggregates.
+    # Extra columns dropped from the public individual-level dataset:
+    # - q03/q04 + *_subregional: finer geography than the quasi-identifiers,
+    #   would defeat the k-anonymization; published as suppressed aggregates
+    # - q10/q13: raw numeric values; an outlier (q13=100, one respondent) is
+    #   a quasi-identifier. The binned versions are kept (with rare bins
+    #   masked, see public_mask_columns).
+    # - response: bookkeeping column
     public_drop_columns = [
         "q03",
         "q04",
         "q03_subregional",
         "q04_subregional",
+        "q10",
+        "q13",
         "response",
     ]
+
+    # Binned numeric columns kept in the public extract, but with lone
+    # extreme bins (e.g. q13_binned == "100%", one respondent) collapsed to
+    # a placeholder so they are not quasi-identifiers.
+    public_mask_columns = ["q10_binned", "q13_binned"]
 
     def get_replace_rules(self) -> dict[str, dict]:
         """Return value replacement rules for q03, q04, q14.

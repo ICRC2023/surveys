@@ -32,7 +32,7 @@ uv run ti aggregate --plugin "$PLUGIN" \
   --pair q04_regional,q02 --pair q04_subregional,q02 \
   --pair q12_genderbalance,q02 --pair q12_diversity,q02 \
   --pair q12_equity,q02 --pair q12_inclusion,q02 \
-  --pair q13_binned,q02 --pair q14,q02 \
+  --pair q10_binned,q02 --pair q13_binned,q02 --pair q14,q02 \
   --pair q17_genderbalance,q02 --pair q17_diversity,q02 \
   --pair q17_equity,q02 --pair q17_inclusion,q02
 

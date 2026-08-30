@@ -1,0 +1,55 @@
+---
+title: "Q13. Female ratio in your group"
+---
+
+**What is the percentage of female researchers in your group?**
+
+Answered as a percentage; shown here binned in 5-percentage-point steps.
+*Prefer not to answer* was an option.
+
+```{python}
+# | echo: false
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path.cwd().parent.parent))
+from _helpers import bar, grouped_bar, load_bivariate, load_univariate, suppression_note  # noqa: E402
+
+RATIO_ORDER = [
+    "0%", "10%", "15%", "20%", "25%", "30%", "35%", "40%", "45%", "50%",
+    "55%", "60%", "65%", "70%", "75%", "80%", "85%", "90%", "95%", "100%",
+    "(rare)", "Prefer not to answer",
+]
+```
+
+## Distribution
+
+```{python}
+# | echo: false
+bar(load_univariate("q13_binned"), "q13_binned", title="Q13. Female ratio (binned)", sort=RATIO_ORDER)
+```
+
+The distribution peaks around 20–30%. The raw percentages are not
+published; lone values in the sparse upper range are shown as "(rare)".
+Q14 asked what respondents think of this ratio.
+
+## By gender identity (Q02)
+
+```{python}
+# | echo: false
+grouped_bar(load_bivariate("q13_binned", "q02"), "q13_binned", "q02", title="Q13 x Q02", normalize=True)
+```
+
+## Ratio cluster
+
+`q13_clustered` groups respondents by reported ratio: Cluster1 (≤20%),
+Cluster2 (≥40%), Others in between.
+
+```{python}
+# | echo: false
+bar(load_univariate("q13_clustered"), "q13_clustered", title="Q13. Ratio cluster")
+```
+
+::: {.callout-note appearance="minimal"}
+`{python} suppression_note()`
+:::

@@ -1,0 +1,42 @@
+---
+title: "Q10. Hours on housework and care"
+---
+
+**How many hours, on average, do you spend on housework, childcare, and
+caregiving per day?**
+
+Answered as a number of hours; shown here binned. *Prefer not to answer*
+was an option.
+
+```{python}
+# | echo: false
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path.cwd().parent.parent))
+from _helpers import bar, grouped_bar, load_bivariate, load_univariate, suppression_note  # noqa: E402
+
+HOUR_ORDER = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10+", "(rare)", "Prefer not to answer"]
+```
+
+## Distribution
+
+```{python}
+# | echo: false
+bar(load_univariate("q10_binned"), "q10_binned", title="Q10. Hours (binned)", sort=HOUR_ORDER)
+```
+
+Most respondents report 1–4 hours per day. The raw hour counts are not
+published; the highest bins are grouped ("10+") and any lone extreme
+value is shown as "(rare)".
+
+## By gender identity (Q02)
+
+```{python}
+# | echo: false
+grouped_bar(load_bivariate("q10_binned", "q02"), "q10_binned", "q02", title="Q10 x Q02", normalize=True)
+```
+
+::: {.callout-note appearance="minimal"}
+`{python} suppression_note()`
+:::

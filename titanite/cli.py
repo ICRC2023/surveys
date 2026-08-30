@@ -153,7 +153,9 @@ def anonymize(
     公開可能な public_data.csv を生成します。
 
     - 自由記述カラムとその翻訳（q15, q15_ja など）を削除
+    - スキーマの public_drop_columns（生の数値列 q10/q13 など）を削除
     - タイムスタンプを日付粒度に丸める
+    - public_mask_columns の稀なカテゴリ値をプレースホルダに置換
     - 準識別子の組み合わせで k 人未満の行を削除（k-匿名化）
 
     Parameters
@@ -184,6 +186,7 @@ def anonymize(
         quasi_identifiers=schema.quasi_identifiers,
         k=k,
         extra_drop_columns=schema.public_drop_columns,
+        mask_columns=schema.public_mask_columns,
     )
     logger.info(f"Public dataset: {len(public)} rows, {len(public.columns)} columns")
 
