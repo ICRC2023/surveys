@@ -29,7 +29,7 @@ task docs:serve
 - **`titanite/`** - Main Python package (cli.py, config.py, core.py, analysis.py, preprocess.py)
 - **`tests/`** - Test suite with pytest configuration
 - **`sandbox/`** - Configuration file (config.toml) and CLI working directory
-- **`data/`** - Survey data (raw_data/, test_data/)
+- **`data/`** - Survey data. `downloaded/` (raw Google Forms exports, git-ignored), `private/` (individual-level pipeline output, git-ignored), `public/` (anonymized extract, committed)
 - **`docs/`** - Sphinx documentation site
 - **`notebooks/`** - Development and analysis Jupyter Notebooks
 - **`Taskfile.yml`** - Task automation for common operations
@@ -89,7 +89,7 @@ Titanite is now a **pluggable survey processing framework**:
 
 **Data Pipeline**
 
-1. **Raw Data**: CSV files from Google Forms in `data/raw_data/` (local only, git-ignored)
+1. **Raw Data**: CSV files exported from Google Forms in `data/downloaded/` (local only, git-ignored)
 2. **Preprocessing** (`titanite.preprocess`): Categorical conversion, sentiment analysis, clustering
    - Produces `prepared_data.csv` — individual-level, contains free text; local only, do not commit
 3. **Anonymization** (`ti anonymize`, `titanite.core.SecureDataHandler`): free-text removal,
@@ -109,7 +109,7 @@ Titanite is now a **pluggable survey processing framework**:
 **Data Preprocessing**
 ```bash
 cd sandbox
-uv run ti prepare ../data/raw_data/survey.csv
+uv run ti prepare ../data/downloaded/survey.csv
 # Outputs to ../data/private/ (git-ignored, individual-level):
 #   prepared_data.csv, categorical_data.csv, sentiment_data.csv
 ```
@@ -208,7 +208,7 @@ class YourSurveySchema(SurveySchema):
 
 ```bash
 cd sandbox
-uv run ti prepare ../data/raw_data/survey.csv --plugin plugins.your_survey.YourSurveySchema
+uv run ti prepare ../data/downloaded/survey.csv --plugin plugins.your_survey.YourSurveySchema
 ```
 
 ## Development Environment
@@ -421,7 +421,7 @@ git push origin --tags
 **CRITICAL**: Survey responses contain sensitive personal information.
 
 **DO:**
-- Keep raw data files locally only (`data/raw_data/`)
+- Keep raw data files locally only (`data/downloaded/`)
 - Never commit CSV files to Git (`.gitignore` excludes them)
 - Always use `SecureDataHandler` for anonymization
 - Review all outputs before publication

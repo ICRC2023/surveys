@@ -64,7 +64,10 @@ titanite/
 
 **原則**: オリジナルの回答データはリポジトリに保存しない
 
-- ✅ **許可**: `data/raw_data/` は `.gitignore` で除外
+> 注: 生の Google Forms エクスポートの置き場は `data/downloaded/` に統一した
+> （旧 `data/raw_data/` は廃止予定）。以下の `data/raw_data/` は当初の記述。
+
+- ✅ **許可**: `data/downloaded/` は `.gitignore` で除外
 - ✅ **許可**: ローカルマシンでのみ処理
 - ❌ **禁止**: CSVファイルをコミット
 - ❌ **禁止**: GitHub/GitLabにアップロード

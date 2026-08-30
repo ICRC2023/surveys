@@ -61,9 +61,9 @@ CSV形式でダウンロードしたGoogleスプレッドシートを前処理�
 
 ```console
 $ cd sandbox
-$ uv run ti prepare ../data/raw_data/回答のスプレッドシート名.csv
+$ uv run ti prepare ../data/downloaded/回答のスプレッドシート名.csv
 Loaded config from: config.toml
-Read data from: ../data/raw_data/20230720_icrc2023_diversity_presurvey_answers.csv
+Read data from: ../data/downloaded/20230726_icrc2023_diversity_pre_survey.csv
 - Replace data
 - Split data
 - Sentiment Analysis ... done!
@@ -78,7 +78,7 @@ Saved data to: ../data/private/prepared_data.csv
 
 ```console
 $ cd sandbox
-$ uv run ti prepare ../data/raw_data/survey.csv --plugin plugins.icrc2023.ICRC2023Schema
+$ uv run ti prepare ../data/downloaded/survey.csv --plugin plugins.icrc2023.ICRC2023Schema
 ```
 
 **プラグインの作成**：
@@ -270,7 +270,7 @@ $ git commit -m "build(pyproject.toml): updated パッケージ名(docs): x.y.z 
 
 **重要な注意事項：**
 
-- ✅ **生データ** (`data/raw_data/`) はローカルのみで処理
+- ✅ **生データ** (`data/downloaded/`) はローカルのみで処理
 - ✅ `.gitignore` で CSV ファイルをリポジトリから除外
 - ✅ 分析結果の公開前に必ずプライバシーレビュー実施
 - ✅ セル抑制（n < 5 の場合は非表示）を実装
