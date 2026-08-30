@@ -2,6 +2,29 @@
 
 このドキュメントは、プロジェクトの品質向上と保守性改善のための課題をまとめています。
 
+## 🚨 重要度：最優先（プライバシー）
+
+### 0. 公開リポジトリからの機密データ除去
+
+- **優先度**: 最優先（他の全タスクに先行）
+- **背景**: リポジトリは PUBLIC。`data/test_data/prepared_data.csv`（295行の個票）が
+  自由記述の原文（q15/q16/q18/q20/q21/q22）と日本語訳（`*_ja`）、`timestamp`（秒単位）を
+  含んだ状態でコミット済み。準識別子の組み合わせと公開参加者名簿の照合で個人特定が可能。
+  さらに `docs/` の 26 個の .ipynb がこの CSV を直接読み、CI（`static.yml`）が myst-nb で
+  実行して GitHub Pages に公開している。
+- **詳細な対応計画**: `PLAN.md` の「Phase 5: プライバシー要件の実施」を参照
+- **チェックリスト**:
+  - [ ] `git rm --cached data/test_data/*.csv data/test_data/chi2_test/*.csv`
+  - [ ] `.gitignore` に `data/**/*.csv` `data/**/*.json` を追加（PLAN.md 72-91 行を反映）
+  - [ ] 公開中の GitHub Pages を精査（q15/q16/q18 ノートが自由記述原文を出力していないか、
+        n<5 のクロス集計表が出ていないか）。必要なら Pages デプロイを一時停止
+  - [ ] `ti anonymize` コマンドを実装（`SecureDataHandler` を実パイプラインに接続）
+  - [ ] 匿名化・集計済みの `public_data.csv` を生成してコミット対象にする
+  - [ ] ノート 26 個の `f_csv` 参照を `public_data.csv` に一括置換
+  - [ ] CI / pre-commit に機密ファイル検出ガードを追加（PLAN.md 212-238 行を反映）
+  - [ ] 公開リポジトリのため履歴からの完全除去（`git filter-repo`）を実施するか
+        ICRC2023 Diversity Group と協議
+
 ## ✅ 完了項目
 
 以下の項目はすでに実装されているため、参考までに記載します。
@@ -87,6 +110,9 @@
 - [ ] **テストデータの整理**
   - 現状：`data/test_data/`に大量のテストファイル
   - 対応：不要ファイルの削除とテストデータの最小化
+  - ⚠️ このうち機密 CSV の除去は「重要度：最優先」の項目 0 で扱う（先にそちらを実施）
+  - テストは fixture（`tests/test_integration_real_world.py` の合成データ）で完結しており、
+    実 CSV への依存はない。ノート用データは項目 0 の `public_data.csv` に移行
 
 - [ ] **未使用ファイルの整理**
   - 対象：古いJupyterノートブック、一時ファイル

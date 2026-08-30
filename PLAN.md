@@ -535,11 +535,84 @@ def _load_schema(plugin_name: str):
 
 ---
 
+## Phase 5: プライバシー要件の実施（最優先）
+
+Phase 1-4 でフレームワーク（`core/`, `plugins/icrc2023/`, `SecureDataHandler`）は実装済み。
+しかし本章「セキュリティ・プライバシー要件」の**実施が未完**で、以下の状態が残っている。
+
+### 現状の問題（2026-08 レビューで判明）
+
+- リポジトリは **PUBLIC**（`https://github.com/ICRC2023/surveys`）
+- `data/test_data/prepared_data.csv`（295行・58列）が **平文でコミット済み**
+  - 個票（1行 = 1回答者）のまま、集計されていない
+  - 自由記述の原文 `q15/q16/q18/q20/q21/q22` と日本語訳 `*_ja` を含む
+  - `timestamp`（秒単位）を含む
+  - 準識別子の組み合わせ（年代 × 性別 × 勤務地域）で 53/295 人が一意
+  - 自由記述に職場・大学名の言及があり、公開参加者名簿との照合で特定可能
+- `.gitignore` の `test_data` パターンは非アンカーだが `data/test_data/*.csv` は無視されていない
+  （本章 72-91 行の `.gitignore` 設定が未適用）
+- `SecureDataHandler`（`suppress_small_cells` / `anonymize_for_publication`）は実装済みだが
+  **パイプラインのどこからも呼ばれていない**（tests 以外に使用箇所なし）
+- `docs/` の **26 個の .ipynb** が `data/test_data/prepared_data.csv` を直接読む
+- CI（`.github/workflows/static.yml`）が `main` への push ごとに myst-nb でノートを実行し、
+  その出力（自由記述の引用・n<5 のクロス集計表を含みうる）を **GitHub Pages で公開**
+
+### 対応方針（案1: 匿名化済みデータをコミット）
+
+`SecureDataHandler` を実パイプラインに組み込み、公開しても安全な派生ファイルを生成する。
+
+```text
+raw CSV                (ローカルのみ、.gitignore)
+   ↓ ti prepare
+prepared_data.csv      (ローカルのみ、.gitignore)  ← 個票 + 自由記述原文
+   ↓ ti anonymize      ← 新規コマンド: SecureDataHandler を通す
+public_data.csv        (コミット可)  ← timestamp除去 / q15-q22除去 / *_ja除去 / n<5セル秘匿
+```
+
+### タスク
+
+1. **[緊急] 追跡中の機密 CSV を除去**
+   - `git rm --cached data/test_data/*.csv data/test_data/chi2_test/*.csv`
+   - `.gitignore` に `data/**/*.csv` `data/**/*.json` を明示追加（本章 72-91 行を反映）
+   - 公開リポジトリのため、履歴からの完全除去（`git filter-repo`）を実施するか要判断
+     - 実施する場合、既存クローン・フォークの扱いを ICRC2023 Diversity Group と協議
+2. **[緊急] 公開中の GitHub Pages を精査**
+   - `q15_*.ipynb` `q16_*.ipynb` `q18_*.ipynb` が自由記述の原文を出力していないか確認
+   - 出力していれば、原文を出さず件数・感情スコア分布・カテゴリ集計に作り替え
+   - n<5 のクロス集計表がそのまま出ていないか確認
+   - 精査完了まで Pages デプロイを一時停止するか要判断
+3. **`ti anonymize` コマンドを実装**
+   - `SecureDataHandler.anonymize_for_publication` + `suppress_small_cells` を組み合わせる
+   - `free_text_columns` はスキーマ（`ICRC2023Schema.free_text_columns`）から取得
+   - `timestamp` は日付粒度に丸めるか完全除去
+   - 出力 `public_data.csv` をコミット対象にする
+4. **`ti prepare` の出力パスを見直し**
+   - `prepared_data.csv` は `.gitignore` 対象ディレクトリ（例: `data/local/`）に出す
+   - `write_dir` のデフォルトを変更
+5. **ノート 26 個の参照先を一括置換**
+   - `f_csv = ".../prepared_data.csv"` → `".../public_data.csv"`
+   - 属性・スコア列のみ使うノート（q01〜q14）はそのまま動く想定
+   - 自由記述系ノートは 2. の作り替えで対応
+6. **CI ガードを追加**（本章 212-238 行を反映）
+   - `data/` 配下に個票 CSV（自由記述列を持つ CSV）が含まれていないかチェックするジョブ
+   - pre-commit フックにも同等のチェックを追加
+
+### 成果物
+
+- コミット可能な `public_data.csv`（匿名化済み・集計済み）
+- `ti anonymize` コマンドとそのテスト
+- 自由記述を露出しないよう作り替えた q15/q16/q18 ノート
+- CI / pre-commit の機密ファイル検出ガード
+- 履歴クリーンアップの実施記録（実施する場合）
+
+---
+
 ## 次のステップ
 
 1. このPLAN.mdをレビュー・承認する
-2. Phase 1の詳細なTODOリストを作成
-3. 開発開始
+2. **Phase 5 を最優先で着手**（プライバシー要件の実施）
+3. Phase 1 の詳細な TODO リストを作成（型ヒント等の品質改善は Phase 5 完了後）
+4. 開発開始
 
 ---
 
