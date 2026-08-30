@@ -1,237 +1,126 @@
 # CLI Commands
 
-Complete reference for titanite command-line interface.
-
-## General
-
-### `ti --help`
-
-Display help message and list all available commands.
-
-### `ti --version`
-
-Show version number.
-
-## Configuration
-
-### `ti config`
-
-Show current survey configuration.
-
-**Options:**
-- `--questions` - Display question definitions
-- `--choices` - Display available choices/categories
-
-**Example:**
-
-```bash
-poetry run ti config --questions
-poetry run ti config --choices
-```
-
-## Data Preparation
-
-### `ti prepare`
-
-Preprocess raw CSV data from Google Forms and generate prepared data.
-
-**Usage:**
-
-```bash
-poetry run ti prepare <input_file> [OPTIONS]
-```
-
-**Options:**
-- `--plugin PLUGIN_NAME` - Specify survey schema (e.g., `plugins.icrc2023.ICRC2023Schema`)
-- `--read_from PATH` - Custom input directory
-- `--write-dir PATH` - Custom output directory
-- `--load_from PATH` - Custom data directory
-
-**Example:**
+Reference for the `ti` command. Run it from `sandbox/`, where `config.toml`
+lives, or pass `--load-from` / `--read-from` / `--write-dir` from elsewhere.
 
 ```bash
 cd sandbox
-poetry run ti prepare ../data/downloaded/survey.csv
-poetry run ti prepare data.csv --plugin plugins.icrc2023.ICRC2023Schema
+uv run ti --help
 ```
 
-**Outputs:**
-- `prepared_data.csv` - Full processed dataset
-- `categorical_data.csv` - Categorical variables only
-- `sentiment_data.csv` - Sentiment analysis scores
+## config
 
-## Analysis Commands
-
-### `ti chi2`
-
-Run chi-square tests for all variable pairs to identify statistical associations.
-
-**Usage:**
+Show the survey configuration from `config.toml`.
 
 ```bash
-poetry run ti chi2 [OPTIONS]
+uv run ti config --questions   # question text
+uv run ti config --choices     # answer choices / categories
 ```
 
-**Options:**
-- `--read_from PATH` - Custom input directory
-- `--write-dir PATH` - Custom output directory
-- `--load_from PATH` - Custom data directory
+## prepare
 
-**Example:**
+Preprocess a raw Google Forms CSV: categorical conversion, geographic
+splitting, clustering, binning, sentiment scoring.
 
 ```bash
-cd sandbox
-poetry run ti chi2
+uv run ti prepare <input.csv> --plugin plugins.icrc2023.ICRC2023Schema
 ```
 
-### `ti p005`
+| Option | Default | Meaning |
+|--------|---------|---------|
+| `--plugin` | *(none)* | Schema class `plugins.pkg.ClassName`. Without it, the legacy `preprocess_data()` path runs. |
+| `--write-dir` | `../data/private/` | Output directory (git-ignored) |
+| `--load-from` | `config.toml` | Config file |
 
-Extract significant correlations (p < 0.05) for a specific column.
+Writes `prepared_data.csv` (one row per respondent, with free text),
+`categorical_data.csv`, `sentiment_data.csv` — all under `data/private/`,
+which is never committed.
 
-**Usage:**
+## anonymize
+
+Turn `prepared_data.csv` into a publication-safe individual-level extract.
 
 ```bash
-poetry run ti p005 <column_name> [OPTIONS]
+uv run ti anonymize --plugin plugins.icrc2023.ICRC2023Schema
 ```
 
-**Options:**
-- `--save` - Save results to CSV file
-- `--read_from PATH` - Custom input directory
-- `--write-dir PATH` - Custom output directory
-- `--load_from PATH` - Custom data directory
+- drops the free-text columns and their `_ja` translations (sentiment scores kept)
+- truncates `timestamp` to the day
+- drops the schema's `public_drop_columns` (geography finer than the quasi-identifiers)
+- masks rare values in `public_mask_columns` to `(rare)`
+- enforces k-anonymity (`--k`, default 5) on the schema's `quasi_identifiers`
 
-**Example:**
+Writes `data/public/public_data.csv`, which **is** committed.
+
+## aggregate
+
+Build suppressed frequency tables from `prepared_data.csv`.
 
 ```bash
-cd sandbox
-poetry run ti p005 q13 --save
+uv run ti aggregate --plugin plugins.icrc2023.ICRC2023Schema \
+  --pair q01,q02 --pair q05,q02
 ```
 
-### `ti crosstabs`
+- `univariate/<col>.csv` for every `categorical_headers` column
+- `bivariate/<x>__<y>.csv` for each repeatable `--pair X,Y`
+- cells below `--threshold` (default 5) are omitted
 
-Create cross-tabulation analysis for all variable pairs.
+Writes to `data/public/aggregates/`, which is committed.
 
-**Usage:**
+## chi2
+
+Chi-square tests for every pair of categorical questions.
 
 ```bash
-poetry run ti crosstabs [OPTIONS]
+uv run ti chi2
 ```
 
-**Options:**
-- `--save` - Save results to file
-- `--read_from PATH` - Custom input directory
-- `--write-dir PATH` - Custom output directory
-- `--load_from PATH` - Custom data directory
+Writes `chi2_test.csv` (and `_p005.csv` for p < 0.05) with the test
+statistics only — no counts.
 
-**Example:**
+## p005
+
+Significant correlations (p < 0.05) for one column.
 
 ```bash
-cd sandbox
-poetry run ti crosstabs --save
+uv run ti p005 q13 --save
 ```
 
-### `ti crosstab`
+## crosstabs
 
-Create cross-tabulation for a single pair of variables.
-
-**Usage:**
+Cross-tabulation for all variable pairs (heatmaps + chi-square).
 
 ```bash
-poetry run ti crosstab [OPTIONS]
+uv run ti crosstabs --save
 ```
 
-**Note:** Currently in development (WIP).
+## response
 
-## Visualization Commands
-
-### `ti response`
-
-Create a timeline heatmap of survey responses.
-
-**Usage:**
+Response-timeline heatmap (day x hour).
 
 ```bash
-poetry run ti response [OPTIONS]
+uv run ti response
 ```
 
-**Options:**
-- `--read_from PATH` - Custom input directory
-- `--write-dir PATH` - Custom output directory
-- `--load_from PATH` - Custom data directory
+## hbars
 
-**Example:**
+Histograms for all variables.
 
 ```bash
-cd sandbox
-poetry run ti response
+uv run ti hbars --save
 ```
 
-### `ti hbars`
+## comments
 
-Create histograms for all variables.
-
-**Usage:**
+Extract free-text responses (q15–q22) with their sentiment scores. Reads
+`data/private/` and writes there — the output contains verbatim answers and
+must not be committed.
 
 ```bash
-poetry run ti hbars [OPTIONS]
+uv run ti comments
 ```
 
-**Options:**
-- `--save` - Save visualizations to file
-- `--read_from PATH` - Custom input directory
-- `--write-dir PATH` - Custom output directory
-- `--load_from PATH` - Custom data directory
+## WIP
 
-**Example:**
-
-```bash
-cd sandbox
-poetry run ti hbars --save
-```
-
-### `ti hbar`
-
-Create histogram for a single variable.
-
-**Usage:**
-
-```bash
-poetry run ti hbar [OPTIONS]
-```
-
-**Note:** Currently in development (WIP).
-
-## Text Analysis
-
-### `ti comments`
-
-Extract and analyze free-text responses (questions q15-q22).
-
-**Usage:**
-
-```bash
-poetry run ti comments [OPTIONS]
-```
-
-**Options:**
-- `--read_from PATH` - Custom input directory
-- `--write-dir PATH` - Custom output directory
-- `--load_from PATH` - Custom data directory
-
-**Example:**
-
-```bash
-cd sandbox
-poetry run ti comments
-```
-
-## Working Directory
-
-Most commands operate from the `sandbox/` directory where `config.toml` is located:
-
-```bash
-cd sandbox
-poetry run ti <command>
-```
-
-Alternatively, use `--read_from`, `--write-dir`, and `--load_from` flags to specify custom directories when running from elsewhere.
+`ti crosstab` and `ti hbar` (single-pair / single-variable) are
+placeholders and not yet implemented.

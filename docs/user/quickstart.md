@@ -7,64 +7,61 @@ Get up and running with titanite in minutes.
 ```bash
 git clone git@github.com:ICRC2023/surveys.git
 cd surveys
-poetry install
+uv sync --all-groups
+uv run ti --help
 ```
 
-## Verify Installation
+## Basic workflow
 
-```bash
-poetry run ti --help
-```
+CLI commands run from `sandbox/`, where `config.toml` lives.
 
-## Basic Workflow
+### 1. Prepare the data
 
-### 1. Prepare Data
-
-Process raw CSV data from Google Forms:
+Process a raw CSV export from Google Forms. Individual-level output goes to
+`data/private/` (git-ignored):
 
 ```bash
 cd sandbox
-poetry run ti prepare ../data/downloaded/survey.csv
+uv run ti prepare ../data/downloaded/survey.csv --plugin plugins.icrc2023.ICRC2023Schema
 ```
 
-This generates:
-- `prepared_data.csv` - Processed data with all transformations
-- `categorical_data.csv` - Categorical variables only
-- `sentiment_data.csv` - Sentiment analysis results
+This writes to `../data/private/`:
 
-### 2. Run Analysis
+- `prepared_data.csv` — one row per respondent, all transformations applied
+- `categorical_data.csv` — categorical columns only
+- `sentiment_data.csv` — free-text sentiment scores
 
-Analyze the prepared data:
+### 2. Build the publishable extract
+
+Turn the individual-level data into something safe to commit:
 
 ```bash
-cd sandbox
+# k-anonymized extract (free text removed, timestamps to the day)
+uv run ti anonymize --plugin plugins.icrc2023.ICRC2023Schema
 
-# Chi-square tests for all variable pairs
-poetry run ti chi2
-
-# Extract significant correlations (p < 0.05)
-poetry run ti p005 q13 --save
-
-# Cross-tabulation analysis
-poetry run ti crosstabs --save
+# suppressed frequency tables and cross-tabs (n<5 cells hidden)
+uv run ti aggregate --plugin plugins.icrc2023.ICRC2023Schema --pair q01,q02
 ```
 
-### 3. Generate Visualizations
+Both write to `../data/public/`, which is committed.
 
-Create statistical visualizations:
+### 3. Analyse
 
 ```bash
-cd sandbox
-
-# Timeline of survey responses
-poetry run ti response
-
-# Histograms for all variables
-poetry run ti hbars --save
+uv run ti chi2                 # chi-square tests for all variable pairs
+uv run ti p005 q13 --save      # significant correlations (p < 0.05) for a column
+uv run ti crosstabs --save     # cross-tabulation analysis
 ```
 
-## Next Steps
+### 4. Visualise
 
-- See [CLI Commands](cli-commands.md) for full command reference
-- See [Configuration](configuration.md) for customizing survey settings
-- Check [Development Guide](../developer/index.md) for plugin development
+```bash
+uv run ti response             # response timeline heatmap
+uv run ti hbars --save         # histograms for all variables
+```
+
+## Next steps
+
+- [CLI Commands](cli-commands.md) — full command reference
+- [Configuration](configuration.md) — customising survey settings
+- [Developer Guide](../developer/index.md) — writing a plugin for a new survey
