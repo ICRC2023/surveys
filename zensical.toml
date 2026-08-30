@@ -1,10 +1,7 @@
 # Zensical configuration for the titanite framework documentation.
 #
-# Scope: the titanite framework docs only (docs/titanite/** and the generated
-# API reference). The ICRC2023 survey-results docs (docs/survey/**,
-# docs/diversity/**) are still built with Sphinx (docs/conf.py) and will move
-# to a separate Quarto project under reports/ (PLAN.md Phase 7 task 2). Once
-# that lands, docs/conf.py is removed and this config's docs_dir widens.
+# Source is docs/ (moved up from docs/titanite/). The ICRC2023 survey-results
+# reports are a separate Quarto project under reports/.
 
 [project]
 site_name = "titanite"
@@ -17,7 +14,7 @@ repo_url = "https://github.com/ICRC2023/surveys"
 repo_name = "ICRC2023/surveys"
 edit_uri = "edit/main/docs/"
 
-docs_dir = "docs/titanite"
+docs_dir = "docs"
 site_dir = "site"
 
 nav = [
@@ -102,7 +99,7 @@ pymdownx.tasklist.custom_checkbox = true
 "zensical.extensions.mkdocstrings" = { default_handler = "python" }
 
 [project.plugins.mkdocstrings.handlers.python]
-paths = ["../.."]
+paths = [".."]
 
 [project.plugins.mkdocstrings.handlers.python.options]
 docstring_style = "numpy"
