@@ -65,6 +65,7 @@ website:
             - pre-survey/responses/q21_dei_hindering.qmd
             - pre-survey/responses/q22_remarks.qmd
         - pre-survey/clusters.qmd
+        - pre-survey/chi2.qmd
     - id: post-survey
       title: "Post-Conference Survey"
       contents:
