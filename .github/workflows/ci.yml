@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  quality:
+    name: Lint and test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.11"
+          enable-cache: true
+      - name: Install dependencies
+        run: uv sync --all-groups
+      - name: Run pre-commit hooks
+        run: uv run pre-commit run --all-files
+      - name: Run pytest
+        run: uv run pytest -v --cov=titanite --cov=plugins --cov-report=term-missing
+
+  guard:
+    name: No individual-level data in git
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+      - name: No individual-level survey data tracked in git
+        # Content-based check across all of data/**: rejects any tracked
+        # CSV/TSV/JSON whose columns include a free-text response field or
+        # its _ja translation. Allows the aggregated data/public/ extract.
+        run: python scripts/check_sensitive_data.py
+      - name: No raw exports tracked in git
+        run: |
+          if git ls-files -- 'data/downloaded/*.csv' 'data/downloaded/*.xlsx' \
+               'data/raw_data/*.csv' 'data/raw_data/*.xlsx' | grep -q .; then
+            echo "ERROR: a raw export is tracked under data/downloaded/ or data/raw_data/"
+            exit 1
+          fi
+          echo "OK: no raw export files tracked in git"
+
+  docs-build:
+    name: Build docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.11"
+          enable-cache: true
+      - name: Install dependencies
+        run: uv sync --all-groups
+      - name: Build titanite docs (Zensical)
+        run: uv run zensical build --clean
+      # reports render from reports/_freeze/, so no notebook re-execution.
+      - name: Render survey reports (Quarto)
+        working-directory: reports
+        run: uv run quarto render
