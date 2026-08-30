@@ -1,14 +1,16 @@
 # Deploy the documentation to GitHub Pages (https://www.icrc2023.org/surveys/).
 #
-# Two sites are built independently and deployed together (Pages allows a
-# single artifact):
+# Runs only after CI succeeds on main (or on manual dispatch). Two sites are
+# built independently and deployed together (Pages allows a single artifact):
 #   /            -> the ICRC2023 survey-results reports (Quarto, reports/)
 #   /titanite/   -> the titanite framework docs (Zensical, zensical.toml)
 name: Deploy docs to Pages
 
 on:
-  push:
-    branches: ["main"]
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -23,6 +25,8 @@ concurrency:
 jobs:
   build-reports:
     name: Build survey reports (Quarto)
+    # Skip when the triggering CI run failed (manual dispatch has no run to check).
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -50,6 +54,7 @@ jobs:
   build-titanite:
     name: Build titanite docs (Zensical)
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7

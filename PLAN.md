@@ -706,23 +706,19 @@ Phase 5 のガード追加（タスク7）に合わせて、`.github/workflows/`
 1. **`ci.yml` を作成**（`pr_test.yml` + `quality.yml` を統合）
    - トリガー: `pull_request` / `push: [main]`
    - `permissions: { contents: read }`、`concurrency` で PR の古い実行をキャンセル
-   - ジョブ `quality`: pre-commit（ruff / ruff-format / commitizen 含む）+
-     `pytest --cov=titanite --cov=plugins`（劣化可視化、閾値ゲートは任意）
-   - ジョブ `guard`: Phase 5 タスク7 の機密データ検査
-     （`data/**/*.csv` `data/**/*.json` 全体 + 自由記述列を持つ CSV が
-     追跡されていないか）
-   - ジョブ `docs-build`: titanite（Zensical）と reports（Quarto）を
-     ビルドできることの確認（デプロイはしない）。ノートは再実行しない
-2. **`pr_test.yml` と `branch.yml` を削除**
-   - PR を作れば `ci.yml` が全てカバーする前提に統一
-3. **`static.yml` → `pages.yml`**
+   - ✅ 完了（PR: ci/consolidate-workflows）
+   - ジョブ `quality`: pre-commit + `pytest -v --cov=titanite --cov=plugins`
+     （`pytest-cov` を dev グループに追加、term レポートのみ・閾値ゲートなし）
+   - ジョブ `guard`: `scripts/check_sensitive_data.py` + 生エクスポート追跡チェック
+   - ジョブ `docs-build`: Zensical build + Quarto render（デプロイはしない）
+2. **`pr_test.yml` と `branch.yml` を削除** — ✅ 完了（同 PR）
+   - `quality.yml` も削除（`ci.yml` に統合）
+3. **`static.yml` を `workflow_run` ゲートに** — ✅ 完了（同 PR）
    - `on: push: [main]` → `on: workflow_run: { workflows: [CI], types: [completed], branches: [main] }`
-   - `if: workflow_run.conclusion == 'success'` でゲート
+   - build ジョブに `if: workflow_run.conclusion == 'success' || workflow_dispatch`
    - `workflow_dispatch` は残す
-   - titanite（Zensical）を `/`、reports（Quarto）を `/reports/` にビルドして
-     `_site` にマージし、単一の Pages アーティファクトとしてデプロイ（Phase 7 参照）
-   - `uv lock --upgrade --dry-run` を削除、必要なら `uv sync --locked` で
-     lockfile 整合を検証
+   - デプロイ内容（reports を `/`、Zensical を `/titanite/`）は Phase 7 タスク3 で対応済み
+   - `uv lock --upgrade --dry-run` は Phase 7 タスク3 の書き換えで既に除去済み
 4. **`update_changelog.yml` → `changelog.yml`**
    - `git push origin main` をやめ `peter-evans/create-pull-request` で
      PR を作る（通常の CI ゲートを通す）
