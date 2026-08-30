@@ -41,7 +41,7 @@ Other re-identification vectors handled alongside k-anonymity:
 
 | Vector | Mitigation |
 |---|---|
-| Free-text answers (may name a person, place, or anecdote) | dropped, with their `_ja` translations |
+| Free-text answers (may name a person, place, or anecdote) | dropped entirely |
 | Second-precision `timestamp` (matchable to a mailing log) | floored to the day |
 | Raw outlier numbers (e.g. one respondent with `q13 == 100`) | raw `q10`/`q13` dropped; binned versions kept |
 | A lone value in a kept binned column (e.g. `q13_binned == "100%"`) | collapsed to `(rare)` |
@@ -91,9 +91,8 @@ uv run ti anonymize --plugin plugins.icrc2023.ICRC2023Schema   # --k 5 default
 
 Pipeline (`SecureDataHandler.build_public_dataset`), in order:
 
-1. **Drop free text** — every `free_text_columns` entry and its
-   `<col>_ja` translation. Sentiment scores (`<col>_polarity` etc.) are
-   non-reversible aggregates and are kept.
+1. **Drop free text** — every `free_text_columns` entry. Sentiment scores
+   (`<col>_polarity` etc.) are non-reversible aggregates and are kept.
 2. **Drop `public_drop_columns`** — geography finer than the quasi-identifiers
    (`q03`, `q04`, `*_subregional`), raw numerics (`q10`, `q13`), and bookkeeping
    (`response`).

@@ -207,22 +207,36 @@ def get_bin_rules(self) -> list[BinRule]:
 
 ## Configuration
 
-Create a `config.toml` for your survey in `sandbox/`:
+Create a `config.toml` for your survey in `sandbox/`. Question text lives in
+`[questions]`, ordered category lists in `[choices]`, and one `[[options]]`
+entry per analysable column. The categorical / numerical / comment header
+lists are derived from each option's `type` field — there is no
+`[categorical_headers]` section.
 
 ```toml
 [questions]
 q01 = "Gender identity"
 q02 = "Age group"
-q03 = "Geographic location"
-q04 = "Organization"
 q05 = "Years of experience"
 
-[categorical_headers]
-default = ["q01", "q02", "q03", "q03_regional"]
+[choices]
+gender = ["male", "female", "non-binary", "prefer not to answer"]
 
-[numerical_headers]
-default = ["q05"]
+[[options]]
+name = "q01"
+title = "Gender identity"
+description = "Gender identity"
+type = "categorical"
+category = "gender"
+
+[[options]]
+name = "q05"
+title = "Years of experience"
+description = "Years of experience"
+type = "numerical"
 ```
+
+See [Configuration](../user/configuration.md) for the full section reference.
 
 ## Testing Your Plugin
 
@@ -401,7 +415,7 @@ uv run ti config --questions
 
 ## Example: ICRC2023Schema
 
-See `plugins/icrc2023/ICRC2023Schema` for a complete reference implementation covering:
+See `plugins/icrc2023/schema.py` for a complete reference implementation covering:
 - Complex geographic splitting (UN geoscheme)
 - Multiple clustering rules
 - Sentiment analysis integration
@@ -412,7 +426,7 @@ See `plugins/icrc2023/ICRC2023Schema` for a complete reference implementation co
 1. Review the [ICRC2023Schema](../../plugins/icrc2023/) reference implementation
 2. Create your survey plugin following the quick start
 3. Write unit and integration tests
-4. Document your schema in CLAUDE.md
+4. Document your schema in `AGENTS.md`
 5. Submit a PR with your plugin
 
 For questions, see [Architecture](architecture.md) for design details or [Testing](testing.md) for test guidelines.
