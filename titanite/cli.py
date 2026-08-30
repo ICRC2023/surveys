@@ -91,7 +91,7 @@ def config(
 @app.command()
 def prepare(
     read_from: str,
-    write_dir: str = "../data/test_data/",
+    write_dir: str = "../data/private/",
     load_from: str = "config.toml",
     plugin: str | None = None,
 ) -> None:
@@ -106,7 +106,7 @@ def prepare(
     read_from : str
         path to raw CSV file exported from Google Forms
     write_dir : str, optional
-        path to directory for saving processed files, by default "../data/test_data/"
+        path to directory for saving processed files, by default "../data/private/"
     load_from : str, optional
         path to configuration file, by default "config.toml"
     plugin : str, optional
@@ -141,7 +141,7 @@ def prepare(
 
 @app.command()
 def anonymize(
-    read_from: str = "../data/local/prepared_data.csv",
+    read_from: str = "../data/private/prepared_data.csv",
     write_dir: str = "../data/public/",
     plugin: str = DEFAULT_PLUGIN,
     k: int = 5,
@@ -160,7 +160,7 @@ def anonymize(
     ----------
     read_from : str, optional
         path to prepared (individual-level) CSV file,
-        by default "../data/local/prepared_data.csv"
+        by default "../data/private/prepared_data.csv"
     write_dir : str, optional
         path to directory for saving public_data.csv,
         by default "../data/public/"
@@ -194,8 +194,8 @@ def anonymize(
 
 @app.command()
 def comments(
-    read_from: str = "../data/test_data/prepared_data.csv",
-    write_dir: str = "../data/test_data/comment/",
+    read_from: str = "../data/private/prepared_data.csv",
+    write_dir: str = "../data/private/comment/",
     load_from: str = "config.toml",
 ) -> None:
     """
@@ -204,9 +204,9 @@ def comments(
     Parameters
     ----------
     read_from : str, optional
-        path to preprocessed data file, by default "../data/test_data/prepared_data.csv"
+        path to preprocessed data file, by default "../data/private/prepared_data.csv"
     write_dir : str, optional
-        path to directory for saving comment CSV and JSON files, by default "../data/test_data/comment/"
+        path to directory for saving comment CSV and JSON files, by default "../data/private/comment/"
     load_from : str, optional
         path to configuration file, by default "config.toml"
     """
@@ -229,8 +229,8 @@ def comments(
 @app.command()
 def hbar(
     header: str,
-    read_from: str = "../data/test_data/prepared_data.csv",
-    write_dir: str = "../data/test_data/hbar/",
+    read_from: str = "../data/private/prepared_data.csv",
+    write_dir: str = "../data/private/hbar/",
     load_from: str = "config.toml",
 ):
     """
@@ -246,9 +246,9 @@ def hbar(
     header : str
         name of the column to use as the x-axis of the histogram
     read_from : str, optional
-        path to preprocessed data file, by default "../data/test_data/prepared_data.csv"
+        path to preprocessed data file, by default "../data/private/prepared_data.csv"
     write_dir : str, optional
-        path to directory for saving histogram files, by default "../data/test_data/hbar/"
+        path to directory for saving histogram files, by default "../data/private/hbar/"
     load_from : str, optional
         path to configuration file, by default "config.toml"
     """
@@ -279,8 +279,8 @@ def hbar(
 
 @app.command()
 def hbars(
-    read_from: str = "../data/test_data/prepared_data.csv",
-    write_dir: str = "../data/test_data/hbar/",
+    read_from: str = "../data/private/prepared_data.csv",
+    write_dir: str = "../data/private/hbar/",
     load_from: str = "config.toml",
     save: bool = False,
 ):
@@ -290,9 +290,9 @@ def hbars(
     Parameters
     ----------
     read_from : str, optional
-        path to preprocessed data file, by default "../data/test_data/prepared_data.csv"
+        path to preprocessed data file, by default "../data/private/prepared_data.csv"
     write_dir : str, optional
-        path to directory for saving histogram files, by default "../data/test_data/hbar/"
+        path to directory for saving histogram files, by default "../data/private/hbar/"
     load_from : str, optional
         path to configuration file, by default "config.toml"
     save : bool, optional
@@ -323,8 +323,8 @@ def hbars(
 
 @app.command()
 def crosstabs(
-    read_from: str = "../data/test_data/prepared_data.csv",
-    write_dir: str = "../data/test_data/crosstab/",
+    read_from: str = "../data/private/prepared_data.csv",
+    write_dir: str = "../data/private/crosstab/",
     load_from: str = "config.toml",
     save: bool = False,
 ) -> None:
@@ -338,9 +338,9 @@ def crosstabs(
     Parameters
     ----------
     read_from : str, optional
-        path to preprocessed data file, by default "../data/test_data/prepared_data.csv"
+        path to preprocessed data file, by default "../data/private/prepared_data.csv"
     write_dir : str, optional
-        path to save processed files, by default "../data/test_data/crosstab/"
+        path to save processed files, by default "../data/private/crosstab/"
     load_from : str, optional
         path to configuration file, by default "config.toml"
     save : bool, optional
@@ -371,8 +371,8 @@ def crosstabs(
 
 @app.command()
 def chi2(
-    read_from: str = "../data/test_data/prepared_data.csv",
-    write_dir: str = "../data/test_data/chi2_test/",
+    read_from: str = "../data/private/prepared_data.csv",
+    write_dir: str = "../data/private/chi2_test/",
     load_from: str = "config.toml",
 ) -> tuple:
     """
@@ -381,9 +381,9 @@ def chi2(
     Parameters
     ----------
     read_from : str, optional
-        path to preprocessed data file, by default "../data/test_data/prepared_data.csv"
+        path to preprocessed data file, by default "../data/private/prepared_data.csv"
     write_dir : str, optional
-        path to directory for saving chi-square test results, by default "../data/test_data/chi2_test/"
+        path to directory for saving chi-square test results, by default "../data/private/chi2_test/"
     load_from : str, optional
         path to configuration file, by default "config.toml"
 
@@ -432,8 +432,8 @@ def chi2(
 @app.command()
 def p005(
     header: str,
-    read_from: str = "../data/test_data/prepared_data.csv",
-    write_dir: str = "../data/test_data/p005/",
+    read_from: str = "../data/private/prepared_data.csv",
+    write_dir: str = "../data/private/p005/",
     load_from: str = "config.toml",
     save: bool = False,
 ) -> None:
@@ -447,9 +447,9 @@ def p005(
     header : str
         name of column to use as the focus variable for cross-tabulation
     read_from : str, optional
-        path to preprocessed data file, by default "../data/test_data/prepared_data.csv"
+        path to preprocessed data file, by default "../data/private/prepared_data.csv"
     write_dir : str, optional
-        path to save processed files, by default "../data/test_data/p005/"
+        path to save processed files, by default "../data/private/p005/"
     load_from : str, optional
         path to configuration file, by default "config.toml"
     save : bool, optional
@@ -498,8 +498,8 @@ def p005(
 @app.command()
 def crosstab(
     header: str,
-    read_from: str = "../data/test_data/prepared_data.csv",
-    write_dir: str = "../data/test_data/hbar/",
+    read_from: str = "../data/private/prepared_data.csv",
+    write_dir: str = "../data/private/hbar/",
     load_from: str = "config.toml",
 ):
     """
@@ -561,8 +561,8 @@ def is_valid_path(path: Path) -> None:
 
 @app.command()
 def response(
-    read_from: str = "../data/test_data/prepared_data.csv",
-    write_dir: str = "../data/test_data/",
+    read_from: str = "../data/private/prepared_data.csv",
+    write_dir: str = "../data/private/",
 ) -> None:
     """
     Check responses
@@ -572,9 +572,9 @@ def response(
     Parameters
     ----------
     read_from : str, optional
-        path to preprocessed data file, by default "../data/test_data/prepared_data.csv"
+        path to preprocessed data file, by default "../data/private/prepared_data.csv"
     write_dir : str, optional
-        path to save processed files, by default "../data/test_data/"
+        path to save processed files, by default "../data/private/"
     """
     logger.info(f"Read data from: {read_from}")
     data = pd.read_csv(read_from, parse_dates=["timestamp"])

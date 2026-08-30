@@ -2,8 +2,16 @@
 # Repos
 ##################################################
 
+# Survey data (see PLAN.md Phase 5).
+#   data/raw_data/  - raw Google Forms exports (never commit)
+#   data/private/   - `ti prepare` / analysis output, individual-level (never commit)
+#   data/public/    - `ti anonymize` output, safe to commit
+# data/test_data/ is still tracked here; it is untracked in a later Phase 5 PR.
 raw_data
 test_data
+/data/private/**
+!/data/private/.gitkeep
+
 tmp_*
 *.pdf
 jupyter_execute/
