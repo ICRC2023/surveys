@@ -1,144 +1,76 @@
 # Configuration
 
-Customize survey settings and data processing through configuration files.
+## The config file
 
-## Configuration File
+`sandbox/config.toml` holds the survey's question text, answer choices, and
+per-column metadata. It is read by `ti config`, `ti prepare`, and the
+analysis commands (via the `Config` / `Data` classes).
 
-The main configuration file is located at:
+Data-processing rules — value replacements, geographic splitting, clustering,
+binning — live in the **schema** (`plugins/<survey>/schema.py`), not here.
 
+## Sections
+
+### `[volumes]`
+
+Named data directories.
+
+```toml
+[volumes]
+main = "../data/main_data"
+test = "../data/test_data"
 ```
-sandbox/config.toml
-```
 
-This file defines:
-- Survey question mappings
-- Categorical variables and their valid choices
-- Numerical variables for statistical analysis
-- Data processing rules
+### `[questions]`
 
-## Configuration Structure
-
-### Questions Section
-
-Defines the mapping between question IDs and descriptions:
+Question id → the full question text.
 
 ```toml
 [questions]
-q01 = "Gender identity"
-q02 = "Gender expression"
-q03 = "Geographic region"
-# ... more questions
+q01 = "【Q1】What is your age ?"
+q02 = "【Q2】What gender do you identify as ?"
 ```
 
-### Categorical Headers
+### `[choices]`
 
-Lists variables that should be treated as categorical (discrete) data:
+Named ordered category lists, referenced by `[[options]].category`.
 
 ```toml
-[categorical_headers]
-default = ["q01", "q02", "q03_regional", "q03_subregional"]
+[choices]
+age = ["10s", "20s", "30s", "40s", "50s", "60s", "70s", "80s", "90s+", "Prefer not to answer"]
+gender = ["Male", "Female", "Non-binary", "Prefer to self-identify", "Prefer not to answer"]
 ```
 
-These variables are used for chi-square tests and categorical analysis.
+### `[[options]]`
 
-### Numerical Headers
-
-Lists variables that should be treated as numerical (continuous) data:
+One entry per analysable column: its display title, description, type, and
+(for categoricals) which `[choices]` list orders it.
 
 ```toml
-[numerical_headers]
-default = ["q10", "q13", "sentiment_score"]
+[[options]]
+name = "q01"
+title = "Age Group"
+description = "【Q1】What is your age?"
+type = "categorical"    # or "numerical" / "comment"
+category = "age"
 ```
 
-### Data Rules
+`Config.get_categorical_headers()` / `get_numerical_headers()` /
+`get_comment_headers()` derive their lists from the `type` field.
 
-Define transformations applied during data preparation:
-
-```toml
-[data_rules]
-# Define categorical values for specific questions
-# Define clustering rules for derived columns
-# Define binning rules for numerical data
-```
-
-## Using Custom Configuration
-
-### Load Custom Config
-
-To use a custom configuration file:
+## Pointing at a different config
 
 ```bash
-cd custom_directory
-poetry run ti config --load_from /path/to/config
+uv run ti config --load-from /path/to/config.toml
+uv run ti prepare data.csv --load-from /path/to/config.toml --write-dir /path/to/output
 ```
 
-### Output Configuration
-
-Specify output directory for processed data:
+## Verifying
 
 ```bash
-poetry run ti prepare data.csv --write-dir /path/to/output
+uv run ti config --questions   # every question is mapped
+uv run ti config --choices     # every category list is defined
 ```
 
-### Input Directory
-
-Specify custom input directory:
-
-```bash
-poetry run ti prepare data.csv --read_from /path/to/input
-```
-
-## Configuration with Plugins
-
-When using a custom survey schema with the `--plugin` option, you can still override configuration:
-
-```bash
-poetry run ti prepare data.csv \
-  --plugin plugins.custom_survey.CustomSchema \
-  --load_from /path/to/config
-```
-
-## Survey Schema Configuration
-
-The survey schema (defined in plugins) determines:
-
-1. **Value Replacements** - Standardize response values
-2. **Geographic Splitting** - Split regional data into components
-3. **Clustering Rules** - Create derived composite columns
-4. **Binning Rules** - Convert numerical data to categories
-
-See [Plugin Development](../developer/plugin-development.md) for details on schema customization.
-
-## Best Practices
-
-1. **Version Control** - Keep configuration files in Git
-2. **Separate Configs** - Use different configs for different surveys
-3. **Document Changes** - Comment configuration changes in commits
-4. **Validate Data** - Run `ti config` to verify configuration is loaded correctly
-5. **Test First** - Test configuration with sample data before processing large datasets
-
-## Troubleshooting
-
-### Configuration Not Found
-
-Ensure the `config.toml` file exists in your current directory or specify the path:
-
-```bash
-poetry run ti config --load_from /path/to/config
-```
-
-### Invalid Categories
-
-Check that all categorical variables are properly defined in `config.toml`:
-
-```bash
-poetry run ti config --choices
-```
-
-### Missing Questions
-
-Verify that all question IDs in data match those defined in configuration:
-
-```bash
-poetry run ti config --questions
-```
+If a categorical column has values not in its `[choices]` list, they become
+NaN after `categorical_data()` — check with `--choices`.

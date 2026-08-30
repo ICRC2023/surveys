@@ -2,71 +2,65 @@
 
 ## Prerequisites
 
-- Python 3.9 or higher
+- Python 3.11
 - Git
-- Poetry (Python package manager)
+- [uv](https://docs.astral.sh/uv/) (Python package and project manager)
 
-## Step 1: Clone Repository
+## Step 1: Clone the repository
 
 ```bash
 git clone git@github.com:ICRC2023/surveys.git
 cd surveys
 ```
 
-## Step 2: Install Dependencies
+## Step 2: Install dependencies
 
 ```bash
-poetry install
+uv sync --all-groups
 ```
 
-This installs titanite and all required dependencies defined in `pyproject.toml`.
+This creates a virtual environment in `.venv/` and installs titanite plus
+everything in `pyproject.toml` (the `docs` and `dev` groups included).
 
-## Step 3: Verify Installation
+## Step 3: Verify the installation
 
 ```bash
-poetry run ti --help
+uv run ti --help
 ```
 
 You should see the titanite CLI help message.
 
-## Development Environment Setup
+## Development environment
 
-If you're planning to contribute or develop:
+If you plan to contribute:
 
 ```bash
-# Set up development environment
+# One-time project setup
 task env:setup
 
-# Install pre-commit hooks
-poetry run pre-commit install
+# Install the pre-commit hooks
+uv run pre-commit install
 ```
 
 ## Troubleshooting
 
-### Poetry not found
+### `uv` not found
 
-Install Poetry following the [official guide](https://python-poetry.org/docs/#installation).
+Install it from the [official guide](https://docs.astral.sh/uv/getting-started/installation/).
 
-### Python version mismatch
+### Python version
 
-Check your Python version:
-
-```bash
-python --version
-```
-
-Ensure you have Python 3.9 or higher. If you have multiple versions, specify the version:
+The project pins Python 3.11 (`requires-python = ">=3.11, <3.12"`). `uv sync`
+downloads a matching interpreter automatically; to point at your own:
 
 ```bash
-poetry env use /path/to/python3.9
+uv python pin 3.11
 ```
 
-### Environment activation
+### Running commands
 
-Always use `poetry run` to execute commands:
+Prefix commands with `uv run` so they use the project's environment:
 
 ```bash
-poetry run ti prepare data.csv
+uv run ti prepare data.csv
 ```
-
-Avoid using `poetry shell` (deprecated). Instead, prefix commands with `poetry run`.
