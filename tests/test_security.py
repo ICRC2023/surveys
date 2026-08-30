@@ -199,3 +199,45 @@ def test_build_public_dataset_full_pipeline():
     assert result["timestamp"].iloc[0] == pd.Timestamp("2023-07-15")
     # Rare (70s, Male) group of 2 dropped, 6 rows retained
     assert len(result) == 6
+
+
+def test_aggregate_counts_univariate_suppresses_small_groups():
+    """aggregate_counts drops categories seen fewer than threshold times."""
+    df = pd.DataFrame({"q02": ["Male"] * 6 + ["Female"] * 3})
+    result = SecureDataHandler.aggregate_counts(df, ["q02"], threshold=5)
+    assert list(result.columns) == ["q02", "count"]
+    assert result.to_dict("records") == [{"q02": "Male", "count": 6}]
+
+
+def test_aggregate_counts_bivariate():
+    """aggregate_counts cross-tabulates two columns."""
+    df = pd.DataFrame(
+        {
+            "q01": ["20s"] * 5 + ["30s"] * 5 + ["40s"] * 2,
+            "q02": ["Female"] * 5 + ["Male"] * 5 + ["Male"] * 2,
+        }
+    )
+    result = SecureDataHandler.aggregate_counts(df, ["q01", "q02"], threshold=5)
+    rows = {(r["q01"], r["q02"]): r["count"] for r in result.to_dict("records")}
+    assert rows == {("20s", "Female"): 5, ("30s", "Male"): 5}
+
+
+def test_aggregate_counts_missing_column_returns_empty():
+    """aggregate_counts returns an empty table if no column is present."""
+    df = pd.DataFrame({"q01": ["20s"] * 5})
+    result = SecureDataHandler.aggregate_counts(df, ["nope"], threshold=5)
+    assert result.empty
+    assert list(result.columns) == ["nope", "count"]
+
+
+def test_aggregate_counts_carries_only_categories_and_count():
+    """The output never carries free-text or identifying columns."""
+    df = pd.DataFrame(
+        {
+            "q02": ["Male"] * 6,
+            "q15": ["verbatim answer"] * 6,
+            "timestamp": ["2023-07-15 10:00:00"] * 6,
+        }
+    )
+    result = SecureDataHandler.aggregate_counts(df, ["q02"], threshold=5)
+    assert set(result.columns) == {"q02", "count"}
