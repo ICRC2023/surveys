@@ -241,3 +241,57 @@ def test_aggregate_counts_carries_only_categories_and_count():
     )
     result = SecureDataHandler.aggregate_counts(df, ["q02"], threshold=5)
     assert set(result.columns) == {"q02", "count"}
+
+
+def test_mask_rare_categories_collapses_rare_values():
+    """mask_rare_categories replaces values below the threshold."""
+    df = pd.DataFrame({"q13_binned": ["20%"] * 6 + ["100%"] * 1 + ["70%"] * 2})
+    result = SecureDataHandler.mask_rare_categories(df, ["q13_binned"], threshold=5)
+    counts = result["q13_binned"].value_counts().to_dict()
+    assert counts == {"20%": 6, "(rare)": 3}
+
+
+def test_mask_rare_categories_keeps_common_values_and_nan():
+    """Common values are untouched and NaN is not masked."""
+    df = pd.DataFrame({"c": ["a"] * 5 + ["b"] * 5 + [None] * 2})
+    result = SecureDataHandler.mask_rare_categories(df, ["c"], threshold=5)
+    assert set(result["c"].dropna()) == {"a", "b"}
+    assert result["c"].isna().sum() == 2
+
+
+def test_mask_rare_categories_custom_placeholder():
+    df = pd.DataFrame({"c": ["a"] * 6 + ["z"] * 1})
+    result = SecureDataHandler.mask_rare_categories(
+        df, ["c"], threshold=5, placeholder="OTHER"
+    )
+    assert set(result["c"]) == {"a", "OTHER"}
+
+
+def test_mask_rare_categories_missing_column_warns():
+    df = pd.DataFrame({"c": ["a"] * 6})
+    result = SecureDataHandler.mask_rare_categories(df, ["nope"], threshold=5)
+    assert list(result["c"]) == ["a"] * 6
+
+
+def test_build_public_dataset_masks_after_k_anonymity():
+    """mask_columns is applied after row suppression, catching newly-rare values."""
+    # 6 "kept" rows: q10_binned "1" x5, "8" x1 (rare from the start).
+    # 2 "rare" rows: a (70s, Male) group dropped by k=5, and they also carry
+    # q10_binned "1" -- so "1" stays common, "8" gets masked.
+    df = pd.DataFrame(
+        {
+            "timestamp": ["2023-07-15 10:00:00"] * 8,
+            "q01": ["20s"] * 6 + ["70s"] * 2,
+            "q02": ["Female"] * 6 + ["Male"] * 2,
+            "q10_binned": ["1"] * 5 + ["8"] + ["1"] * 2,
+        }
+    )
+    result = SecureDataHandler.build_public_dataset(
+        df,
+        free_text_columns=[],
+        quasi_identifiers=["q01", "q02"],
+        k=5,
+        mask_columns=["q10_binned"],
+    )
+    assert len(result) == 6
+    assert set(result["q10_binned"]) == {"1", "(rare)"}

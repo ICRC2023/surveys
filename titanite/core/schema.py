@@ -91,7 +91,11 @@ class SurveySchema(ABC):
       when linked against external data (used for k-anonymization)
     - public_drop_columns: Extra columns to drop from the public
       individual-level dataset (e.g. geography finer than the
-      quasi-identifiers, or bookkeeping columns like "response")
+      quasi-identifiers, raw numeric columns, or bookkeeping columns
+      like "response")
+    - public_mask_columns: Columns kept in the public extract but with
+      rare values collapsed to a placeholder (e.g. a binned numeric
+      column with a lone extreme bin)
 
     Examples
     --------
@@ -124,6 +128,9 @@ class SurveySchema(ABC):
     free_text_columns: list[str] = []
     quasi_identifiers: list[str] = []
     public_drop_columns: list[str] = []
+    #: Columns kept in the public extract but with rare values masked
+    #: (e.g. a binned numeric column with a lone extreme bin).
+    public_mask_columns: list[str] = []
 
     @abstractmethod
     def get_replace_rules(self) -> dict[str, dict]:

@@ -618,15 +618,20 @@ public_data.csv        (コミット可)  ← timestamp除去 / q15-q22除去 / 
    - ✅ 第1弾（PR: feat/reports-response-pages）: `data/public/` 生成・コミット、
      `reports/_helpers.py`、Q01/Q02/Q05-Q09/Q11/Q19 の 9 ページ
    - ✅ 第2弾（PR: feat/reports-geo-and-numeric-pages）: Q03/Q04（地理）
-   - 残り: Q12/Q14/Q17（DEI 評価）、自由記述（Q15/Q16/Q18/Q20/Q21/Q22、
-     原文非表示・感情スコアと件数のみ）、クラスタ系、集約ノート
-     （demographics / icrc2023_diversity / responses / chi2_test_map）、post-survey
+   - ✅ 第3弾（PR: feat/reports-geo-and-numeric-pages）: Q12/Q14/Q17（DEI 評価）、
+     自由記述 Q15/Q16/Q18/Q20/Q21/Q22（原文非表示、感情スコアと件数のみ）
+   - ✅ 第4弾（PR: feat/anonymize-numeric-columns）: `q10`/`q13` の生値を
+     `public_drop_columns` で削除、`SecureDataHandler.mask_rare_categories` +
+     `SurveySchema.public_mask_columns` で `q10_binned`/`q13_binned` の稀な
+     カテゴリ値を `(rare)` にマスク（k-匿名化の後に実行）、
+     `q10_binned`/`q13_binned`/`q13_clustered` を `categorical_headers` に追加、
+     Q10/Q13 ページ作成
+   - 残り: クラスタ系ページ、集約ノート（demographics / icrc2023_diversity /
+     responses / chi2_test_map）、post-survey
    - ノートは出力込みでコミット（`reports/_freeze/`）、CI では再実行しない
-   - **別途対応が必要**: `q10` / `q13` の生の数値が `public_data.csv` に残り、
-     外れ値（例: `q13=100` が 1 人）が準識別子になる。`ICRC2023Schema` に
-     `q10_binned` / `q13_binned` / `q13_clustered` を `categorical_headers` として
-     追加し、`ti anonymize` が `q10` / `q13` の生値を落として binned 版に
-     置き換える改修を別 PR で行う。それまで Q10 / Q13 ページは保留
+     （altair の chart div ID はレンダーごとにランダムなので、ページ追加時は
+     既存 `_freeze` にも無害な差分が出る。データが変わらない限り既存 freeze は
+     コミットに含めなくてよい）
 7. **CI ガードを追加** — ✅ 完了（PR: feat/ci-sensitive-data-guard）
    - `scripts/check_sensitive_data.py`: 追跡中／ステージ済みの `data/**` の
      CSV/TSV/JSON を内容判定し、自由記述列（q15/q16/q18/q20/q21/q22）または
