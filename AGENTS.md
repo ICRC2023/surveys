@@ -177,6 +177,7 @@ touch plugins/your_survey/schema.py
 from titanite.core import SurveySchema, SplitColumnRule, ClusterRule, BinRule
 import pandas as pd
 
+
 class YourSurveySchema(SurveySchema):
     categorical_headers = ["q01", "q02", ...]
     numerical_headers = ["q10", "q13", ...]

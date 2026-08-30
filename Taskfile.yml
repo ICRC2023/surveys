@@ -46,9 +46,9 @@ tasks:
       - uv sync --all-groups
 
   deps:outdated:
-    desc: List outdated dependencies
+    desc: List outdated direct dependencies
     cmds:
-      - uv pip list --outdated
+      - uv tree --outdated --depth 1
 
   deps:update:
     desc: Update dependencies
@@ -95,14 +95,14 @@ tasks:
   diff:staged:
     desc: Show staged changes
     cmds:
-      - git diff -cached
+      - git diff --cached
     silent: true
 
   diff:last-tag:
     desc: Show all changes since the last tag
     vars:
       LAST_TAG:
-        sh: git desctibe --tags --abbrev=0
+        sh: git describe --tags --abbrev=0
     preconditions:
       - sh: "git describe --tags --abbrev=0 >/dev/null 2>&1"
         msg: "No tags found"
@@ -200,7 +200,7 @@ tasks:
     requires:
       vars: [CLI_ARGS]
     vars:
-      VERSION: "{{.CLI_ARGS"
+      VERSION: "{{.CLI_ARGS}}"
       SOURCE: "templates/release.md"
       TARGET: "docs/releases/v{{.CLI_ARGS}}.md"
     preconditions:

@@ -20,6 +20,7 @@ Clusters are defined in your survey plugin:
 ```python
 from titanite.core import ClusterRule
 
+
 def get_cluster_rules(self) -> list[ClusterRule]:
     return [
         ClusterRule(
@@ -363,7 +364,7 @@ Include rationale in schema:
 ClusterRule(
     name="gender_cluster",
     description="Combines gender identity (q01) and expression (q02) "
-                "as they are interdependent aspects of gender",
+    "as they are interdependent aspects of gender",
     source_columns=["q01", "q02"],
     aggregation_func="combine",
 )

@@ -21,6 +21,7 @@ Bins are defined in your survey plugin:
 ```python
 from titanite.core import BinRule
 
+
 def get_bin_rules(self) -> list[BinRule]:
     return [
         BinRule(
@@ -281,6 +282,7 @@ labels = ["<25", "25-35", "35-50", "50-65", "65+"]
 
 # Or use inf
 import numpy as np
+
 bins = [0, 25, 35, 50, 65, np.inf]
 ```
 
@@ -309,6 +311,7 @@ labels = ["<25k", "25-50k", "50-75k", "75-100k", "100-150k", "150k+"]
 
 # Or use equal-frequency binning
 import pandas as pd
+
 df["income_quartile"] = pd.qcut(df["income"], q=4)
 ```
 

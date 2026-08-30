@@ -22,6 +22,7 @@ touch plugins/your_survey/schema.py
 # plugins/your_survey/schema.py
 from titanite.core import SurveySchema, SplitColumnRule, ClusterRule, BinRule
 
+
 class YourSurveySchema(SurveySchema):
     # Define question categories
     categorical_headers = ["q01", "q02", "q03"]
@@ -120,6 +121,7 @@ Split composite columns (e.g., geographic regions):
 ```python
 from titanite.core import SplitColumnRule
 
+
 def get_split_rules(self) -> list[SplitColumnRule]:
     """
     Define how to split composite columns.
@@ -131,7 +133,7 @@ def get_split_rules(self) -> list[SplitColumnRule]:
     return [
         SplitColumnRule(
             source_column="q03",  # Input column
-            split_char=" - ",      # Delimiter
+            split_char=" - ",  # Delimiter
             target_columns=["country", "region"],  # Output columns
         ),
         SplitColumnRule(
@@ -148,6 +150,7 @@ Create derived columns combining multiple questions:
 
 ```python
 from titanite.core import ClusterRule
+
 
 def get_cluster_rules(self) -> list[ClusterRule]:
     """
@@ -178,6 +181,7 @@ Convert numerical data to categorical bins:
 
 ```python
 from titanite.core import BinRule
+
 
 def get_bin_rules(self) -> list[BinRule]:
     """
@@ -230,10 +234,12 @@ import pytest
 from plugins.your_survey import YourSurveySchema
 import pandas as pd
 
+
 def test_schema_initialization():
     schema = YourSurveySchema()
     assert schema.categorical_headers
     assert schema.numerical_headers
+
 
 def test_replace_rules():
     schema = YourSurveySchema()
@@ -241,11 +247,13 @@ def test_replace_rules():
     assert "q01" in rules
     assert rules["q01"]["Male"] == "male"
 
+
 def test_split_rules():
     schema = YourSurveySchema()
     rules = schema.get_split_rules()
     assert len(rules) > 0
     assert rules[0].target_columns
+
 
 def test_with_real_data():
     """Test plugin with actual survey data."""

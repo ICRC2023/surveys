@@ -33,6 +33,7 @@ touch plugins/your_survey/schema.py
 from titanite.core import SurveySchema, SplitColumnRule, BinRule, ClusterRule
 import pandas as pd
 
+
 class YourSurveySchema(SurveySchema):
     """Your survey-specific schema implementation."""
 
@@ -82,9 +83,14 @@ poetry run ti prepare raw_data.csv --plugin plugins.your_survey.YourSurveySchema
 class YourSurveySchema(SurveySchema):
     # All categorical variables from your survey questions
     categorical_headers = [
-        "q01", "q02", "q03_regional", "q03_subregional",
-        "q04", "q04_regional", "q04_subregional",
-        ...
+        "q01",
+        "q02",
+        "q03_regional",
+        "q03_subregional",
+        "q04",
+        "q04_regional",
+        "q04_subregional",
+        ...,
     ]
 
     # All numerical variables
@@ -179,6 +185,7 @@ def get_cluster_rules(self) -> list[ClusterRule]:
         ),
     ]
 
+
 @staticmethod
 def _cluster_age(df: pd.DataFrame) -> pd.Series:
     """Age-based clustering logic.
@@ -189,6 +196,7 @@ def _cluster_age(df: pd.DataFrame) -> pd.Series:
     result[df["q01"] < "40s"] = "Cluster1"
     result[df["q01"] >= "40s"] = "Cluster2"
     return result
+
 
 @staticmethod
 def _cluster_female_ratio(df: pd.DataFrame) -> pd.Series:
@@ -226,8 +234,18 @@ def get_bin_rules(self) -> list[BinRule]:
             output_column="q13_binned",
             bins=[-1, 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 105],
             labels=[
-                "Prefer not to answer", "0%", "10%", "20%", "30%", "40%",
-                "50%", "60%", "70%", "80%", "90%", "100%",
+                "Prefer not to answer",
+                "0%",
+                "10%",
+                "20%",
+                "30%",
+                "40%",
+                "50%",
+                "60%",
+                "70%",
+                "80%",
+                "90%",
+                "100%",
             ],
             right=False,
         ),
@@ -341,6 +359,7 @@ def test_processor_integration(sample_data):
    @staticmethod
    def _cluster_age(df):
        df.loc[..., "temp_col"] = ...  # Side effect!
+
 
    # ✅ GOOD
    @staticmethod
