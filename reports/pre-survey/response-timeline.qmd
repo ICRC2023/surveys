@@ -1,0 +1,64 @@
+---
+title: "Response timeline"
+---
+
+When responses came in, by day. Two requests were sent to conference
+participants:
+
+- **2023-07-08** — 1st circular
+- **2023-07-17** — 2nd circular (reminder)
+
+```{python}
+# | echo: false
+import sys
+from pathlib import Path
+
+import altair as alt
+import pandas as pd
+
+sys.path.insert(0, str(Path.cwd().parent))
+from _helpers import load_public  # noqa: E402
+
+df = load_public()
+daily = (
+    pd.to_datetime(df["timestamp"])
+    .dt.strftime("%Y-%m-%d")
+    .value_counts()
+    .rename_axis("date")
+    .reset_index(name="responses")
+    .sort_values("date")
+)
+requests = pd.DataFrame(
+    {
+        "date": ["2023-07-08", "2023-07-17"],
+        "label": ["1st circular", "2nd circular"],
+    }
+)
+```
+
+```{python}
+# | echo: false
+bars = (
+    alt.Chart(daily)
+    .mark_bar()
+    .encode(
+        x=alt.X("date:T", title=None),
+        y=alt.Y("responses:Q", title="Responses"),
+        tooltip=["date:T", "responses:Q"],
+    )
+)
+rules = (
+    alt.Chart(requests)
+    .mark_rule(color="firebrick", strokeDash=[4, 4])
+    .encode(x="date:T", tooltip=["label:N"])
+)
+(bars + rules).properties(width="container", height=300, title="Responses per day")
+```
+
+Most responses arrived within three days of the first circular, with a
+smaller bump after the reminder.
+
+::: {.callout-note appearance="minimal"}
+Counts are from the anonymized extract (245 of 295 respondents; the
+rest were removed by k-anonymity). Timestamps are truncated to the day.
+:::

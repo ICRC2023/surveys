@@ -1,0 +1,57 @@
+---
+title: "Derived clusters"
+---
+
+Besides the raw answers, the preprocessing step derives a few binary/ternary
+**cluster** columns used in the analysis. Each groups respondents by a
+combination of answers.
+
+```{python}
+# | echo: false
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path.cwd().parent))
+from _helpers import bar, load_univariate, suppression_note  # noqa: E402
+```
+
+## `q01_clustered` — age
+
+Cluster1: under 40s. Cluster2: 40s and over.
+
+```{python}
+# | echo: false
+bar(load_univariate("q01_clustered"), "q01_clustered", title="Age cluster")
+```
+
+## `q13_clustered` — female ratio
+
+Cluster1: reported ratio ≤ 20%. Cluster2: ≥ 40%. Others: in between.
+
+```{python}
+# | echo: false
+bar(load_univariate("q13_clustered"), "q13_clustered", title="Female-ratio cluster")
+```
+
+## `q01q02_clustered` — young researchers by gender
+
+Cluster1: under 40s and Female. Cluster2: under 40s and Male. Others: the rest.
+
+```{python}
+# | echo: false
+bar(load_univariate("q01q02_clustered"), "q01q02_clustered", title="Young female / male cluster")
+```
+
+## `q13q14_clustered` — ratio and satisfaction
+
+Cluster1: reported ratio < 25% **and** rated it Poor/Very Poor.
+Cluster2: ratio > 25% **and** rated it Good/Very Good. Others: the rest.
+
+```{python}
+# | echo: false
+bar(load_univariate("q13q14_clustered"), "q13q14_clustered", title="Ratio-satisfaction cluster")
+```
+
+::: {.callout-note appearance="minimal"}
+`{python} suppression_note()`
+:::
