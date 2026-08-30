@@ -599,11 +599,14 @@ public_data.csv        (コミット可)  ← timestamp除去 / q15-q22除去 / 
 5. **`ti prepare` の出力パスを見直し**
    - `prepared_data.csv` は `.gitignore` 対象ディレクトリ（例: `data/local/`）に出す
    - `write_dir` のデフォルトを変更
-6. **ノート 26 個の参照先を一括置換**
-   - q01〜q14 の 23 ノート: `f_csv` を `.../public_data.csv` に置換
+6. **ノート 26 個の参照先を一括置換**（Phase 7 と一体で実施）
+   - q01〜q14 の 23 ノート: データ参照を `public_data.csv` に置換
    - q03/q04/demographics の 3 ノート: 方式A の集計 CSV を読む形に改修
    - 自由記述系ノート（q15/q16/q18）は 2. の作り替えで対応
-7. **CI ガードを追加**（本章 212-238 行を反映）
+   - 併せてノートを `reports/`（Quarto プロジェクト）へ移動する（Phase 7 参照）
+   - ノートは出力込みでコミットし、CI ではノートを再実行しない
+     （公開物の内容をコミット時点で確定させ、CI が個票 CSV を要求しないようにする）
+7. **CI ガードを追加**（本章 212-238 行を反映、Phase 6 タスク1 の `guard` ジョブと共通）
    - `data/` 配下に個票 CSV（自由記述列を持つ CSV）が含まれていないかチェックするジョブ
    - pre-commit フックにも同等のチェックを追加
 
@@ -652,7 +655,7 @@ Phase 5 のガード追加（タスク7）に合わせて、`.github/workflows/`
 | `pr_test.yml` | （廃止） | `ci.yml` に統合、二重実行を解消 |
 | `quality.yml` | `ci.yml` | `--cov` 追加、guard ジョブ拡張、docs ジョブ追加 |
 | `branch.yml` | （廃止） | `ci.yml` の docs ジョブが代替（PR 必須運用に） |
-| `static.yml` | `pages.yml` | `workflow_run`（CI 成功後）トリガーに変更、本番経路をスリム化 |
+| `static.yml` | `pages.yml` | `workflow_run`（CI 成功後）トリガー、docs（Zensical）と reports（Quarto）を統合デプロイ（Phase 7 参照） |
 | `update_changelog.yml` | `changelog.yml` | main 直 push → PR 化、`permissions` 明示 |
 | （なし） | `release.yml`（任意） | `cz bump --check-consistency` の CI 化 |
 
@@ -666,13 +669,16 @@ Phase 5 のガード追加（タスク7）に合わせて、`.github/workflows/`
    - ジョブ `guard`: Phase 5 タスク7 の機密データ検査
      （`data/**/*.csv` `data/**/*.json` 全体 + 自由記述列を持つ CSV が
      追跡されていないか）
-   - ジョブ `docs`: myst-nb ビルド（デプロイはしない、通ることの確認のみ）
+   - ジョブ `docs-build`: titanite（Zensical）と reports（Quarto）を
+     ビルドできることの確認（デプロイはしない）。ノートは再実行しない
 2. **`pr_test.yml` と `branch.yml` を削除**
    - PR を作れば `ci.yml` が全てカバーする前提に統一
 3. **`static.yml` → `pages.yml`**
    - `on: push: [main]` → `on: workflow_run: { workflows: [CI], types: [completed], branches: [main] }`
    - `if: workflow_run.conclusion == 'success'` でゲート
    - `workflow_dispatch` は残す
+   - titanite（Zensical）を `/`、reports（Quarto）を `/reports/` にビルドして
+     `_site` にマージし、単一の Pages アーティファクトとしてデプロイ（Phase 7 参照）
    - `uv lock --upgrade --dry-run` を削除、必要なら `uv sync --locked` で
      lockfile 整合を検証
 4. **`update_changelog.yml` → `changelog.yml`**
@@ -701,12 +707,106 @@ Phase 5 のガード追加（タスク7）に合わせて、`.github/workflows/`
 
 ---
 
+## Phase 7: ドキュメントの分離（titanite / アンケート結果）
+
+現状、性格の異なる 2 種類のドキュメントが 1 つの Sphinx サイトに同居している。
+これを読者・データ依存・寿命の観点で分離し、それぞれに適したツールへ移す。
+
+### 現状の問題
+
+| 観点 | titanite ドキュメント | アンケート結果ドキュメント |
+|------|----------------------|---------------------------|
+| 読者 | 開発者・再利用者 | 会議参加者・DEI 関係者・一般 |
+| 内容 | フレームワークの使い方 / API / プラグイン開発 | 調査結果・図表・考察 |
+| データ依存 | なし | 個票 CSV に依存（Phase 5 の核心） |
+| 更新頻度 | コード変更に追従 | ほぼ確定・凍結 |
+| ビルド | 軽い（API 生成のみ） | 重い（26 ノート実行） |
+| 寿命 | titanite が生きる限り | ICRC2023 という一度きりのイベント |
+
+同居の弊害:
+
+- プライバシー境界が曖昧。個票 CSV を要するのは結果側だけなのに、
+  サイト全体が同じビルドを通る（titanite のドキュメントを直すと CI が個票を要求）
+- `titanite` は `cz bump` でバージョンを刻む（v0.7.0）が、
+  アンケート結果に「v0.7.0」は無意味。`docs/releases/` が両方に紐づく
+- 将来 titanite を他調査に再利用したとき、ICRC2023 の結果がフレームワークの
+  ドキュメントに残る
+
+### ツール選定
+
+| 対象 | 現行 | 移行後 | 理由 |
+|------|------|--------|------|
+| titanite ドキュメント（`docs/titanite/*` + API） | Sphinx + myst-nb + sphinx-autodoc2 + sphinx-book-theme | **Zensical**（Material for MkDocs 系）+ `mkdocstrings`（Napoleon 対応） | フレームワークの参照ドキュメントに最適。ノート実行が不要で軽い。API は `mkdocstrings` が docstring 形式に強い |
+| アンケート結果（`docs/survey/*` + `docs/diversity/*`） | Sphinx + myst-nb | **Quarto**（`.qmd` + ノート埋め込み） | データ分析レポートの事実上の標準。HTML/PDF 両対応。Jupyter と Marimo の両方をセルとして埋め込める（`marimo` は依存済み） |
+
+### 目標構成
+
+```text
+docs/                 # titanite フレームワークドキュメント（Zensical）
+  mkdocs.yml          #   または zensical.toml
+  user/ developer/ statistics/ reference/(mkdocstrings)
+
+reports/              # ICRC2023 アンケート結果（Quarto）
+  _quarto.yml         #   execute: { freeze: true }  ← CI で再実行しない
+  index.qmd
+  pre-survey/  post-survey/
+  *.ipynb / *.qmd     #   public_data.csv と集計 CSV のみ参照、出力込みでコミット
+```
+
+- GitHub Pages は 1 ドメインでサブパス配信: `/` に titanite、`/reports/` に結果
+- `pages.yml`（Phase 6 タスク3）が両方をビルドして `_site` にマージ、
+  単一アーティファクトとしてデプロイ
+
+### タスク
+
+1. **`docs/titanite/` を Zensical プロジェクトに移行**
+   - `mkdocs.yml` / `zensical.toml` を作成、`mkdocstrings[python]` で API 生成
+   - `sphinx-autodoc2` / `sphinx-book-theme` / `sphinx-copybutton` を依存から削除
+   - `docs/apidocs/` `docs/titanite/` の Sphinx 固有記法（`{toctree}` 等）を
+     MkDocs の `nav:` に変換
+   - `docs/releases/` は titanite 側に残す（`cz bump` と連動）
+2. **`docs/survey/` + `docs/diversity/` を `reports/` へ Quarto 移行**
+   - `_quarto.yml` を作成、`execute: { freeze: true }` でビルド時再実行を禁止
+   - 26 ノートを `reports/` に移動。データ参照を Phase 5 の
+     `public_data.csv` / 集計 CSV に置換（Phase 5 タスク6 と一体）
+   - ノートは出力込みでコミット（Marimo セルは `{python}` ブロックか
+     エクスポートした形で埋め込み）
+   - `.md` の Sphinx 固有記法を Quarto Markdown に変換
+   - `myst-nb` を依存から削除
+3. **`conf.py` / `docs/Makefile` を撤去**、`docs/_build` `docs/jupyter_execute`
+   `docs/apidocs` の `.gitignore` エントリを整理
+4. **`pages.yml` を 2 ビルド統合デプロイに更新**（Phase 6 タスク3）
+5. **`Taskfile.yml` を更新**
+   - `docs:build` → Zensical ビルド、`docs:serve` → Zensical プレビュー
+   - `reports:render` / `reports:preview` を追加（Quarto）
+6. **AGENTS.md / CLAUDE.md のドキュメント関連記述を更新**
+   - `task docs:serve` の説明、ツール名、ディレクトリ構成
+
+### 前提・順序
+
+- Phase 5（`public_data.csv` と集計 CSV が存在すること）が完了していること
+- タスク2 は Phase 5 タスク6 と同一 PR で実施するのが効率的
+- タスク1（Zensical 移行）は Phase 5 と独立に着手可能
+- Quarto は CI ランナーへのインストールが必要（`quarto-dev/quarto-actions/setup`）
+
+### 成果物
+
+- `docs/`（Zensical）と `reports/`（Quarto）の 2 プロジェクト
+- 撤去された Sphinx 構成（`conf.py`, `docs/Makefile`, `myst-nb`, `sphinx-*`）
+- CI が個票 CSV なしで両ドキュメントをビルドできる状態
+- サブパス配信された単一 Pages サイト
+
+---
+
 ## 次のステップ
 
 1. このPLAN.mdをレビュー・承認する
 2. **Phase 5 を最優先で着手**（プライバシー要件の実施）
-3. Phase 1 の詳細な TODO リストを作成（型ヒント等の品質改善は Phase 5 完了後）
-4. 開発開始
+3. Phase 7 タスク2（ノートを `reports/` へ Quarto 移行）は Phase 5 タスク6 と
+   同一 PR で実施。Phase 7 タスク1（titanite の Zensical 移行）は並行着手可
+4. Phase 6（ワークフロー再編）は Phase 5・7 のディレクトリ構成が固まってから
+5. Phase 1 の詳細な TODO リストを作成（型ヒント等の品質改善は Phase 5 完了後）
+6. 開発開始
 
 ---
 
