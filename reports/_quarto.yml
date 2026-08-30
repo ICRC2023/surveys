@@ -10,9 +10,8 @@ project:
 execute:
   freeze: true
 
-# Pages read data/public/ via reports/_helpers.py.
-resources:
-  - "_helpers.py"
+# Pages import reports/_helpers.py at render time (via sys.path); it is not
+# a site resource. CI renders from _freeze/ and touches neither.
 
 website:
   title: "ICRC2023 Diversity Survey Results"
