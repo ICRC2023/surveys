@@ -39,12 +39,33 @@ website:
         - pre-survey/index.qmd
         - pre-survey/overview.qmd
         - pre-survey/questionnaire.qmd
-        # Per-question response notebooks are added under
-        # pre-survey/responses/ as they migrate from the Sphinx site
-        # (PLAN.md Phase 7 task 2). Quarto auto-discovers them here:
+        - pre-survey/response-timeline.qmd
         - section: "Responses"
           contents:
-            - "pre-survey/responses/*"
+            - pre-survey/responses/q01_age.qmd
+            - pre-survey/responses/q02_gender_identity.qmd
+            - pre-survey/responses/q03_workplace.qmd
+            - pre-survey/responses/q04_hometown.qmd
+            - pre-survey/responses/q05_job_title.qmd
+            - pre-survey/responses/q06_research_domain.qmd
+            - pre-survey/responses/q07_research_type.qmd
+            - pre-survey/responses/q08_research_years.qmd
+            - pre-survey/responses/q09_career_satisfaction.qmd
+            - pre-survey/responses/q10_hours.qmd
+            - pre-survey/responses/q11_signup.qmd
+            - pre-survey/responses/q12_dei_group.qmd
+            - pre-survey/responses/q13_female_ratio.qmd
+            - pre-survey/responses/q14_female_ratio_thoughts.qmd
+            - pre-survey/responses/q15_good_practice_examples.qmd
+            - pre-survey/responses/q16_group_concerns.qmd
+            - pre-survey/responses/q17_dei_individual.qmd
+            - pre-survey/responses/q18_agree_disagree.qmd
+            - pre-survey/responses/q19_science_interest.qmd
+            - pre-survey/responses/q20_individual_concerns.qmd
+            - pre-survey/responses/q21_dei_hindering.qmd
+            - pre-survey/responses/q22_remarks.qmd
+        - pre-survey/clusters.qmd
+        - pre-survey/chi2.qmd
     - id: post-survey
       title: "Post-Conference Survey"
       contents:
